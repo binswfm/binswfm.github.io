@@ -1,0 +1,496 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="google-site-verification" content="WNyUn91IXtlyHB-gfFfg8K6MCkItzKWdzzw_Nh17ksE" />
+  <meta name="baidu-site-verification" content="e5ZaZQ3Tx8" />
+  
+    <title>Sublime Text使用指南 | Zoe&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Zoe">
+    
+    <meta name="description" content="">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Zoe&#39;s blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Zoe&#39;s blog" title="Zoe&#39;s blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Zoe&#39;s blog">Zoe&#39;s blog</a></h1>
+				<h2 class="blog-motto">宅学长的博客</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:seniorzhai.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/09/28/Sublime-Text使用指南/" title="Sublime Text使用指南" itemprop="url">Sublime Text使用指南</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://seniorzhai.github.io/about" title="Zoe" target="_blank" itemprop="author">Zoe</a>
+		
+  <p class="article-time">
+    <time datetime="2014-09-28T06:33:22.000Z" itemprop="datePublished"> 发表于 9月 28 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Package_Control"><span class="toc-number">1.</span> <span class="toc-text">安装Package Control</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本操作"><span class="toc-number">2.</span> <span class="toc-text">基本操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#选择"><span class="toc-number">3.</span> <span class="toc-text">选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查找&替换"><span class="toc-number">4.</span> <span class="toc-text">查找&替换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#快速查找"><span class="toc-number">4.1.</span> <span class="toc-text">快速查找</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标准查找&替换"><span class="toc-number">4.2.</span> <span class="toc-text">标准查找&替换</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#关键字查找&替换"><span class="toc-number">4.2.1.</span> <span class="toc-text">关键字查找&替换</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多文件搜索"><span class="toc-number">4.3.</span> <span class="toc-text">多文件搜索</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#跳转"><span class="toc-number">5.</span> <span class="toc-text">跳转</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#组合跳跃"><span class="toc-number">5.1.</span> <span class="toc-text">组合跳跃</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件夹"><span class="toc-number">6.</span> <span class="toc-text">文件夹</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#格式化"><span class="toc-number">7.</span> <span class="toc-text">格式化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#中文输入法Bug"><span class="toc-number">8.</span> <span class="toc-text">中文输入法Bug</span></a></li></ol>
+		
+		</div>
+		
+		<p><a id="more"></a></p>
+<h2 id="安装Package_Control">安装Package Control</h2>
+<p>Sublime Text支持大量插件，Package Control能够帮助我们管理这些插件，它可以方便的浏览、安装和卸载Sublime Text中的插件</p>
+<ul>
+<li>使用Ctrl+`打开Sublime Text控制台</li>
+<li>输入下面命令道控制台</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">import urllib.request,os,hashlib; h = <span class="string">'7183a2d3e96f11eeadd761d777e62404'</span> + <span class="string">'e330c659d4bb41d3bdf022e94cab3cd0'</span>; pf = <span class="string">'Package Control.sublime-package'</span>; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); <span class="keyword">by</span> = urllib.request.urlopen( <span class="string">'http://sublime.wbond.net/'</span> + pf.<span class="built_in">replace</span>(<span class="string">' '</span>, <span class="string">'%20'</span>)).<span class="built_in">read</span>(); dh = hashlib.sha256(<span class="keyword">by</span>).hexdigest(); print(<span class="string">'Error validating download (got %s instead of %s), please try manual install'</span> % (dh, h)) <span class="keyword">if</span> dh != h <span class="keyword">else</span> <span class="built_in">open</span>(os.path.join( ipp, pf), <span class="string">'wb'</span> ).<span class="built_in">write</span>(<span class="keyword">by</span>)</div></pre></td></tr></table></figure>
+
+<ul>
+<li>等待Package Control安装完成，使用<code>Ctrl + Shift + P</code>打开命令板<h2 id="基本操作">基本操作</h2>
+</li>
+<li><code>Ctrl + Enter</code>在当前行下面增加一行并跳至该行</li>
+<li><code>Ctrl + Shift + Enter</code>在当前行上增加一行并跳至该行</li>
+<li><code>Ctrl + ←/→</code>逐词移动</li>
+<li><code>Ctrl + Shift + ←/→</code>逐词选择</li>
+<li><code>Ctrl + ↑/↓</code>移动显示区域</li>
+<li><code>Ctrl + Shift + ↑/↓</code>移动当前行<h2 id="选择">选择</h2>
+</li>
+<li><code>Ctrl + D</code>选择当前光标所在的词并高亮该词出现的位置，再次按下选择该词下次出现的位置</li>
+<li><code>Ctrl + K</code>在多重选词的过程中进行跳过，使用<code>Ctrl + U</code>进行回退，使用<code>Esc</code>退出多重编辑<br><img src="/img/14092801.gif" alt=""></li>
+<li><code>Ctrl + Shift + L</code>将当前选中区域打散，然后进行同时编辑<br><img src="/img/14092802.gif" alt=""></li>
+<li><code>Ctrl + J</code>将当前选中的区域合并成一行<br><img src="/img/14092803.gif" alt=""><h2 id="查找&amp;替换">查找&amp;替换</h2>
+Sublime Text的查找功能可以分为<strong>快速查找</strong>、<strong>标准查找</strong>、<strong>多文件查找</strong><h3 id="快速查找">快速查找</h3>
+使用<code>Shift + ←/→</code>或者<code>Ctrl + D</code>选中关键字，然后使用<code>F3</code>跳到其下一个出现的位置，<code>Shift + F3</code>跳到其上一个出现的位置，<code>Alt + F3</code>可以选中其出现的所有位置<br><img src="/img/14092804.gif" alt=""><h3 id="标准查找&amp;替换">标准查找&amp;替换</h3>
+使用<code>Ctrl + F</code>调出搜索框进行搜索<br><img src="/img/14092805.jpg" alt=""><br>使用<code>Ctrl + H</code>调出替换框，<code>Ctrl +_Shift + H</code>替换当前关键字，<code>Ctrl + Alt + H</code>替换所有匹配关键字<br><img src="/img/14092806.jpg" alt=""><h4 id="关键字查找&amp;替换">关键字查找&amp;替换</h4>
+</li>
+<li><code>Alt + C</code>切换大小写敏感模式</li>
+<li><code>Alt + W</code>切换整字匹配模式<h3 id="多文件搜索">多文件搜索</h3>
+<code>Ctrl + Shift + F</code>开启多文件搜索&amp;替换<br><img src="/img/14092807.jpg" alt=""><h2 id="跳转">跳转</h2>
+</li>
+<li><code>Ctrl + P</code>会列出当前打开的文件（或者是当前文件夹的文件），输入文件名然后Enter跳转至该文件。<br><img src="/img/14092808.gif" alt=""></li>
+<li><code>Ctrl + R</code>会列出当前文件中的符号（例如类名和函数名，但无法深入到变量名），输入符号名称Enter即可以跳转到该处。此外，还可以使用F12快速跳转到当前光标所在符号的定义处（Jump to Definition）。<br><img src="/img/14092809.gif" alt=""></li>
+<li><code>Ctrl + G</code>然后输入行号以跳转到指定行。<br><img src="/img/14092810.gif" alt=""><h3 id="组合跳跃">组合跳跃</h3>
+在<code>Ctrl + P</code>匹配文件后，可以进行后续输入以跳转到更精确的位置</li>
+<li><code>@</code>符号跳转：输入<code>@demo</code>跳转到<code>demo</code>符号所在的位置</li>
+<li><code>#</code>关键字跳转：输入<code>#keyword</code>跳转到<code>keyword</code>所在的位置</li>
+<li><code>:</code>行号跳转：输入:12跳转到文件的第12行。<br><img src="/img/14092811.gif" alt=""><h2 id="文件夹">文件夹</h2>
+用<code>Ctrl + K</code>, <code>Ctrl + B</code>显示或隐藏侧栏，使用<code>Ctrl + P</code>快速跳转到文件夹里的文件。<br><img src="/img/14092814.jpg" alt=""></li>
+<li>使用<code>Ctrl + Shift + N</code>创建一个新窗口</li>
+<li><code>Ctrl + N</code>在当前窗口创建一个新标签，<code>Ctrl + W</code>关闭当前标签，<code>Ctrl + Shift + T</code>恢复刚刚关闭的标签。</li>
+<li>分屏：<code>Alt + Shift + 2</code>进行左右分屏，<code>Alt + Shift + 8</code>进行上下分屏，<code>Alt + Shift + 5</code>进行上下左右分屏（即分为四屏）。<ul>
+<li>分屏下，使用<code>Ctrl + 数字</code>键跳转到指定屏，使用<code>Ctrl + Shift + 数字键</code>将当前屏移动到指定屏</li>
+</ul>
+</li>
+<li><code>F11</code> 全屏</li>
+<li><code>Shift + F11</code> 切换无干扰全屏<h2 id="格式化">格式化</h2>
+手动格式化使用<code>Ctrl + [</code>向左缩进，<code>Ctrl + ]</code>向右缩进，<code>Ctrl + Shift + V</code>以当前缩进粘贴代码<br>此外也可以使用插件实现自动缩进和智能对齐</li>
+<li><a href="https://sublime.wbond.net/packages/HTMLBeautify" target="_blank" rel="external">HTMLBeautify</a>：格式化HTML。</li>
+<li><a href="https://sublime.wbond.net/packages/AutoPEP8" target="_blank" rel="external">AutoPEP8</a>：格式化Python代码。</li>
+<li><a href="https://sublime.wbond.net/packages/Alignment" target="_blank" rel="external">Alignment</a>：进行智能对齐。<h2 id="中文输入法Bug">中文输入法Bug</h2>
+Sublime Text一直存在一个Bug：中文输入框不跟随。<br><img src="/img/14092812.jpg" alt=""><br>解决方法是安装<code>IMESupport</code>插件，之后重启Sublime Text问题就解决了。<br><img src="/img/14092813.jpg" alt=""></li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Prose/">Prose</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Sublime-Text/">Sublime Text</a>
+  </div>
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://seniorzhai.github.io/2014/09/28/Sublime-Text使用指南/" data-title="Sublime Text使用指南 | Zoe&#39;s blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/09/29/晃动动画/" title="晃动动画">
+  <strong>上一篇：</strong><br/>
+  <span>
+  晃动动画</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/09/27/Python遍历/"  title="Python遍历">
+ <strong>下一篇：</strong><br/> 
+ <span>Python遍历
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Package_Control"><span class="toc-number">1.</span> <span class="toc-text">安装Package Control</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本操作"><span class="toc-number">2.</span> <span class="toc-text">基本操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#选择"><span class="toc-number">3.</span> <span class="toc-text">选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查找&替换"><span class="toc-number">4.</span> <span class="toc-text">查找&替换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#快速查找"><span class="toc-number">4.1.</span> <span class="toc-text">快速查找</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标准查找&替换"><span class="toc-number">4.2.</span> <span class="toc-text">标准查找&替换</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#关键字查找&替换"><span class="toc-number">4.2.1.</span> <span class="toc-text">关键字查找&替换</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多文件搜索"><span class="toc-number">4.3.</span> <span class="toc-text">多文件搜索</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#跳转"><span class="toc-number">5.</span> <span class="toc-text">跳转</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#组合跳跃"><span class="toc-number">5.1.</span> <span class="toc-text">组合跳跃</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件夹"><span class="toc-number">6.</span> <span class="toc-text">文件夹</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#格式化"><span class="toc-number">7.</span> <span class="toc-text">格式化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#中文输入法Bug"><span class="toc-number">8.</span> <span class="toc-text">中文输入法Bug</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/Android/" title="Android">Android<sup>184</sup></a></li>
+		
+			<li><a href="/categories/Camera/" title="Camera">Camera<sup>1</sup></a></li>
+		
+			<li><a href="/categories/Cocos2d-X/" title="Cocos2d-X">Cocos2d-X<sup>11</sup></a></li>
+		
+			<li><a href="/categories/Prose/" title="Prose">Prose<sup>27</sup></a></li>
+		
+			<li><a href="/categories/Python/" title="Python">Python<sup>22</sup></a></li>
+		
+			<li><a href="/categories/ReactNative/" title="ReactNative">ReactNative<sup>7</sup></a></li>
+		
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>79</sup></a></li>
+		
+			<li><a href="/categories/node-js/" title="node.js">node.js<sup>29</sup></a></li>
+		
+			<li><a href="/categories/杂文/" title="杂文">杂文<sup>3</sup></a></li>
+		
+		</ul>
+		<ul>
+		<script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"></script>
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AFNetworking/" style="font-size: 10.00px;">AFNetworking</a><a href="/tags/APK/" style="font-size: 10.00px;">APK</a><a href="/tags/AS/" style="font-size: 10.00px;">AS</a><a href="/tags/Adapter/" style="font-size: 10.00px;">Adapter</a><a href="/tags/Android/" style="font-size: 20.00px;">Android</a><a href="/tags/Android-5-0/" style="font-size: 10.00px;">Android 5.0</a><a href="/tags/Android-Studio/" style="font-size: 13.33px;">Android Studio</a><a href="/tags/AndroidAninotations/" style="font-size: 10.00px;">AndroidAninotations</a><a href="/tags/AndroidStudio/" style="font-size: 18.33px;">AndroidStudio</a><a href="/tags/Animation/" style="font-size: 15.00px;">Animation</a><a href="/tags/Api/" style="font-size: 13.33px;">Api</a><a href="/tags/App/" style="font-size: 10.00px;">App</a><a href="/tags/Apple/" style="font-size: 10.00px;">Apple</a><a href="/tags/Async/" style="font-size: 10.00px;">Async</a><a href="/tags/Atom/" style="font-size: 11.67px;">Atom</a><a href="/tags/BaseAdapter/" style="font-size: 10.00px;">BaseAdapter</a><a href="/tags/Blur/" style="font-size: 10.00px;">Blur</a><a href="/tags/Box2D/" style="font-size: 10.00px;">Box2D</a><a href="/tags/Broadcast/" style="font-size: 10.00px;">Broadcast</a><a href="/tags/CardView/" style="font-size: 10.00px;">CardView</a><a href="/tags/CocoaPods/" style="font-size: 10.00px;">CocoaPods</a><a href="/tags/Cocos2d-X/" style="font-size: 16.67px;">Cocos2d-X</a><a href="/tags/CocosPods/" style="font-size: 10.00px;">CocosPods</a><a href="/tags/ContentProvider/" style="font-size: 10.00px;">ContentProvider</a><a href="/tags/Context/" style="font-size: 10.00px;">Context</a><a href="/tags/Crouton/" style="font-size: 10.00px;">Crouton</a><a href="/tags/CursorLoader/" style="font-size: 10.00px;">CursorLoader</a><a href="/tags/Demo/" style="font-size: 11.67px;">Demo</a><a href="/tags/Dialog/" style="font-size: 10.00px;">Dialog</a><a href="/tags/EditView/" style="font-size: 10.00px;">EditView</a><a href="/tags/EventBus/" style="font-size: 10.00px;">EventBus</a><a href="/tags/Express/" style="font-size: 10.00px;">Express</a><a href="/tags/Express学习笔记/" style="font-size: 10.00px;">Express学习笔记</a><a href="/tags/Flex/" style="font-size: 10.00px;">Flex</a><a href="/tags/Fragment/" style="font-size: 11.67px;">Fragment</a><a href="/tags/GET/" style="font-size: 10.00px;">GET</a><a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/Gradle/" style="font-size: 11.67px;">Gradle</a><a href="/tags/GridLayout/" style="font-size: 10.00px;">GridLayout</a><a href="/tags/GridView/" style="font-size: 11.67px;">GridView</a>
+    </div>
+  </div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">25</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a><span class="archive-list-count">42</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">June 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">20</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a><span class="archive-list-count">24</span></li></ul>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://imid.me/" target="_blank" title="iMID">iMID's Blog</a></li>
+      <li><a href="http://www.trinea.cn/" target="_blank" title="trinea">Trinea's Blog</a></li>
+      <li><a href="http://stormzhang.github.io/" target="_blank" title="stormzhang">StormZhang's Blog</a></li>
+      <li><a href="http://daimajia.com/" target="_blank" title="daimajia">DaiMaJia.Blog</a></li>
+      <li><a href="http://macrotea.com/welcome/" target="_blank" title="daimajia">Macrotea.Blog</a></li>
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello,I&#39;m Zoe,a Android and iOS developers. <br/>
+			This is my blog,I hope you will enjoy them.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2292032577" target="_blank" class="icon-weibo" title="weibo"></a>
+		
+		
+		<a href="https://github.com/seniorzhai" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:developer.zhaitao@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2016 
+		
+		<a href="http://seniorzhai.github.io/about" target="_blank" title="Zoe">Zoe</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zt1991616"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-54646832-1', 'null');  
+ga('send', 'pageview');
+</script>
+
+
+
+
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<script src="/js/totop.js"></script>
+
+
+
+
+  </body>
+</html>
+
+<a href="https://github.com/seniorzhai"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>

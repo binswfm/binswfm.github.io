@@ -1,0 +1,574 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="google-site-verification" content="WNyUn91IXtlyHB-gfFfg8K6MCkItzKWdzzw_Nh17ksE" />
+  <meta name="baidu-site-verification" content="e5ZaZQ3Tx8" />
+  
+    <title>SuperAgent使用 | Zoe&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Zoe">
+    
+    <meta name="description" content="SuperAgent是一个非常方便的客户端请求模块，能方便的发起get、post、put、delete、head请求">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Zoe&#39;s blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Zoe&#39;s blog" title="Zoe&#39;s blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Zoe&#39;s blog">Zoe&#39;s blog</a></h1>
+				<h2 class="blog-motto">宅学长的博客</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:seniorzhai.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/13/SuperAgent使用/" title="SuperAgent使用" itemprop="url">SuperAgent使用</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://seniorzhai.github.io/about" title="Zoe" target="_blank" itemprop="author">Zoe</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-13T03:12:25.000Z" itemprop="datePublished"> 发表于 5月 13 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#简单使用"><span class="toc-number">1.</span> <span class="toc-text">简单使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置头字段"><span class="toc-number">2.</span> <span class="toc-text">设置头字段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GET请求"><span class="toc-number">3.</span> <span class="toc-text">GET请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#POST/PUT请求"><span class="toc-number">4.</span> <span class="toc-text">POST/PUT请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置Content-Type"><span class="toc-number">5.</span> <span class="toc-text">设置Content-Type</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置接收类型"><span class="toc-number">6.</span> <span class="toc-text">设置接收类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查询字符串"><span class="toc-number">7.</span> <span class="toc-text">查询字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解析响应内容"><span class="toc-number">8.</span> <span class="toc-text">解析响应内容</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON/Urlencoded"><span class="toc-number">8.1.</span> <span class="toc-text">JSON/Urlencoded</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Multipart"><span class="toc-number">8.2.</span> <span class="toc-text">Multipart</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#响应属性"><span class="toc-number">9.</span> <span class="toc-text">响应属性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#text"><span class="toc-number">9.1.</span> <span class="toc-text">text</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#body"><span class="toc-number">9.2.</span> <span class="toc-text">body</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#header"><span class="toc-number">9.3.</span> <span class="toc-text">header</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Content-Type"><span class="toc-number">9.4.</span> <span class="toc-text">Content-Type</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Status"><span class="toc-number">9.5.</span> <span class="toc-text">Status</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#中止请求"><span class="toc-number">10.</span> <span class="toc-text">中止请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#请求超时"><span class="toc-number">11.</span> <span class="toc-text">请求超时</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基础验证"><span class="toc-number">12.</span> <span class="toc-text">基础验证</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#重定向"><span class="toc-number">12.1.</span> <span class="toc-text">重定向</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#管道数据"><span class="toc-number">12.2.</span> <span class="toc-text">管道数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#复合请求"><span class="toc-number">12.3.</span> <span class="toc-text">复合请求</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#附加文件"><span class="toc-number">13.</span> <span class="toc-text">附加文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#字段值"><span class="toc-number">13.1.</span> <span class="toc-text">字段值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缓冲响应"><span class="toc-number">13.2.</span> <span class="toc-text">缓冲响应</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#跨域资源共享"><span class="toc-number">13.3.</span> <span class="toc-text">跨域资源共享</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异常处理"><span class="toc-number">13.4.</span> <span class="toc-text">异常处理</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p><a href="https://github.com/visionmedia/superagent" target="_blank" rel="external">SuperAgent</a>是一个非常方便的客户端请求模块，能方便的发起get、post、put、delete、head请求<br><a id="more"></a></p>
+<h2 id="简单使用">简单使用</h2>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">request</div><div class="line">	.get(<span class="string">'/'</span>)</div><div class="line">	.end(<span class="function"><span class="keyword">function</span><span class="params">(res)</span></span>{</div><div class="line">		<span class="comment">// 处理数据</span></div><div class="line">	});</div></pre></td></tr></table></figure>
+
+<p>可以使用参数传递</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">request(<span class="string">'GET'</span>,<span class="string">'/search'</span>).end(callback);</div></pre></td></tr></table></figure>
+
+<p>也可以使用绝对路径</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">request.get(<span class="string">'http://example.com/search'</span>)</div><div class="line">	.end(<span class="function"><span class="keyword">function</span><span class="params">(res)</span>)</span></div></pre></td></tr></table></figure>
+
+<p><code>delete</code>、<code>head</code>、<code>post</code>、<code>put</code>等HTTP动作都可以使用</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">request</div><div class="line">	.head(<span class="string">'/favicon.ico'</span>)</div><div class="line">	.end(<span class="function"><span class="keyword">function</span><span class="params">(res)</span></span>{</div><div class="line">		<span class="comment">//</span></div><div class="line">	})</div></pre></td></tr></table></figure>
+
+<p><code>delete</code>是默认的保留字所以使用<code>.del()</code>来指定delete动作</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">request</div><div class="line">	.del(<span class="string">'/user/1'</span>)</div><div class="line">	.end(<span class="function"><span class="keyword">function</span><span class="params">(res)</span></span>{</div><div class="line">		<span class="comment">//</span></div><div class="line">	});</div></pre></td></tr></table></figure>
+
+<h2 id="设置头字段">设置头字段</h2>
+<p>只需要调用<code>.set()</code>方法即可</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">request</div><div class="line">	.get(<span class="string">'/search'</span>)</div><div class="line">	.set(<span class="string">'API-Key'</span>,<span class="string">'foobar'</span>)</div><div class="line">	.set(<span class="string">'Accept'</span>,<span class="string">'application/json'</span>)</div><div class="line">	.end(callback);</div></pre></td></tr></table></figure>
+
+<p>也可以传递一个对象，一次修改多个字段</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">request</div><div class="line">  .get(<span class="string">'/search'</span>)</div><div class="line">  .set({ <span class="string">'API-Key'</span>: <span class="string">'foobar'</span>, Accept: <span class="string">'application/json'</span> })</div><div class="line">  .end(callback);</div></pre></td></tr></table></figure>
+
+<h2 id="GET请求">GET请求</h2>
+<p>使用<code>.query()</code>方法可以传递一个对象完成请求参数</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">reques</div><div class="line">	.get(<span class="string">'/search'</span>)</div><div class="line">	.query({query:<span class="string">'Manny'</span>})</div><div class="line">	.query({rang:<span class="string">'1.5'</span>})</div><div class="line">	.end(<span class="function"><span class="keyword">function</span><span class="params">(res)</span></span>{</div><div class="line">		<span class="comment">//</span></div><div class="line">	});</div></pre></td></tr></table></figure>
+
+<p>也可以合并成一个对象</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">request</div><div class="line">	.get(<span class="string">'/search'</span>)</div><div class="line">	.query({query:<span class="string">'Manny'</span>,range:<span class="string">'1.5'</span>})</div><div class="line">	.end(<span class="function"><span class="keyword">function</span><span class="params">(res)</span></span>{</div><div class="line">		<span class="comment">//</span></div><div class="line">	});</div></pre></td></tr></table></figure>
+
+<p>也可以直接传递字符串</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">request</div><div class="line">	.get(<span class="string">'/search'</span>)</div><div class="line">	.query(<span class="string">'query=Manny&range=1.5'</span>)</div><div class="line">	.end(<span class="function"><span class="keyword">function</span><span class="params">(res)</span></span>{</div><div class="line">		<span class="comment">//</span></div><div class="line">	});</div></pre></td></tr></table></figure>
+
+<p>或者字符串拼接</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">request</div><div class="line">    .get(<span class="string">'/querystring'</span>)</div><div class="line">    .query(<span class="string">'search=Manny'</span>)</div><div class="line">    .query(<span class="string">'range=1..5'</span>)</div><div class="line">    .end(<span class="function"><span class="keyword">function</span><span class="params">(res)</span></span>{</div><div class="line">    	<span class="comment">//</span></div><div class="line">    });</div></pre></td></tr></table></figure>
+
+<h2 id="POST/PUT请求">POST/PUT请求</h2>
+<ul>
+<li>POST Json数据</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">request.post(<span class="string">'/user'</span>)</div><div class="line">	.set(<span class="string">'Content-Type'</span>,<span class="string">'application/json'</span>)</div><div class="line">	.send(<span class="string">'{"name":"tj","pet":"tobi"}'</span>)</div><div class="line">	.end(callback);</div></pre></td></tr></table></figure>
+
+<p>默认支持<code>form</code>和<code>json</code>两种格式，不设置Content-Type也是可以的</p>
+<ul>
+<li>以<code>application/x-www-form-urlencoded</code>类型发送数据，调用<code>.type()</code>方法传递form参数即可</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">request.post(<span class="string">'/user'</span>)</div><div class="line">    .type(<span class="string">'form'</span>)</div><div class="line">    .send({ name: <span class="string">'tj'</span> })</div><div class="line">    .send({ pet: <span class="string">'tobi'</span> })</div><div class="line">    .end(callback)</div></pre></td></tr></table></figure>
+
+<blockquote>
+<p>form是form-data和urlencoded的别名</p>
+</blockquote>
+<h2 id="设置Content-Type">设置Content-Type</h2>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">request.post(<span class="string">'/user'</span>)</div><div class="line">	.type(<span class="string">'application/json'</span>)</div><div class="line"></div><div class="line">request.post(<span class="string">'/user'</span>)</div><div class="line">	.type(<span class="string">'json'</span>)</div><div class="line"></div><div class="line">request.post(<span class="string">'/user'</span>)</div><div class="line">	.type(<span class="string">'png'</span>)</div></pre></td></tr></table></figure>
+
+<h2 id="设置接收类型">设置接收类型</h2>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">request.get(<span class="string">'/user'</span>)</div><div class="line">	.accept(<span class="string">'application/json'</span>)</div><div class="line"></div><div class="line">request.get(<span class="string">'/user'</span>)</div><div class="line">	.accept(<span class="string">'json'</span>)</div><div class="line"></div><div class="line">request.get(<span class="string">'/user'</span>)</div><div class="line">	.accept(<span class="string">'png'</span>)</div></pre></td></tr></table></figure>
+
+<h2 id="查询字符串">查询字符串</h2>
+<p>当POST请求并希望传递一些查询字符串时，可以同时使用<code>.query()</code>方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">request</div><div class="line">  .post(<span class="string">'/'</span>)</div><div class="line">  .query({ format: <span class="string">'json'</span> })</div><div class="line">  .query({ dest: <span class="string">'/login'</span> })</div><div class="line">  .send({ post: <span class="string">'data'</span>, here: <span class="string">'wahoo'</span> })</div><div class="line">  .end(callback);</div></pre></td></tr></table></figure>
+
+<h2 id="解析响应内容">解析响应内容</h2>
+<p>SuperAgent会解析一些常用的格式，当前支持<code>application/json</code>，<code>application/x-www-form-urlencoded</code>，<code>multipart/form-data</code></p>
+<h3 id="JSON/Urlencoded">JSON/Urlencoded</h3>
+<p>res.body是解析后的内容对象，比如一个请求响应<code>&#39;{“user:{&quot;name&quot;:&quot;tobi&quot;}}&#39;</code>字符串，res.body.user.name将会返回tobi</p>
+<h3 id="Multipart">Multipart</h3>
+<p>res.files属性就可以直接获取文件</p>
+<h2 id="响应属性">响应属性</h2>
+<p>返回为response对象</p>
+<h3 id="text">text</h3>
+<p>res.text为未解析的响应内容，一般只在mime类型能够匹配<code>text</code>，<code>json</code>，<code>x-www-form-urlencoding</code>的情况</p>
+<h3 id="body">body</h3>
+<p>当Content-Type定义一个解析器后，自动解析，默认解析<code>application/json</code>和<code>application/x-www-form-urlencoding</code></p>
+<h3 id="header">header</h3>
+<p>res.header包含解析之后的响应投数据，键值都是node处理成小写字幕形成，比如<code>res.header[&#39;content-lenth&#39;]</code></p>
+<h3 id="Content-Type">Content-Type</h3>
+<p>Content-Type响应头字段的一个特例，服务器提供res.type来访问他，默认res.charset。<br>如Content-Type为<code>text/html;charset=utf-8</code>则res.type为text/html，res.charset为utf-8</p>
+<h3 id="Status">Status</h3>
+<p>响应状态标志位</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> type = status / <span class="number">100</span> | <span class="number">0</span>;</div><div class="line"></div><div class="line"> <span class="comment">// status / class</span></div><div class="line"> res.status = status;</div><div class="line"> res.statusType = type;</div><div class="line"></div><div class="line"> <span class="comment">// basics</span></div><div class="line"> res.info = <span class="number">1</span> == type;</div><div class="line"> res.ok = <span class="number">2</span> == type;</div><div class="line"> res.clientError = <span class="number">4</span> == type;</div><div class="line"> res.serverError = <span class="number">5</span> == type;</div><div class="line"> res.error = <span class="number">4</span> == type || <span class="number">5</span> == type;</div><div class="line"></div><div class="line"> <span class="comment">// sugar</span></div><div class="line"> res.accepted = <span class="number">202</span> == status;</div><div class="line"> res.noContent = <span class="number">204</span> == status || <span class="number">1223</span> == status;</div><div class="line"> res.badRequest = <span class="number">400</span> == status;</div><div class="line"> res.unauthorized = <span class="number">401</span> == status;</div><div class="line"> res.notAcceptable = <span class="number">406</span> == status;</div><div class="line"> res.notFound = <span class="number">404</span> == status;</div><div class="line"> res.forbidden = <span class="number">403</span> == status;</div></pre></td></tr></table></figure>
+
+<h2 id="中止请求">中止请求</h2>
+<p><code>req.abort()</code>可以中止请求</p>
+<h2 id="请求超时">请求超时</h2>
+<p><code>req.timeout()</code>来定义超时时间</p>
+<h2 id="基础验证">基础验证</h2>
+<ol>
+<li>传递URL</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">request.get(<span class="string">'http://tobi:learnboost[@local](/user/local)'</span>).end(callback);</div></pre></td></tr></table></figure>
+
+<ol>
+<li>调用<code>.auth()</code>方法</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">request</div><div class="line">  .get(<span class="string">'http://local'</span>)</div><div class="line">  .auth(<span class="string">'tobo'</span>, <span class="string">'learnboost'</span>)</div><div class="line">  .end(callback);</div></pre></td></tr></table></figure>
+
+<h3 id="重定向">重定向</h3>
+<p>可以通过调用.res.redirects(n)来设置个数，默认是5个</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">request</div><div class="line">  .get(<span class="string">'/some.png'</span>)</div><div class="line">  .redirects(<span class="number">2</span>)</div><div class="line">  .end(callback);</div></pre></td></tr></table></figure>
+
+<h3 id="管道数据">管道数据</h3>
+<p>允许使用一个请求流来输送数据,比如请求一个文件作为输出流</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> request = <span class="built_in">require</span>(<span class="string">'superagent'</span>)</div><div class="line">  , fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> stream = fs.createReadStream(<span class="string">'path/to/my.json'</span>);</div><div class="line"><span class="keyword">var</span> req = request.post(<span class="string">'/somewhere'</span>);</div><div class="line">req.type(<span class="string">'json'</span>);</div><div class="line">stream.pipe(req);</div><div class="line"></div><div class="line"><span class="comment">// 保存到文件</span></div><div class="line"><span class="keyword">var</span> request = <span class="built_in">require</span>(<span class="string">'superagent'</span>)</div><div class="line">  , fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> stream = fs.createWriteStream(<span class="string">'path/to/my.json'</span>);</div><div class="line"><span class="keyword">var</span> req = request.get(<span class="string">'/some.json'</span>);</div><div class="line">req.pipe(stream);</div></pre></td></tr></table></figure>
+
+<h3 id="复合请求">复合请求</h3>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> req = request.post(<span class="string">'/upload'</span>);</div><div class="line"></div><div class="line">req.part()</div><div class="line">   .set(<span class="string">'Content-Type'</span>, <span class="string">'image/png'</span>)</div><div class="line">   .set(<span class="string">'Content-Disposition'</span>, <span class="string">'attachment; filename="myimage.png"'</span>)</div><div class="line">   .write(<span class="string">'some image data'</span>)</div><div class="line">   .write(<span class="string">'some more image data'</span>);</div><div class="line"></div><div class="line">req.part()</div><div class="line">   .set(<span class="string">'Content-Disposition'</span>, <span class="string">'form-data; name="name"'</span>)</div><div class="line">   .set(<span class="string">'Content-Type'</span>, <span class="string">'text/plain'</span>)</div><div class="line">   .write(<span class="string">'tobi'</span>);</div><div class="line"></div><div class="line">req.end(callback);</div></pre></td></tr></table></figure>
+
+<h2 id="附加文件">附加文件</h2>
+<p>可以通用.attach(name, [path], [filename])和.field(name, value)这两种形式来调用.添加多个附件也比较简单，只需要给附件提供自定义的文件名称,同样的基础名称也要提供.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">request</div><div class="line">  .post(<span class="string">'/upload'</span>)</div><div class="line">  .attach(<span class="string">'avatar'</span>, <span class="string">'path/to/tobi.png'</span>, <span class="string">'user.png'</span>)</div><div class="line">  .attach(<span class="string">'image'</span>, <span class="string">'path/to/loki.png'</span>)</div><div class="line">  .attach(<span class="string">'file'</span>, <span class="string">'path/to/jane.png'</span>)</div><div class="line">  .end(callback);</div></pre></td></tr></table></figure>
+
+<h3 id="字段值">字段值</h3>
+<p>跟html的字段很像,你可以调用.field(name,value)方法来设置字段,假设你想上传一个图片的时候带上自己的名称和邮箱，那么你可以像下面写的那样:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">request</div><div class="line">  .post(<span class="string">'/upload'</span>)</div><div class="line">  .field(<span class="string">'user[name]'</span>, <span class="string">'Tobi'</span>)</div><div class="line">  .field(<span class="string">'user[email]'</span>, <span class="string">'tobi[@learnboost](/user/learnboost).com'</span>)</div><div class="line">  .attach(<span class="string">'image'</span>, <span class="string">'path/to/tobi.png'</span>)</div><div class="line">  .end(callback);</div></pre></td></tr></table></figure>
+
+<h3 id="缓冲响应">缓冲响应</h3>
+<p>为了强迫缓冲res.text这样的响应内容,可以调用req.buffer()方法,想取消默认的文本缓冲响应像text/plain,text/html这样的，可以调用req.buffer(false)方法<br>当缓冲res.buffered标识提供了，那么就可以在一个回调函数里处理缓冲和没缓冲的响应.</p>
+<h3 id="跨域资源共享">跨域资源共享</h3>
+<p><code>.withCredentials()</code>方法可以激活发送原始cookie的能力,不过只有在Access-Control-Allow-Origin不是一个通配符(*),并且Access-Control-Allow-Credentials为<code>true</code>的情况下才行.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">request</div><div class="line">  .get(<span class="string">'http://localhost:4001/'</span>)</div><div class="line">  .withCredentials()</div><div class="line">  .end(<span class="function"><span class="keyword">function</span><span class="params">(res)</span></span>{</div><div class="line">    assert(<span class="number">200</span> == res.status);</div><div class="line">    assert(<span class="string">'tobi'</span> == res.text);</div><div class="line">    next();</div><div class="line">  })</div></pre></td></tr></table></figure>
+
+<h3 id="异常处理">异常处理</h3>
+<p>当发送错误时，superagent首先会检查回调函数的参数数量,当err参数提供的话，参数就是两个,如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">request</div><div class="line"> .post(<span class="string">'/upload'</span>)</div><div class="line"> .attach(<span class="string">'image'</span>, <span class="string">'path/to/tobi.png'</span>)</div><div class="line"> .end(<span class="function"><span class="keyword">function</span><span class="params">(err, res)</span></span>{</div><div class="line"></div><div class="line"> });</div><div class="line"></div><div class="line"></div><div class="line"> request</div><div class="line">  .post(<span class="string">'/upload'</span>)</div><div class="line">  .attach(<span class="string">'image'</span>, <span class="string">'path/to/tobi.png'</span>)</div><div class="line">  .on(<span class="string">'error'</span>, handle)</div><div class="line">  .end(<span class="function"><span class="keyword">function</span><span class="params">(res)</span></span>{</div><div class="line">  	<span class="comment">//</span></div><div class="line">  });</div></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意:superagent默认情况下,对响应4xx和5xx的认为不是错误,例如当响应返回一个500或者403的时候,这些状态信息可以通过res.error,res.status和其它的响应属性来查看,但是没有任务的错误对象会传递到回调函数里或者emit一个error事件.正常的error事件只会发生在网络错误,解析错误等.</p>
+</blockquote>
+<p>当产生一个4xx或者5xx的http错误响应,res.error提供了一个错误信息的对象，你可以通过检查这个来做某些事情.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (res.error) {</div><div class="line">  alert(<span class="string">'oh no '</span> + res.error.message);</div><div class="line">} <span class="keyword">else</span> {</div><div class="line">  alert(<span class="string">'got '</span> + res.status + <span class="string">' response'</span>);</div><div class="line">}</div></pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/node-js/">node.js</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/http/">http</a><a href="/tags/爬虫/">爬虫</a><a href="/tags/cookie/">cookie</a><a href="/tags/访问/">访问</a>
+  </div>
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://seniorzhai.github.io/2015/05/13/SuperAgent使用/" data-title="SuperAgent使用 | Zoe&#39;s blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/05/28/-转-json实体类快速生成插件/" title="[转]json实体类快速生成插件">
+  <strong>上一篇：</strong><br/>
+  <span>
+  [转]json实体类快速生成插件</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/04/27/RDVTabBarController的简单使用/"  title="RDVTabBarController的简单使用">
+ <strong>下一篇：</strong><br/> 
+ <span>RDVTabBarController的简单使用
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#简单使用"><span class="toc-number">1.</span> <span class="toc-text">简单使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置头字段"><span class="toc-number">2.</span> <span class="toc-text">设置头字段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GET请求"><span class="toc-number">3.</span> <span class="toc-text">GET请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#POST/PUT请求"><span class="toc-number">4.</span> <span class="toc-text">POST/PUT请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置Content-Type"><span class="toc-number">5.</span> <span class="toc-text">设置Content-Type</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置接收类型"><span class="toc-number">6.</span> <span class="toc-text">设置接收类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查询字符串"><span class="toc-number">7.</span> <span class="toc-text">查询字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解析响应内容"><span class="toc-number">8.</span> <span class="toc-text">解析响应内容</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON/Urlencoded"><span class="toc-number">8.1.</span> <span class="toc-text">JSON/Urlencoded</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Multipart"><span class="toc-number">8.2.</span> <span class="toc-text">Multipart</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#响应属性"><span class="toc-number">9.</span> <span class="toc-text">响应属性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#text"><span class="toc-number">9.1.</span> <span class="toc-text">text</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#body"><span class="toc-number">9.2.</span> <span class="toc-text">body</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#header"><span class="toc-number">9.3.</span> <span class="toc-text">header</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Content-Type"><span class="toc-number">9.4.</span> <span class="toc-text">Content-Type</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Status"><span class="toc-number">9.5.</span> <span class="toc-text">Status</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#中止请求"><span class="toc-number">10.</span> <span class="toc-text">中止请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#请求超时"><span class="toc-number">11.</span> <span class="toc-text">请求超时</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基础验证"><span class="toc-number">12.</span> <span class="toc-text">基础验证</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#重定向"><span class="toc-number">12.1.</span> <span class="toc-text">重定向</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#管道数据"><span class="toc-number">12.2.</span> <span class="toc-text">管道数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#复合请求"><span class="toc-number">12.3.</span> <span class="toc-text">复合请求</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#附加文件"><span class="toc-number">13.</span> <span class="toc-text">附加文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#字段值"><span class="toc-number">13.1.</span> <span class="toc-text">字段值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缓冲响应"><span class="toc-number">13.2.</span> <span class="toc-text">缓冲响应</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#跨域资源共享"><span class="toc-number">13.3.</span> <span class="toc-text">跨域资源共享</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异常处理"><span class="toc-number">13.4.</span> <span class="toc-text">异常处理</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/Android/" title="Android">Android<sup>184</sup></a></li>
+		
+			<li><a href="/categories/Camera/" title="Camera">Camera<sup>1</sup></a></li>
+		
+			<li><a href="/categories/Cocos2d-X/" title="Cocos2d-X">Cocos2d-X<sup>11</sup></a></li>
+		
+			<li><a href="/categories/Prose/" title="Prose">Prose<sup>27</sup></a></li>
+		
+			<li><a href="/categories/Python/" title="Python">Python<sup>22</sup></a></li>
+		
+			<li><a href="/categories/ReactNative/" title="ReactNative">ReactNative<sup>7</sup></a></li>
+		
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>79</sup></a></li>
+		
+			<li><a href="/categories/node-js/" title="node.js">node.js<sup>29</sup></a></li>
+		
+			<li><a href="/categories/杂文/" title="杂文">杂文<sup>3</sup></a></li>
+		
+		</ul>
+		<ul>
+		<script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"></script>
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AFNetworking/" style="font-size: 10.00px;">AFNetworking</a><a href="/tags/APK/" style="font-size: 10.00px;">APK</a><a href="/tags/AS/" style="font-size: 10.00px;">AS</a><a href="/tags/Adapter/" style="font-size: 10.00px;">Adapter</a><a href="/tags/Android/" style="font-size: 20.00px;">Android</a><a href="/tags/Android-5-0/" style="font-size: 10.00px;">Android 5.0</a><a href="/tags/Android-Studio/" style="font-size: 13.33px;">Android Studio</a><a href="/tags/AndroidAninotations/" style="font-size: 10.00px;">AndroidAninotations</a><a href="/tags/AndroidStudio/" style="font-size: 18.33px;">AndroidStudio</a><a href="/tags/Animation/" style="font-size: 15.00px;">Animation</a><a href="/tags/Api/" style="font-size: 13.33px;">Api</a><a href="/tags/App/" style="font-size: 10.00px;">App</a><a href="/tags/Apple/" style="font-size: 10.00px;">Apple</a><a href="/tags/Async/" style="font-size: 10.00px;">Async</a><a href="/tags/Atom/" style="font-size: 11.67px;">Atom</a><a href="/tags/BaseAdapter/" style="font-size: 10.00px;">BaseAdapter</a><a href="/tags/Blur/" style="font-size: 10.00px;">Blur</a><a href="/tags/Box2D/" style="font-size: 10.00px;">Box2D</a><a href="/tags/Broadcast/" style="font-size: 10.00px;">Broadcast</a><a href="/tags/CardView/" style="font-size: 10.00px;">CardView</a><a href="/tags/CocoaPods/" style="font-size: 10.00px;">CocoaPods</a><a href="/tags/Cocos2d-X/" style="font-size: 16.67px;">Cocos2d-X</a><a href="/tags/CocosPods/" style="font-size: 10.00px;">CocosPods</a><a href="/tags/ContentProvider/" style="font-size: 10.00px;">ContentProvider</a><a href="/tags/Context/" style="font-size: 10.00px;">Context</a><a href="/tags/Crouton/" style="font-size: 10.00px;">Crouton</a><a href="/tags/CursorLoader/" style="font-size: 10.00px;">CursorLoader</a><a href="/tags/Demo/" style="font-size: 11.67px;">Demo</a><a href="/tags/Dialog/" style="font-size: 10.00px;">Dialog</a><a href="/tags/EditView/" style="font-size: 10.00px;">EditView</a><a href="/tags/EventBus/" style="font-size: 10.00px;">EventBus</a><a href="/tags/Express/" style="font-size: 10.00px;">Express</a><a href="/tags/Express学习笔记/" style="font-size: 10.00px;">Express学习笔记</a><a href="/tags/Flex/" style="font-size: 10.00px;">Flex</a><a href="/tags/Fragment/" style="font-size: 11.67px;">Fragment</a><a href="/tags/GET/" style="font-size: 10.00px;">GET</a><a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/Gradle/" style="font-size: 11.67px;">Gradle</a><a href="/tags/GridLayout/" style="font-size: 10.00px;">GridLayout</a><a href="/tags/GridView/" style="font-size: 11.67px;">GridView</a>
+    </div>
+  </div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">25</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a><span class="archive-list-count">42</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">June 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">20</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a><span class="archive-list-count">24</span></li></ul>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://imid.me/" target="_blank" title="iMID">iMID's Blog</a></li>
+      <li><a href="http://www.trinea.cn/" target="_blank" title="trinea">Trinea's Blog</a></li>
+      <li><a href="http://stormzhang.github.io/" target="_blank" title="stormzhang">StormZhang's Blog</a></li>
+      <li><a href="http://daimajia.com/" target="_blank" title="daimajia">DaiMaJia.Blog</a></li>
+      <li><a href="http://macrotea.com/welcome/" target="_blank" title="daimajia">Macrotea.Blog</a></li>
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello,I&#39;m Zoe,a Android and iOS developers. <br/>
+			This is my blog,I hope you will enjoy them.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2292032577" target="_blank" class="icon-weibo" title="weibo"></a>
+		
+		
+		<a href="https://github.com/seniorzhai" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:developer.zhaitao@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2016 
+		
+		<a href="http://seniorzhai.github.io/about" target="_blank" title="Zoe">Zoe</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zt1991616"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-54646832-1', 'null');  
+ga('send', 'pageview');
+</script>
+
+
+
+
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<script src="/js/totop.js"></script>
+
+
+
+
+  </body>
+</html>
+
+<a href="https://github.com/seniorzhai"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>

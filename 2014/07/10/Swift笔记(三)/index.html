@@ -1,0 +1,645 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="google-site-verification" content="WNyUn91IXtlyHB-gfFfg8K6MCkItzKWdzzw_Nh17ksE" />
+  <meta name="baidu-site-verification" content="e5ZaZQ3Tx8" />
+  
+    <title>Swift笔记(三) | Zoe&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Zoe">
+    
+    <meta name="description" content="字符串和字符（String and Character）
+Swift的String类型和Foundation的NSString类进行了无缝桥接，所有NSString API都可以调用Swift的String类型的值
+字符串字面量(String Literals)
+字符串字面量是由双引号(“”)包裹的">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Zoe&#39;s blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Zoe&#39;s blog" title="Zoe&#39;s blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Zoe&#39;s blog">Zoe&#39;s blog</a></h1>
+				<h2 class="blog-motto">宅学长的博客</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:seniorzhai.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/07/10/Swift笔记(三)/" title="Swift笔记(三)" itemprop="url">Swift笔记(三)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://seniorzhai.github.io/about" title="Zoe" target="_blank" itemprop="author">Zoe</a>
+		
+  <p class="article-time">
+    <time datetime="2014-07-10T05:11:08.000Z" itemprop="datePublished"> 发表于 7月 10 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#字符串和字符（String_and_Character）"><span class="toc-number">1.</span> <span class="toc-text">字符串和字符（String and Character）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串字面量(String_Literals)"><span class="toc-number">1.1.</span> <span class="toc-text">字符串字面量(String Literals)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#初始化空字符串"><span class="toc-number">1.2.</span> <span class="toc-text">初始化空字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串可变性(String_Mutability)"><span class="toc-number">1.3.</span> <span class="toc-text">字符串可变性(String Mutability)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串是值类型"><span class="toc-number">1.4.</span> <span class="toc-text">字符串是值类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符"><span class="toc-number">1.5.</span> <span class="toc-text">字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#计算字符数量"><span class="toc-number">1.6.</span> <span class="toc-text">计算字符数量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#连接字符串和字符"><span class="toc-number">1.7.</span> <span class="toc-text">连接字符串和字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串插值"><span class="toc-number">1.8.</span> <span class="toc-text">字符串插值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#比较字符串"><span class="toc-number">1.9.</span> <span class="toc-text">比较字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#字符串相等"><span class="toc-number">1.9.1.</span> <span class="toc-text">字符串相等</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数的定义与调用(Defining_and_Calling_Functions)"><span class="toc-number">2.</span> <span class="toc-text">函数的定义与调用(Defining and Calling Functions)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数参数与返回值(Function_Parameters_and_Return_Values)"><span class="toc-number">3.</span> <span class="toc-text">函数参数与返回值(Function Parameters and Return Values)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#函数参数名称"><span class="toc-number">3.1.</span> <span class="toc-text">函数参数名称</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#外部函数名"><span class="toc-number">3.1.1.</span> <span class="toc-text">外部函数名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#简写外部参数名"><span class="toc-number">3.1.2.</span> <span class="toc-text">简写外部参数名</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#默认参数值"><span class="toc-number">3.2.</span> <span class="toc-text">默认参数值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可变参数"><span class="toc-number">3.3.</span> <span class="toc-text">可变参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常量参数和变量参数"><span class="toc-number">3.4.</span> <span class="toc-text">常量参数和变量参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#输入输出参数"><span class="toc-number">3.5.</span> <span class="toc-text">输入输出参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数类型"><span class="toc-number">3.6.</span> <span class="toc-text">函数类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用函数类型"><span class="toc-number">3.7.</span> <span class="toc-text">使用函数类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#使用函数类型-1"><span class="toc-number">3.7.1.</span> <span class="toc-text">使用函数类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#函数类型作为参数类型"><span class="toc-number">3.7.2.</span> <span class="toc-text">函数类型作为参数类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#函数类型作为返回类型"><span class="toc-number">3.7.3.</span> <span class="toc-text">函数类型作为返回类型</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#闭包表达式(Closure_Expreessions)"><span class="toc-number">4.</span> <span class="toc-text">闭包表达式(Closure Expreessions)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#闭包表达式语法"><span class="toc-number">4.1.</span> <span class="toc-text">闭包表达式语法</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h2 id="字符串和字符（String_and_Character）">字符串和字符（String and Character）</h2>
+<p>Swift的String类型和Foundation的NSString类进行了无缝桥接，所有NSString API都可以调用Swift的String类型的值</p>
+<h3 id="字符串字面量(String_Literals)">字符串字面量(String Literals)</h3>
+<p>字符串字面量是由双引号(“”)包裹的具有固定顺序的文本字符集<br>字符串字面量可以包含以下特殊字符：</p>
+<ul>
+<li>转义字符\0(空字符)、\(反斜线)、\t(水平制表符)、\n(换行符)、\r(回车符)、\”(双引号)、\’(单引号)</li>
+<li>单字节 Unicode 标量，写成\xnn，其中nn为两位十六进制数</li>
+<li>双字节 Unicode 标量，写成\unnnn，其中nnnn为四位十六进制数</li>
+<li>四字节 Unicode 标量，写成\Unnnnnnnn，其中nnnnnnnn为八位十六进制数<h3 id="初始化空字符串">初始化空字符串</h3>
+</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> emptyString = <span class="string">""</span></div><div class="line"><span class="keyword">var</span> antherEmptyString = <span class="type">String</span>()</div><div class="line"><span class="keyword">if</span> emptyString.isEmpty {</div><div class="line">    <span class="comment">//</span></div><div class="line">}</div></pre></td></tr></table></figure>
+
+<h3 id="字符串可变性(String_Mutability)">字符串可变性(String Mutability)</h3>
+<p>可以通过分配一个变量来对字符串进行修改，或者分配一个常量保证其不被修改</p>
+<h3 id="字符串是值类型">字符串是值类型</h3>
+<p>String类型进行常量、变量赋值操作或在函数\方法中传递，会进行拷贝，是值传递</p>
+<h3 id="字符">字符</h3>
+<p>Swift的String类型表示特定序列的character类型值的集合</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> character <span class="keyword">in</span> <span class="string">"Hello world"</span>}</div><div class="line">    <span class="built_in">println</span>(character)</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>可以表明<code>Character</code>类型来创建字符常量或者变量</p>
+<figure class="highlight Swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> a:<span class="type">Character</span> = <span class="string">"1"</span></div></pre></td></tr></table></figure>
+
+<h3 id="计算字符数量">计算字符数量</h3>
+<p>通过调用全局的<code>countElement</code>函数，并将字符串作为参数传递，可以获取字符串的字符数量</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> <span class="keyword">str</span> = <span class="string">"I have a word"</span></div><div class="line">pritln(\(coutElemnts(<span class="keyword">str</span>)));</div></pre></td></tr></table></figure>
+
+<h3 id="连接字符串和字符">连接字符串和字符</h3>
+<p>使用<code>+</code>相加就可以连接字符串<br>使用<code>+=</code>可以讲一个字符串加上另一个字符串存到原有的字符串上</p>
+<h3 id="字符串插值">字符串插值</h3>
+<p>字符串插值是一种构建新字符串的方式，可以在其中包含常量、变量、字面量和表达式</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">\(<span class="type">Double</span>(<span class="number">3</span>) * <span class="number">2.5</span>) <span class="comment">// "7.5"</span></div></pre></td></tr></table></figure>
+
+<h3 id="比较字符串">比较字符串</h3>
+<p>Swift 提供了三种方式来比较字符串的值：字符串相等、前缀相等和后缀相等。</p>
+<h4 id="字符串相等">字符串相等</h4>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> str = <span class="string">"一样样的"</span></div><div class="line">str == <span class="string">"一样样的"</span> <span class="comment">// true</span></div><div class="line">####前缀/后缀相等</div><div class="line">调用字符串的`hasPrefix`/`hasSuffix`方法来检查字符串是否拥有特定前缀/后缀。</div></pre></td></tr></table></figure>
+
+<p>swift<br>“I am a boy”.hasPrefix(“I am”); // true</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">###大写和小写字符串</div><div class="line">通过字符串的<span class="escape">`u</span>ppercaseString<span class="escape">`和</span><span class="escape">`l</span>owercaseString<span class="escape">`属</span>性来方位大写/小写版本的字符串</div><div class="line">###Unicode</div><div class="line">Unicode是一个国际标准，用于文本的编码和表示。</div><div class="line">每一个字符都可以被Unicode解释成一个或多个unicode标量。字符的unicode标量是一个唯一的<span class="number">21</span>位数字，例如<span class="escape">`U</span>+<span class="number">0061</span><span class="escape">`表</span>示小写的拉丁字母<span class="escape">`a</span><span class="escape">`</span></div><div class="line">当Unicode字符串被写进文本文件或其他存储结构当中，这些unicode标量将会按照Unicode定义的集中格式之一进行编码，其中包括<span class="escape">`U</span>TF-<span class="number">8</span><span class="escape">`（</span>以<span class="number">8</span>位代码单元进行编码）和<span class="escape">`U</span>TF-<span class="number">16</span><span class="escape">`（</span>以<span class="number">16</span>位代码单元进行编码）</div><div class="line">####字符串的Unicode表示</div><div class="line">Swift提供了几种不同的方法来访问字符串的Unicode</div><div class="line">- UTF-<span class="number">8</span> 代码单元集合 (利用字符串的utf8属性进行访问)</div><div class="line">- UTF-<span class="number">16</span> 代码单元集合 (利用字符串的utf16属性进行访问)</div><div class="line">- <span class="number">21</span>位的 Unicode 标量值集合 (利用字符串的unicodeScalars属性进行访问)</div><div class="line">utfb属性其为<span class="escape">`U</span>TF8View<span class="escape">`类</span>型的属性，是无符号<span class="number">8</span>位(UInt)值的集合，同理utf16属性是<span class="escape">`U</span>TF16View<span class="escape">`类</span>型的属性</div></pre></td></tr></table></figure>
+
+<p>swift<br>let dogString “Dog!”<br>for codeUnit in dogString.utf8 {<br>    pritln(“(codeUnit)”);<br>}<br>for code16Unit in dogString.utf16 {<br>    println(“(code16Unit)”);<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">####Unicode标量</div><div class="line">unocodeScalars属性为<span class="escape">`U</span>nicodeScalarView<span class="escape">`类</span>型的属性，是<span class="escape">`U</span>nicodeScalar<span class="escape">`的</span>集合,<span class="escape">`U</span>nicodeScalar<span class="escape">`是</span><span class="number">21</span>位的 Unicode 代码点。</div></pre></td></tr></table></figure>
+
+<p>swift<br>for scale in dogString.unicodeScalars {<br>    println(“(scale.value)”)<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">集合类型(Collection Types)</div><div class="line"><span class="header">##数组</span></div><div class="line">数组使用有序列表存储同一类型的多个值，相同的值可以多次出现在一个数组的不同位置中</div><div class="line">在Swift中。数据值在被存储进入某个数组之前类型必须明确，方法是通过显示的类型标注或类型推断，Swift的数组是类型安全的，并且它包含的类型必须明确，这点和NSArray和NSMutableArray很不同。</div><div class="line"><span class="header">###数组的简单语法</span></div><div class="line">数组遵循<span class="code">`Array&lt;SomeType&gt;`</span>这样的形式，其中<span class="code">`SomeType`</span>是这个数组中唯一允许存在的数据类型。也可以使用像<span class="code">`SomeType[]`</span>这样的简单语法。</div><div class="line"><span class="header">###数组构造语句</span></div><div class="line">形如<span class="code">`[value1,value2,value3]`</span></div></pre></td></tr></table></figure>
+
+<p>Swift<br>var names:String[] = [“joy”,”jack”]</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">变量被声明为<span class="escape">`字</span>符串类型的数组<span class="escape">`</span></div><div class="line">由于Swift的类型推断机制，也可以这样写</div></pre></td></tr></table></figure>
+
+<p>swift<br>var names = [“jay”,”jack”]</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">###访问和修改数组</div><div class="line">可以通过数组的方法和属性来访问和修改数组，或者下表语法。还可以使用数组的只读属性<span class="escape">`c</span>ount<span class="escape">`来</span>获取数组中的数据数量，使用<span class="escape">`i</span>sEmpty<span class="escape">`属</span>性可以检测数组是否为空，使用<span class="escape">`a</span>ppend<span class="escape">`方</span>法在数组后面添加新的数据项，也可以使用(+=)添加单个数据项或者拥有相同数据类型的数组</div><div class="line">也可以通过索引获取数组项</div></pre></td></tr></table></figure>
+
+<p>var names = [“joy”,”jack”]<br>names.count // 2<br>names.isEmpty // false<br>names.append(“alisa”)<br>names+=”Demi”<br>names+=[“Carry”,”Carry”]<br>names[0] //“joy”<br>names[2…3] // [“alisa”,”Demi”]</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="label">调用`insert(atIndex:</span>)<span class="escape">`可</span>以再在指定位置插入数据，<span class="escape">`r</span>emoveAtIndex<span class="escape">`方</span>法可以移除数组中的某一项，<span class="escape">`r</span>emoveLast<span class="escape">`方</span>法可以移除最后一项</div><div class="line">###数组的遍历</div><div class="line">使用<span class="escape">`f</span><span class="literal">or</span>-in<span class="escape">`循</span>环来遍历所有数组中的数据项</div></pre></td></tr></table></figure>
+
+<p>for item in shoppingList{<br>   println(item)<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">也可以使用全局<span class="escape">`e</span>numerate<span class="escape">`函</span>数来进行数组遍历</div></pre></td></tr></table></figure>
+
+<p>swift<br>for (index,value) in enumerate(shoppingList) {<br>    println(“Item (index+1) : (value)”)<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">###创建或构造一个数组</span></div></pre></td></tr></table></figure>
+
+<p>swift<br>var someInts = Int<a href=""></a><br>var threeDoubles = Double<a href="count:3,repeatedValue:0.0" target="_blank" rel="external"></a> // 指定大小，初始值<br>var anotherThreeDoubles = Array(count:3,repeatedValue:2.5) // 类型推到</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">##字典</div><div class="line">字典是一种存储多个相同类型的值的容器，没个值都关联唯一的键，键作为字典中的这个值数据的标识符。字典的数据项没有具体的顺序，需要通过键访问数据。</div><div class="line">与Objective-C中的<span class="escape">`N</span>SDictionary<span class="escape">`和</span><span class="escape">`N</span>SMutableDictionary<span class="escape">`类</span>可以使用任何类型的对象做键和值不同，Swift在某个特定字典中可以存储的键和值必须提前定义，方法是通过显式标注或者类型推断</div><div class="line">Swift的字典可以使用<span class="escape">`D</span>ictionary&lt;KeyType,ValueType&gt;<span class="escape">`定</span>义，其中<span class="escape">`k</span>eyType<span class="escape">`是</span>键的数据类型，<span class="escape">`V</span>alueType<span class="escape">`是</span>值的数据类型。<span class="escape">`k</span>eyType<span class="escape">`的</span>唯一限制是可哈希的，这样可以保证它的唯一性，所有Swift的基本类型(String,Int,Double和Bool)都是可哈希的，未关联的枚举成员也是可哈希的。</div><div class="line">###字典字面量</div><div class="line"><span class="escape">`[</span>key1:value1,key2:value2,key3:value3]<span class="escape">`可</span>以创建字典</div></pre></td></tr></table></figure>
+
+<p>swift<br>var airports:Dictionary<string,string> = [“TYO”:”Tokyo”,”DUB”:”Dublin”]<br>var airports = [“TYO”:”Tokyo”,”DUB”:”Dubin”]</string,string></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">###读取和修改字典</div><div class="line">使用下标语法或者字典的方法属性可以读取字典，只读属性<span class="escape">`c</span>ount<span class="escape">`来</span>获取字典的数据项的数量</div><div class="line">也可以使用下标法添加新的数据项</div><div class="line"><span class="escape">`u</span>pdateValue(forkey:)<span class="escape">`方</span>法可以设置或更新特定键对应的值，根据键值是否存在判断。该函数会返回包含一个字典值类型的可选值</div></pre></td></tr></table></figure>
+
+<p>airports[“LHR”] = “London Heathrow” // 添加数据项<br>airports[“LHR”] = “London” // 修改<br>if let oldValue = airports.updateValue(“Dublin Internation”,forKey:”DUB”){<br>    oldValue // 返回的是原值<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">使用下标法也可以访问对应键的值，如果不存在，返回<span class="escape">`n</span>il<span class="escape">`，</span>通过下标法设置某键的值为<span class="escape">`n</span>il<span class="escape">`，</span>也可以删除数据项，也可以使用<span class="escape">`r</span>emoveValueForKey<span class="escape">`方</span>法移除</div></pre></td></tr></table></figure>
+
+<p>swift<br>if let removedValue = airports.removeValueForKey(“DUB”){<br>    // removedValue为被移除的值，不存在的话返回nil<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">###字典遍历</div><div class="line">使用<span class="escape">`f</span><span class="literal">or</span>-in<span class="escape">`语</span>法便可遍历，每一个字典的数据项都由<span class="escape">`(</span>key,value)<span class="escape">`元</span>组形式返回</div></pre></td></tr></table></figure>
+
+<p>swift<br>for (airportCode,airportName) in airport {<br>    prinln(“(airportCode):(airportName)”)<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">也可以访问它的<span class="escape">`k</span>eys<span class="escape">`和</span><span class="escape">`v</span>alues<span class="escape">`属</span>性检索一个字典的键或者值</div></pre></td></tr></table></figure>
+
+<p>swift<br>for airportCode in airports.keys {<br>    println(“Airport code: (airportCode)”)<br>}<br>let airportNames = Array(airports.values)</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">###创建字典</span></div><div class="line">创建空字典</div></pre></td></tr></table></figure>
+
+<p>swift<br>var nameOfIntegers = Dictionary<int,string>()<br>var nameOfIntegers = [:]</int,string></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">##集合的可变性</div><div class="line">如果数组或字典设置为变量，那么它的数据项是可变的，设置为常量，那么它的大小是不可变的，数据在首次设定之后便不能改变。不同的是，数组的大小不能改变，但是可以改变它的值。</div><div class="line">控制流</div><div class="line">##For循环</div><div class="line"><span class="escape">`f</span><span class="literal">or</span><span class="escape">`循</span>环用作按照指定的次数多次执行一系列语句。Swift提供了两种<span class="escape">`f</span><span class="literal">or</span><span class="escape">`循</span>环形式：</div><div class="line">- <span class="escape">`f</span><span class="literal">or</span>-in<span class="escape">`用</span>来遍历一个区间(range)，序列(sequence),集合(collection)，系列(progression)里面多有的元素</div><div class="line">- for条件递增(<span class="escape">`f</span><span class="literal">or</span>-condition-increment<span class="escape">`)</span>语句，用来重复执行一系列语句知道达到特定条件，一般通过在每次循环完成后增加计数器的值来实现。</div><div class="line">###For-In</div></pre></td></tr></table></figure>
+
+<p>swift<br>// index不需要声明<br>for index in 1…5{<br>    println(“(index)”);<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">如果不需要知道区间每一项的值，可以使用下划线(<span class="escape">`_</span><span class="escape">`)</span>替代变量名忽略对值的访问</div></pre></td></tr></table></figure>
+
+<p>for _ in 1…9{<br>    //<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">###<span class="flow">For</span>条件递增（<span class="flow">for</span>-condition-inc<span class="comment">rement）</span></div></pre></td></tr></table></figure>
+
+<p>swift<br>for var index = 0; index &lt; 3;++index{<br>    //<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">下面是一般情况下这种循环方式的格式：</div><div class="line">&gt;for <span class="escape">`i</span>nitialization<span class="escape">`;</span> <span class="escape">`c</span>ondition<span class="escape">`;</span> <span class="escape">`i</span>ncrement<span class="escape">` </span>{</div><div class="line">    statements</div><div class="line">}</div><div class="line"></div><div class="line"></div><div class="line">##<span class="keyword">While</span>循环</div><div class="line"><span class="escape">`w</span>hile<span class="escape">`循</span>环运行一系列语句直到条件变成<span class="escape">`f</span>alse<span class="escape">`。</span>这类循环适合使用在第一次迭代前迭代次数未知的情况下。<span class="escape">`S</span>wift<span class="escape">` </span>提供两种<span class="escape">`w</span>hile<span class="escape">`循</span>环形式：</div><div class="line">- <span class="keyword">while</span>循环，每次在循环开始时计算条件是否符合；</div><div class="line">- do-<span class="keyword">while</span>循环，每次在循环结束时计算条件是否符合。</div><div class="line">一般格式如下：</div></pre></td></tr></table></figure>
+
+<p>swift<br>while condition{<br>    statements<br>}<br>do {<br>    statements<br>} while condition</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">##条件语句</div><div class="line">Swift提供两种类型的条件语句：<span class="escape">`i</span>f<span class="escape">`语</span>句和<span class="escape">`s</span>witch<span class="escape">`语</span>句。通常，当条件较为简单且可能的情况很少时，使用<span class="escape">`i</span>f<span class="escape">`语</span>句。而<span class="escape">`s</span>witch<span class="escape">`语</span>句更适用于条件较复杂、可能情况较多且需要用到模式匹配（pattern-matching）的情境。</div><div class="line">###<span class="keyword">If</span></div><div class="line"><span class="keyword">if</span>语句最简单的形式就是只包含一个条件，当且仅当该条件为<span class="literal">true</span>时，才执行相关代码：</div></pre></td></tr></table></figure>
+
+<p>swift<br>if true {<br>    //<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">###Switch</span></div><div class="line"><span class="keyword">switch</span>语句会尝试把某个值与若干个模式（pattern）进行匹配。根据第一个匹配成功的模式，<span class="keyword">switch</span>语句会执行对应的代码。</div></pre></td></tr></table></figure>
+
+<p>swift<br>witch some value to consider {<br>    case value 1:<br>        respond to value 1<br>    case value 2,<br>    value 3:<br>        respond to value 2 or 3<br>    default:<br>        otherwise, do something else<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">swift</span>不存在隐藏的贯穿，即不需要<span class="keyword">break</span>，执行完也会推出，同时<span class="built_in">swift</span>还支持区间匹配</div></pre></td></tr></table></figure>
+
+<p>swift<br>switch count{<br>    case 0:<br>        //<br>    case 1…3:<br>        //<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">元组匹配</div></pre></td></tr></table></figure>
+
+<p>swift<br>var count = (1,3)<br>switch count{<br>    case (0,0):<br>        //<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">####值绑定</span></div><div class="line"><span class="keyword">case</span>分支的模式允许将匹配的值绑定到一个临时的常量或变量，这些变量或常量在该<span class="keyword">case</span>分支里就可以被引用————这种行为被称为值绑定</div></pre></td></tr></table></figure>
+
+<p>swift<br>let point = (2,0)<br>switch point {<br>case (let x,0):<br>    //<br>case (0, let y):<br>    //<br>case let (x,y):<br>    //<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">####Where</span></div><div class="line"><span class="keyword">case</span>分支模式可以使用`<span class="keyword">where</span>`语句来判断额外的条件</div></pre></td></tr></table></figure>
+
+<p>swift<br>let point = (1,0)<br>switch point {<br>    case let (x,y) where x == y:<br>        //<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="preprocessor">###控制转移语句（Control Transfer Statements）</span></div><div class="line">控制转移语句改变你代码的执行顺序，通过它你可以实现代码的跳转。Swift有四种控制转移语句。- continue</div><div class="line">- <span class="keyword">break</span></div><div class="line">- fallthrough</div><div class="line">- <span class="keyword">return</span></div><div class="line"><span class="preprocessor">####Continue</span></div><div class="line">continue语句告诉一个循环体立刻停止本次循环迭代，重新开始下次循环迭代。</div><div class="line"><span class="preprocessor">####Break</span></div><div class="line"><span class="keyword">break</span>语句会立刻结束整个控制流的执行。</div><div class="line"><span class="preprocessor">####贯穿（Fallthrough）</span></div><div class="line">Swift不存在C语言中<span class="keyword">switch</span>语句的贯穿行为，要实现需要使用`fallthrouth`</div></pre></td></tr></table></figure>
+
+<p>swift<br>switch count{<br>    case 1:<br>        //<br>        fallthrough<br>    default:<br>        // 这里会被执行<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="preprocessor">###带标签的语句（Labeled Statements）</span></div><div class="line">环体和<span class="keyword">switch</span>代码块两者都可以使用<span class="keyword">break</span>语句来提前结束整个方法体，通过`带标签的语句`可以指定想要终止哪个循环或者<span class="keyword">switch</span>代码块，如果有许多嵌套的循环体，也可以实现`<span class="keyword">continue</span>`指定跳转</div></pre></td></tr></table></figure>
+
+<p>swift<br>label name:while condition{<br>    statenments<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">```<span class="built_in">swift</span></div><div class="line">loop:<span class="keyword">while</span> <span class="built_in">count</span> != <span class="number">100</span>{</div><div class="line">    <span class="keyword">if</span> <span class="built_in">count</span> &lt; <span class="number">100</span> {<span class="built_in">count</span> += <span class="number">10</span>}</div><div class="line">    <span class="keyword">switch</span> <span class="built_in">count</span> {</div><div class="line">        <span class="keyword">case</span> <span class="number">1</span>..<span class="number">20</span> :</div><div class="line">            <span class="keyword">break</span> loop</div><div class="line">        <span class="keyword">case</span> <span class="number">21</span>...<span class="number">99</span>:</div><div class="line">            <span class="comment">//</span></div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>函数(Functions)</p>
+<h2 id="函数的定义与调用(Defining_and_Calling_Functions)">函数的定义与调用(Defining and Calling Functions)</h2>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="func"><span class="keyword">func</span></span> sayHello(personName:<span class="type">String</span>) -&gt; <span class="type">String</span>{</div><div class="line">	<span class="keyword">let</span> greeting = <span class="string">"Hello,"</span> + personName + <span class="string">"!"</span></div><div class="line">	<span class="keyword">return</span> greeting</div><div class="line">}</div><div class="line"><span class="built_in">println</span>(<span class="string">"<span class="subst">\(sayHeloo("zoe")</span>)"</span>)</div></pre></td></tr></table></figure>
+
+<h2 id="函数参数与返回值(Function_Parameters_and_Return_Values)">函数参数与返回值(Function Parameters and Return Values)</h2>
+<ul>
+<li>多个参数</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="func"><span class="keyword">func</span></span> fun(start: <span class="type">Int</span>,end: <span class="type">Int</span>) -&gt; <span class="type">Int</span> {</div><div class="line">	<span class="keyword">return</span> end - start</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<ul>
+<li>无参</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="func"><span class="keyword">func</span></span> say() -&gt; <span class="type">String</span>{</div><div class="line">	<span class="keyword">return</span> <span class="string">"hello"</span></div><div class="line">}</div></pre></td></tr></table></figure>
+
+<ul>
+<li>无返回值</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="func"><span class="keyword">func</span></span> sayGoodbye(personName: <span class="type">String</span>){</div><div class="line">	<span class="built_in">println</span>(<span class="string">"Goodbye"</span>,\(personName)!)</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<ul>
+<li>多返回值<br>// 计算一个字符串中元音、辅音和其他字母的个数</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="func"><span class="keyword">func</span></span> <span class="built_in">count</span>(str:<span class="type">String</span>) -&gt; (vowels: <span class="type">Int</span>, consonants: <span class="type">Int</span>,others: <span class="type">Int</span>) {</div><div class="line">	 <span class="keyword">var</span> vowels = <span class="number">0</span>, consonants = <span class="number">0</span>, others = <span class="number">0</span></div><div class="line">    <span class="keyword">for</span> character <span class="keyword">in</span> string {</div><div class="line">        <span class="keyword">switch</span> <span class="type">String</span>(character).lowercaseString {</div><div class="line">        <span class="keyword">case</span> <span class="string">"a"</span>, <span class="string">"e"</span>, <span class="string">"i"</span>, <span class="string">"o"</span>, <span class="string">"u"</span>:</div><div class="line">            ++vowels</div><div class="line">        <span class="keyword">case</span> <span class="string">"b"</span>, <span class="string">"c"</span>, <span class="string">"d"</span>, <span class="string">"f"</span>, <span class="string">"g"</span>, <span class="string">"h"</span>, <span class="string">"j"</span>, <span class="string">"k"</span>, <span class="string">"l"</span>, <span class="string">"m"</span>,</div><div class="line">          <span class="string">"n"</span>, <span class="string">"p"</span>, <span class="string">"q"</span>, <span class="string">"r"</span>, <span class="string">"s"</span>, <span class="string">"t"</span>, <span class="string">"v"</span>, <span class="string">"w"</span>, <span class="string">"x"</span>, <span class="string">"y"</span>, <span class="string">"z"</span>:</div><div class="line">            ++consonants</div><div class="line">        <span class="keyword">default</span>:</div><div class="line">            ++others</div><div class="line">        }</div><div class="line">    }</div><div class="line">    <span class="keyword">return</span> (vowels, consonants, others)</div><div class="line">}</div><div class="line"><span class="keyword">let</span> total = <span class="built_in">count</span>(<span class="string">"some arbitrary string!"</span>)</div><div class="line"><span class="built_in">println</span>(<span class="string">"<span class="subst">\(total.vowels)</span> vowels and <span class="subst">\(total.consonants)</span> consonants"</span>)</div></pre></td></tr></table></figure>
+
+<h3 id="函数参数名称">函数参数名称</h3>
+<p>在函数定义时定义的参数为<code>局部参数名</code>，只能在函数体中使用</p>
+<h4 id="外部函数名">外部函数名</h4>
+<p>类似于Objective-C的函数命名</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="func"><span class="keyword">func</span></span> <span class="built_in">join</span>(string s1:<span class="type">String</span>,<span class="built_in">toString</span> s2:<span class="type">String</span>) -&gt; <span class="type">String</span>{</div><div class="line">	<span class="keyword">return</span> s1 + s2</div><div class="line">}</div><div class="line"><span class="built_in">join</span>(string:<span class="string">"hello"</span>,<span class="built_in">toString</span>:<span class="string">"world"</span>)</div></pre></td></tr></table></figure>
+
+<h4 id="简写外部参数名">简写外部参数名</h4>
+<p>上面的方法需要为参数提供外部参数名和内部参数名，可以通过<code>#</code>简写，将外部参数名和内部参数名等同起来</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="func"><span class="keyword">func</span></span> <span class="built_in">join</span>(#string:<span class="type">String</span>,#<span class="built_in">toString</span>:<span class="type">String</span>) -&gt; <span class="type">String</span>{</div><div class="line">	<span class="keyword">return</span> string + <span class="built_in">toString</span></div><div class="line">}</div><div class="line"><span class="built_in">join</span>(string:<span class="string">"hello"</span>,<span class="built_in">toString</span>:<span class="string">"world"</span>)</div></pre></td></tr></table></figure>
+
+<h3 id="默认参数值">默认参数值</h3>
+<p>为参数提供一个初始值，调用时，缺省可以忽略并使用默认值</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="func"><span class="keyword">func</span></span> <span class="built_in">join</span>(str1 <span class="type">String</span>,str2 <span class="type">String</span> = <span class="string">"world"</span>) -&gt; <span class="type">String</span>{</div><div class="line">	<span class="keyword">return</span> str1 + str2</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<h3 id="可变参数">可变参数</h3>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="func"><span class="keyword">func</span></span> add (numbers: <span class="type">Double</span>...) -&gt; <span class="type">Double</span> {</div><div class="line">	<span class="keyword">var</span> total: <span class="type">Double</span> = <span class="number">0</span>;</div><div class="line">	<span class="keyword">for</span> number <span class="keyword">in</span> numbers {</div><div class="line">		total += number</div><div class="line">	}</div><div class="line">	<span class="keyword">return</span> total / <span class="type">Double</span>(numbers.cout)</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<h3 id="常量参数和变量参数">常量参数和变量参数</h3>
+<p>函数参数默认是常量，在函数体中更改参数值将会导致编译错误，如果参数定义为变量就可以当做参数的副本来使用</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 用来右对齐输入的字符串到一个长的输出字符串中。左侧空余的地方用指定的填充字符填充</span></div><div class="line"><span class="func"><span class="keyword">func</span></span> alignRight(<span class="keyword">var</span> string: <span class="type">String</span>, <span class="built_in">count</span>: <span class="type">Int</span>, pad: <span class="type">Character</span>) -&gt; <span class="type">String</span> {</div><div class="line">    <span class="keyword">let</span> amountToPad = <span class="built_in">count</span> - <span class="built_in">countElements</span>(string)</div><div class="line">    <span class="keyword">for</span> <span class="number">_</span> <span class="keyword">in</span> <span class="number">1</span>...amountToPad {</div><div class="line">        string = pad + string</div><div class="line">    }</div><div class="line">    <span class="keyword">return</span> string</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<h3 id="输入输出参数">输入输出参数</h3>
+<p>一个输入输出参数时，在参数定义前加<code>inout</code>关键字。一个输入输出参数有传入函数的值，这个值被函数修改，然后被传出函数，替换原来的值。当传入的参数作为输入输出参数时，需要在参数前加&amp;符，表示这个值可以被函数修改。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="func"><span class="keyword">func</span></span> <span class="built_in">swap</span> (<span class="keyword">inout</span> a:<span class="type">Int</span>,<span class="keyword">inout</span> b:<span class="type">Int</span>){</div><div class="line">	<span class="keyword">let</span> temp = a</div><div class="line">	a = b</div><div class="line">	b = temp</div><div class="line">}</div><div class="line"><span class="keyword">var</span> a = <span class="number">3</span>,b = <span class="number">4</span></div><div class="line"><span class="built_in">swap</span>(&a,&b)</div></pre></td></tr></table></figure>
+
+<h3 id="函数类型">函数类型</h3>
+<p>每个函数都有种特定的函数类型，由函数的参数类型和返回类型组成。<br><code>() -&gt; ()</code>表示没用参数，返回<code>Void</code>，在Swift中，<code>Void</code>与空元组是一样的</p>
+<h3 id="使用函数类型">使用函数类型</h3>
+<p>使用函数名来给另一个函数赋值</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fun2:(<span class="type">Int</span>,<span class="type">Int</span>) -&gt; <span class="type">Int</span> = fun1</div></pre></td></tr></table></figure>
+
+<h4 id="使用函数类型-1">使用函数类型</h4>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mathFunction:(<span class="type">Int</span>,<span class="type">Int</span>) -&gt; <span class="type">Int</span> = addTwoInts</div><div class="line"><span class="comment">// 只要matchFunction和addTwoInts的类型相同，该赋值就是合法的</span></div></pre></td></tr></table></figure>
+
+<h4 id="函数类型作为参数类型">函数类型作为参数类型</h4>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="func"><span class="keyword">func</span></span> printMathResult(matchFunction:(<span class="type">Int</span>,<span class="type">Int</span>) -&gt; <span class="type">Int</span>,a:<span class="type">Int</span>,b:<span class="type">Int</span>){</div><div class="line">	<span class="built_in">println</span>(<span class="string">"Result: <span class="subst">\(mathFunction(a,b)</span>)"</span>)</div><div class="line">}</div><div class="line">printMathResult(addTwoInts,<span class="number">3</span>,<span class="number">5</span>)</div></pre></td></tr></table></figure>
+
+<h4 id="函数类型作为返回类型">函数类型作为返回类型</h4>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="func"><span class="keyword">func</span></span> chooseStepFunction(backwards:<span class="type">Bool</span>) -&gt; (<span class="type">Int</span>) -&gt; <span class="type">Int</span> {</div><div class="line">	<span class="keyword">return</span> backwards ? stepBackward : stepForward</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>闭包<br>闭包之自包含的函数代码块，可以在代码中传递和使用，与Objective-C的blocks相似<br>闭包可以捕获和存储其所在上下文任意常量和变量的引用。<br>全局和嵌套函数也是特殊的闭包，闭包采取如下三种形式：</p>
+<ul>
+<li>全局函数是一个有名字但不会捕获任何值的闭包</li>
+<li>嵌套函数是一个有名字并可以捕获其封闭函数内值的闭包</li>
+<li>闭包表达式是一个利用轻量级语法所写的可以捕获其上下文中变量或常量值的匿名闭包</li>
+</ul>
+<h2 id="闭包表达式(Closure_Expreessions)">闭包表达式(Closure Expreessions)</h2>
+<p>闭包表达式是一种利用简洁语法构建内联闭包的方式，闭包表达式提供了一些语法优化，使得撰写闭包变得简单明了。</p>
+<h3 id="闭包表达式语法">闭包表达式语法</h3>
+<p>闭包表带式语法一般形式：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">{ (parameters) -&gt; returnType <span class="keyword">in</span></div><div class="line">	statemnts</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>Swift标准库提供了<code>sort</code>函数，会根据基于输出类型排序的闭包函数将已知类型数组的值进行排序，返回一个与原数组大小相同的新数组，并排序完成。</p>
+<p>```</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/iOS/">iOS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a><a href="/tags/Swift/">Swift</a>
+  </div>
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://seniorzhai.github.io/2014/07/10/Swift笔记(三)/" data-title="Swift笔记(三) | Zoe&#39;s blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/07/10/AVOS-Cloud-Android开发指南/" title="AVOS Cloud Android开发指南">
+  <strong>上一篇：</strong><br/>
+  <span>
+  AVOS Cloud Android开发指南</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/07/10/理解Optional/"  title="理解Optional">
+ <strong>下一篇：</strong><br/> 
+ <span>理解Optional
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#字符串和字符（String_and_Character）"><span class="toc-number">1.</span> <span class="toc-text">字符串和字符（String and Character）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串字面量(String_Literals)"><span class="toc-number">1.1.</span> <span class="toc-text">字符串字面量(String Literals)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#初始化空字符串"><span class="toc-number">1.2.</span> <span class="toc-text">初始化空字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串可变性(String_Mutability)"><span class="toc-number">1.3.</span> <span class="toc-text">字符串可变性(String Mutability)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串是值类型"><span class="toc-number">1.4.</span> <span class="toc-text">字符串是值类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符"><span class="toc-number">1.5.</span> <span class="toc-text">字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#计算字符数量"><span class="toc-number">1.6.</span> <span class="toc-text">计算字符数量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#连接字符串和字符"><span class="toc-number">1.7.</span> <span class="toc-text">连接字符串和字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串插值"><span class="toc-number">1.8.</span> <span class="toc-text">字符串插值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#比较字符串"><span class="toc-number">1.9.</span> <span class="toc-text">比较字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#字符串相等"><span class="toc-number">1.9.1.</span> <span class="toc-text">字符串相等</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数的定义与调用(Defining_and_Calling_Functions)"><span class="toc-number">2.</span> <span class="toc-text">函数的定义与调用(Defining and Calling Functions)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数参数与返回值(Function_Parameters_and_Return_Values)"><span class="toc-number">3.</span> <span class="toc-text">函数参数与返回值(Function Parameters and Return Values)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#函数参数名称"><span class="toc-number">3.1.</span> <span class="toc-text">函数参数名称</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#外部函数名"><span class="toc-number">3.1.1.</span> <span class="toc-text">外部函数名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#简写外部参数名"><span class="toc-number">3.1.2.</span> <span class="toc-text">简写外部参数名</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#默认参数值"><span class="toc-number">3.2.</span> <span class="toc-text">默认参数值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可变参数"><span class="toc-number">3.3.</span> <span class="toc-text">可变参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常量参数和变量参数"><span class="toc-number">3.4.</span> <span class="toc-text">常量参数和变量参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#输入输出参数"><span class="toc-number">3.5.</span> <span class="toc-text">输入输出参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数类型"><span class="toc-number">3.6.</span> <span class="toc-text">函数类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用函数类型"><span class="toc-number">3.7.</span> <span class="toc-text">使用函数类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#使用函数类型-1"><span class="toc-number">3.7.1.</span> <span class="toc-text">使用函数类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#函数类型作为参数类型"><span class="toc-number">3.7.2.</span> <span class="toc-text">函数类型作为参数类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#函数类型作为返回类型"><span class="toc-number">3.7.3.</span> <span class="toc-text">函数类型作为返回类型</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#闭包表达式(Closure_Expreessions)"><span class="toc-number">4.</span> <span class="toc-text">闭包表达式(Closure Expreessions)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#闭包表达式语法"><span class="toc-number">4.1.</span> <span class="toc-text">闭包表达式语法</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/Android/" title="Android">Android<sup>184</sup></a></li>
+		
+			<li><a href="/categories/Camera/" title="Camera">Camera<sup>1</sup></a></li>
+		
+			<li><a href="/categories/Cocos2d-X/" title="Cocos2d-X">Cocos2d-X<sup>11</sup></a></li>
+		
+			<li><a href="/categories/Prose/" title="Prose">Prose<sup>27</sup></a></li>
+		
+			<li><a href="/categories/Python/" title="Python">Python<sup>22</sup></a></li>
+		
+			<li><a href="/categories/ReactNative/" title="ReactNative">ReactNative<sup>7</sup></a></li>
+		
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>79</sup></a></li>
+		
+			<li><a href="/categories/node-js/" title="node.js">node.js<sup>29</sup></a></li>
+		
+			<li><a href="/categories/杂文/" title="杂文">杂文<sup>3</sup></a></li>
+		
+		</ul>
+		<ul>
+		<script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"></script>
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AFNetworking/" style="font-size: 10.00px;">AFNetworking</a><a href="/tags/APK/" style="font-size: 10.00px;">APK</a><a href="/tags/AS/" style="font-size: 10.00px;">AS</a><a href="/tags/Adapter/" style="font-size: 10.00px;">Adapter</a><a href="/tags/Android/" style="font-size: 20.00px;">Android</a><a href="/tags/Android-5-0/" style="font-size: 10.00px;">Android 5.0</a><a href="/tags/Android-Studio/" style="font-size: 13.33px;">Android Studio</a><a href="/tags/AndroidAninotations/" style="font-size: 10.00px;">AndroidAninotations</a><a href="/tags/AndroidStudio/" style="font-size: 18.33px;">AndroidStudio</a><a href="/tags/Animation/" style="font-size: 15.00px;">Animation</a><a href="/tags/Api/" style="font-size: 13.33px;">Api</a><a href="/tags/App/" style="font-size: 10.00px;">App</a><a href="/tags/Apple/" style="font-size: 10.00px;">Apple</a><a href="/tags/Async/" style="font-size: 10.00px;">Async</a><a href="/tags/Atom/" style="font-size: 11.67px;">Atom</a><a href="/tags/BaseAdapter/" style="font-size: 10.00px;">BaseAdapter</a><a href="/tags/Blur/" style="font-size: 10.00px;">Blur</a><a href="/tags/Box2D/" style="font-size: 10.00px;">Box2D</a><a href="/tags/Broadcast/" style="font-size: 10.00px;">Broadcast</a><a href="/tags/CardView/" style="font-size: 10.00px;">CardView</a><a href="/tags/CocoaPods/" style="font-size: 10.00px;">CocoaPods</a><a href="/tags/Cocos2d-X/" style="font-size: 16.67px;">Cocos2d-X</a><a href="/tags/CocosPods/" style="font-size: 10.00px;">CocosPods</a><a href="/tags/ContentProvider/" style="font-size: 10.00px;">ContentProvider</a><a href="/tags/Context/" style="font-size: 10.00px;">Context</a><a href="/tags/Crouton/" style="font-size: 10.00px;">Crouton</a><a href="/tags/CursorLoader/" style="font-size: 10.00px;">CursorLoader</a><a href="/tags/Demo/" style="font-size: 11.67px;">Demo</a><a href="/tags/Dialog/" style="font-size: 10.00px;">Dialog</a><a href="/tags/EditView/" style="font-size: 10.00px;">EditView</a><a href="/tags/EventBus/" style="font-size: 10.00px;">EventBus</a><a href="/tags/Express/" style="font-size: 10.00px;">Express</a><a href="/tags/Express学习笔记/" style="font-size: 10.00px;">Express学习笔记</a><a href="/tags/Flex/" style="font-size: 10.00px;">Flex</a><a href="/tags/Fragment/" style="font-size: 11.67px;">Fragment</a><a href="/tags/GET/" style="font-size: 10.00px;">GET</a><a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/Gradle/" style="font-size: 11.67px;">Gradle</a><a href="/tags/GridLayout/" style="font-size: 10.00px;">GridLayout</a><a href="/tags/GridView/" style="font-size: 11.67px;">GridView</a>
+    </div>
+  </div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">25</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a><span class="archive-list-count">42</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">June 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">20</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a><span class="archive-list-count">24</span></li></ul>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://imid.me/" target="_blank" title="iMID">iMID's Blog</a></li>
+      <li><a href="http://www.trinea.cn/" target="_blank" title="trinea">Trinea's Blog</a></li>
+      <li><a href="http://stormzhang.github.io/" target="_blank" title="stormzhang">StormZhang's Blog</a></li>
+      <li><a href="http://daimajia.com/" target="_blank" title="daimajia">DaiMaJia.Blog</a></li>
+      <li><a href="http://macrotea.com/welcome/" target="_blank" title="daimajia">Macrotea.Blog</a></li>
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello,I&#39;m Zoe,a Android and iOS developers. <br/>
+			This is my blog,I hope you will enjoy them.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2292032577" target="_blank" class="icon-weibo" title="weibo"></a>
+		
+		
+		<a href="https://github.com/seniorzhai" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:developer.zhaitao@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2016 
+		
+		<a href="http://seniorzhai.github.io/about" target="_blank" title="Zoe">Zoe</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zt1991616"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-54646832-1', 'null');  
+ga('send', 'pageview');
+</script>
+
+
+
+
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<script src="/js/totop.js"></script>
+
+
+
+
+  </body>
+</html>
+
+<a href="https://github.com/seniorzhai"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>

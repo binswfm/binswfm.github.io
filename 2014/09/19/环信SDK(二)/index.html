@@ -1,0 +1,520 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="google-site-verification" content="WNyUn91IXtlyHB-gfFfg8K6MCkItzKWdzzw_Nh17ksE" />
+  <meta name="baidu-site-verification" content="e5ZaZQ3Tx8" />
+  
+    <title>环信SDK(二) | Zoe&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Zoe">
+    
+    <meta name="description" content="环信单聊API">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Zoe&#39;s blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Zoe&#39;s blog" title="Zoe&#39;s blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Zoe&#39;s blog">Zoe&#39;s blog</a></h1>
+				<h2 class="blog-motto">宅学长的博客</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:seniorzhai.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/09/19/环信SDK(二)/" title="环信SDK(二)" itemprop="url">环信SDK(二)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://seniorzhai.github.io/about" title="Zoe" target="_blank" itemprop="author">Zoe</a>
+		
+  <p class="article-time">
+    <time datetime="2014-09-19T01:39:50.000Z" itemprop="datePublished"> 发表于 9月 19 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#登陆"><span class="toc-number">1.</span> <span class="toc-text">登陆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注销"><span class="toc-number">2.</span> <span class="toc-text">注销</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#发送文本消息"><span class="toc-number">3.</span> <span class="toc-text">发送文本消息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#发送语音消息"><span class="toc-number">4.</span> <span class="toc-text">发送语音消息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#发送图片消息"><span class="toc-number">5.</span> <span class="toc-text">发送图片消息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#发送地理位置消息"><span class="toc-number">6.</span> <span class="toc-text">发送地理位置消息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#发送文件消息"><span class="toc-number">7.</span> <span class="toc-text">发送文件消息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接收消息"><span class="toc-number">8.</span> <span class="toc-text">接收消息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取聊天记录"><span class="toc-number">9.</span> <span class="toc-text">获取聊天记录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取未读消息数量"><span class="toc-number">10.</span> <span class="toc-text">获取未读消息数量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#未读消息清零"><span class="toc-number">11.</span> <span class="toc-text">未读消息清零</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#清空会话记录"><span class="toc-number">12.</span> <span class="toc-text">清空会话记录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除聊天记录"><span class="toc-number">13.</span> <span class="toc-text">删除聊天记录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置自定义的消息提示"><span class="toc-number">14.</span> <span class="toc-text">设置自定义的消息提示</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置notification点击跳转的intent"><span class="toc-number">15.</span> <span class="toc-text">设置notification点击跳转的intent</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#好友列表"><span class="toc-number">16.</span> <span class="toc-text">好友列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加好友"><span class="toc-number">17.</span> <span class="toc-text">添加好友</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除好友"><span class="toc-number">18.</span> <span class="toc-text">删除好友</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#同意好友请求"><span class="toc-number">19.</span> <span class="toc-text">同意好友请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#拒绝好友请求"><span class="toc-number">20.</span> <span class="toc-text">拒绝好友请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#监听好友请求"><span class="toc-number">21.</span> <span class="toc-text">监听好友请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取黑名单"><span class="toc-number">22.</span> <span class="toc-text">获取黑名单</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#加入黑名单"><span class="toc-number">23.</span> <span class="toc-text">加入黑名单</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#从黑名单中移除"><span class="toc-number">24.</span> <span class="toc-text">从黑名单中移除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#网络异常监听"><span class="toc-number">25.</span> <span class="toc-text">网络异常监听</span></a></li></ol>
+		
+		</div>
+		
+		<p>环信单聊API<br><a id="more"></a></p>
+<h2 id="登陆">登陆</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">EMChatManager.getInstance().login(userName,password,<span class="keyword">new</span> EMCallBack(){</div><div class="line">	<span class="annotation">@Override</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSuccess</span>() {</div><div class="line">		runOnUiTread(<span class="keyword">new</span> Runnable(){</div><div class="line">			<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span>(){</div><div class="line">				<span class="comment">// 成功</span></div><div class="line">			}</div><div class="line">		});</div><div class="line">	}</div><div class="line">	<span class="annotation">@Override</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onProgress</span>(<span class="keyword">int</span> progress,String status) {</div><div class="line"></div><div class="line">	}</div><div class="line">	<span class="annotation">@Override</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span>(<span class="keyword">int</span> code,String message) {</div><div class="line">		<span class="comment">// 失败</span></div><div class="line">	}</div><div class="line">});</div></pre></td></tr></table></figure>
+
+<h2 id="注销">注销</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">EMChatManager.getInstance().login();</div></pre></td></tr></table></figure>
+
+<h2 id="发送文本消息">发送文本消息</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 获取会话</span></div><div class="line">EMConversation conversation = EMChatManager.getInstance().getConversation(username);</div><div class="line"><span class="comment">// 创建文本消息</span></div><div class="line">EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);</div><div class="line"><span class="comment">// 设置为群聊聊</span></div><div class="line">message.setChatType(ChatType.GroupChat);</div><div class="line"><span class="comment">// 设置消息</span></div><div class="line">TextMessageBody txtBody = <span class="keyword">new</span> TextMessageBody(content);</div><div class="line">message.addBody(txtBody);</div><div class="line"><span class="comment">// 设置接收人</span></div><div class="line">message.setReceipt(username);</div><div class="line"><span class="comment">// 把消息加入到会话中</span></div><div class="line">conversation.addMessage(message);</div><div class="line"><span class="comment">// 发送消息</span></div><div class="line">EMChatManager.getInstance().sendMessage(message,<span class="keyword">new</span> EMCallBack());</div></pre></td></tr></table></figure>
+
+<h2 id="发送语音消息">发送语音消息</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">EMConversation conversation = EMChatManager.getInstance().getConversation(username);</div><div class="line">EMMessage message = EMMessage.createSendMessage(EMMessage.Type.VOICE);</div><div class="line"><span class="comment">// 设置为群聊</span></div><div class="line">VoiceMessageBody body = <span class="keyword">new</span> VoiceMessageBody(<span class="keyword">new</span> File(filePath), len);</div><div class="line">message.addBody(body);</div><div class="line">message.setReceipt(username);</div><div class="line">conversation.addMessage(message);</div><div class="line">EMChatManager.getInstance().sendMessage(message, <span class="keyword">new</span> EMCallBack());</div></pre></td></tr></table></figure>
+
+<h2 id="发送图片消息">发送图片消息</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">EMConversation conversation = EMChatManager.getInstance().getConversation(username);</div><div class="line">EMMessage message = EMMessage.createSendMessage(EMMessage.Type.IMAGE);</div><div class="line"><span class="comment">//如果是群聊，设置chattype,默认是单聊</span></div><div class="line">message.setChatType(ChatType.GroupChat);</div><div class="line">ImageMessageBody body = <span class="keyword">new</span> ImageMessageBody(<span class="keyword">new</span> File(filePath));</div><div class="line"><span class="comment">// 默认超过100k的图片会压缩后发给对方，可以设置成发送原图</span></div><div class="line"><span class="comment">// body.setSendOriginalImage(true);</span></div><div class="line">message.addBody(body);</div><div class="line">message.setReceipt(username);</div><div class="line">conversation.addMessage(message);</div><div class="line">EMChatManager.getInstance().sendMessage(message, <span class="keyword">new</span> EMCallBack());</div></pre></td></tr></table></figure>
+
+<h2 id="发送地理位置消息">发送地理位置消息</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">EMConversation conversation = EMChatManager.getInstance().getConversation(username);</div><div class="line">EMMessage message = EMMessage.createSendMessage(EMMessage.Type.LOCATION);</div><div class="line"><span class="comment">//如果是群聊，设置chattype,默认是单聊</span></div><div class="line">message.setChatType(ChatType.GroupChat);</div><div class="line">LocationMessageBody locBody = <span class="keyword">new</span> LocationMessageBody(locationAddress, latitude, longitude);</div><div class="line">message.addBody(locBody);</div><div class="line">message.setReceipt(username);</div><div class="line">conversation.addMessage(message);</div><div class="line">EMChatManager.getInstance().sendMessage(message, <span class="keyword">new</span> EMCallBack());</div></pre></td></tr></table></figure>
+
+<h2 id="发送文件消息">发送文件消息</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">EMConversation conversation = EMChatManager.getInstance().getConversation(username);</div><div class="line"><span class="comment">// 创建一个文件消息</span></div><div class="line">EMMessage message = EMMessage.createSendMessage(EMMessage.Type.FILE);</div><div class="line"><span class="comment">// 如果是群聊，设置chattype,默认是单聊</span></div><div class="line"><span class="keyword">if</span> (chatType == CHATTYPE_GROUP)</div><div class="line">	message.setChatType(ChatType.GroupChat);</div><div class="line"><span class="comment">//设置接收人的username</span></div><div class="line">message.setReceipt(username);</div><div class="line"><span class="comment">// add message body</span></div><div class="line">NormalFileMessageBody body = <span class="keyword">new</span> NormalFileMessageBody(<span class="keyword">new</span> File(filePath));</div><div class="line">message.addBody(body);</div><div class="line">conversation.addMessage(message);</div><div class="line">EMChatManager.getInstance().sendMessage(message, <span class="keyword">new</span> EMCallBack());</div></pre></td></tr></table></figure>
+
+<h2 id="接收消息">接收消息</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">NewMessageBroadcastReceiver msgReceiver = <span class="keyword">new</span> NewMessageBroadcastReceiver();</div><div class="line">IntentFilter intentFilter = <span class="keyword">new</span> IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());</div><div class="line">intentFilter.setPriority(<span class="number">3</span>);</div><div class="line">registerReceiver(msgReceiver, intentFilter);</div><div class="line"></div><div class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">NewMessageBroadcastReceiver</span> <span class="keyword">extends</span> <span class="title">BroadcastReceiver</span> </span>{</div><div class="line">    <span class="annotation">@Override</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span>(Context context, Intent intent) {</div><div class="line">        <span class="comment">//消息id</span></div><div class="line">        String msgId = intent.getStringExtra(<span class="string">"msgid"</span>);</div><div class="line">        <span class="comment">//发消息的人的username(userid)</span></div><div class="line">        String msgFrom = intent.getStringExtra(<span class="string">"from"</span>);</div><div class="line">        <span class="comment">//消息类型，文本，图片，语音消息等,这里返回的值为msg.type.ordinal()。</span></div><div class="line">        <span class="comment">//所以消息type实际为是enum类型</span></div><div class="line">        <span class="keyword">int</span> msgType = intent.getIntExtra(<span class="string">"type"</span>, <span class="number">0</span>);</div><div class="line">        <span class="comment">//消息body，为一个json字符串</span></div><div class="line">        String msgBody = intent.getStringExtra(<span class="string">"body"</span>);</div><div class="line">        Log.d(<span class="string">"main"</span>, <span class="string">"new message id:"</span> + msgId + <span class="string">" from:"</span> + msgFrom + <span class="string">" type:"</span> + msgType + <span class="string">" body:"</span> + msgBody);</div><div class="line">      </div><div class="line">        <span class="comment">//更方便的方法是通过msgId直接获取整个message</span></div><div class="line">        EMMessage message = EMChatManager.getInstance().getMessage(msgId);</div><div class="line">                </div><div class="line">        }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<h2 id="获取聊天记录">获取聊天记录</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">EMConversation conversation = EMChatManager.getInstance().getConversation(username);</div><div class="line"><span class="comment">//获取此会话的所有消息</span></div><div class="line">List&lt;EMMessage&gt; messages = conversation.getAllMessages();</div><div class="line"><span class="comment">//sdk初始化加载的聊天记录为20条，到顶时需要去db里获取更多</span></div><div class="line"><span class="comment">//获取startMsgId之前的pagesize条消息，此方法获取的messages sdk会自动存入到此会话中，app中无需再次把获取到的messages添加到会话中</span></div><div class="line">List&lt;EMMessage&gt; messages = conversation.loadMoreMsgFromDB(startMsgId, pagesize);</div><div class="line"><span class="comment">//如果是群聊，调用下面此方法</span></div><div class="line">List&lt;EMMessage&gt; messages = conversation.loadMoreGroupMsgFromDB(startMsgId, pagesize);</div></pre></td></tr></table></figure>
+
+<h2 id="获取未读消息数量">获取未读消息数量</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">EMConversation conversation = EMChatManager.getInstance().getConversation(username);</div><div class="line">conversation.getUnreadMsgCount();</div></pre></td></tr></table></figure>
+
+<h2 id="未读消息清零">未读消息清零</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">EMConversation conversation = EMChatManager.getInstance().getConversation(username);</div><div class="line">conversation.resetUnsetMsgCount();</div></pre></td></tr></table></figure>
+
+<h2 id="清空会话记录">清空会话记录</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//清空和某个user的聊天记录，不删除整个会话</span></div><div class="line">EMChatManager.getInstance().clearConversation(username);</div></pre></td></tr></table></figure>
+
+<h2 id="删除聊天记录">删除聊天记录</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//删除和某个user的整个的聊天记录</span></div><div class="line">EMChatManager.getInstance().deleteConversation(username);</div><div class="line"><span class="comment">//删除当前会话的某条聊天记录</span></div><div class="line">EMConversation conversation = EMChatManager.getInstance().getConversation(username);</div><div class="line">conversation.removeMessage(deleteMsg.msgId);</div></pre></td></tr></table></figure>
+
+<h2 id="设置自定义的消息提示">设置自定义的消息提示</h2>
+<p>App在后台时，新消息会通过notification提示，可以把提示的内容换成自定义的内容，在Application中的onCreate()里设置</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 获取到options对象</span></div><div class="line">EMChatOptions options = EMChatManager.getInstance().getChatOptions();</div><div class="line"><span class="comment">// 设置自定义的文字提醒</span></div><div class="line">options.setNotifyText(<span class="keyword">new</span> OnMessageNotifyListener() {</div><div class="line">	<span class="annotation">@Override</span></div><div class="line">	<span class="keyword">public</span> String <span class="title">onNewMessageNotify</span>(EMMessage message){</div><div class="line">		<span class="keyword">return</span> message.getFrom() + <span class="string">"发来了一条消息"</span>;</div><div class="line">	}</div><div class="line">	<span class="annotation">@Override</span></div><div class="line">	<span class="keyword">public</span> String <span class="title">onLatestMessageNotify</span>(EMMessage message,<span class="keyword">int</span> fromUserNum,<span class="keyword">int</span> messageNum) {</div><div class="line">		<span class="keyword">return</span> fromUserNum + <span class="string">"个好友发来了"</span> + messgaeNum + <span class="string">"条消息"</span>;</div><div class="line">	}</div><div class="line">});</div></pre></td></tr></table></figure>
+
+<h2 id="设置notification点击跳转的intent">设置notification点击跳转的intent</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">EMChatOptions options = EMChatManager.getInstance().getChatOptions();</div><div class="line">options.setOnNotificationClickListener(<span class="keyword">new</span> OnNotificationClickListener(){</div><div class="line">	<span class="annotation">@Override</span></div><div class="line">	<span class="keyword">public</span> Intent <span class="title">onNotificationClick</span>(EMMessage message) {</div><div class="line">		Intent intent = <span class="keyword">new</span> Intent(applicationContext,ChatActivity.class);</div><div class="line">		ChatType chatType = message.getChatType();</div><div class="line">		<span class="keyword">if</span>(chatType == ChatType.chat){</div><div class="line">			intent.putExtra(<span class="string">"userId"</span>, message.getFrom());</div><div class="line">			intent.putExtra(<span class="string">"chatType"</span>, ChatActivity.CHATTYPE_SINGLE);</div><div class="line">		} <span class="keyword">else</span> {</div><div class="line">			<span class="comment">//message.getTo()为群聊id</span></div><div class="line">			intent.putExtra(<span class="string">"groupId"</span>, message.getTo());</div><div class="line">			intent.putExtra(<span class="string">"chatType"</span>, ChatActivity.CHATTYPE_GROUP);</div><div class="line">		}</div><div class="line">		<span class="keyword">return</span> intent;</div><div class="line">	}</div><div class="line">});</div></pre></td></tr></table></figure>
+
+<h2 id="好友列表">好友列表</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">List&lt;String&gt; usernames = EMChatManager.getInstance().getContactUesrNames();</div></pre></td></tr></table></figure>
+
+<h2 id="添加好友">添加好友</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//参数为要添加的好友的username和添加理由</span></div><div class="line">EMContactManager.getInstance().addContact(toAddUsername, reason);</div></pre></td></tr></table></figure>
+
+<h2 id="删除好友">删除好友</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">EMContactManager.getInstance().deleteContact(username);</div></pre></td></tr></table></figure>
+
+<h2 id="同意好友请求">同意好友请求</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//同意username的好友请求</span></div><div class="line">EMChatManager.getInstance().acceptInvitation(username);</div></pre></td></tr></table></figure>
+
+<h2 id="拒绝好友请求">拒绝好友请求</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">EMChatManager.getInstance().refuseInvitation(username);</div></pre></td></tr></table></figure>
+
+<h2 id="监听好友请求">监听好友请求</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">EMContactManager.getInstance().setContactListener(<span class="keyword">new</span> EMContactListener() {</div><div class="line">	</div><div class="line">	<span class="annotation">@Override</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onContactAgreed</span>(String username) {</div><div class="line">		<span class="comment">//好友请求被同意</span></div><div class="line">	}</div><div class="line">	</div><div class="line">	<span class="annotation">@Override</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onContactRefused</span>(String username) {</div><div class="line">		<span class="comment">//好友请求被拒绝</span></div><div class="line">	}</div><div class="line">	</div><div class="line">	<span class="annotation">@Override</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onContactInvited</span>(String username, String reason) {</div><div class="line">		<span class="comment">//收到好友邀请</span></div><div class="line">	}</div><div class="line">	</div><div class="line">	<span class="annotation">@Override</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onContactDeleted</span>(List&lt;String&gt; usernameList) {</div><div class="line">		<span class="comment">//被删除时回调此方法</span></div><div class="line">	}</div><div class="line">	</div><div class="line">	</div><div class="line">	<span class="annotation">@Override</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onContactAdded</span>(List&lt;String&gt; usernameList) {</div><div class="line">		<span class="comment">//增加了联系人时回调此方法</span></div><div class="line">	}</div><div class="line">});</div></pre></td></tr></table></figure>
+
+<h2 id="获取黑名单">获取黑名单</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//获取黑名单用户的usernames</span></div><div class="line">EMContactManager.getInstance().getBlackListUsernames();</div></pre></td></tr></table></figure>
+
+<h2 id="加入黑名单">加入黑名单</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//第二个参数如果为true，则把用户加入到黑名单后双方发消息时对方都收不到；false,则</span></div><div class="line"><span class="comment">//我能给黑名单的中用户发消息，但是对方发给我时我是收不到的</span></div><div class="line">EMContactManager.getInstance().addUserToBlackList(username,<span class="keyword">true</span>);</div></pre></td></tr></table></figure>
+
+<h2 id="从黑名单中移除">从黑名单中移除</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">EMContactManager.getInstance().deleteUserFromBlackList(username);</div></pre></td></tr></table></figure>
+
+<h2 id="网络异常监听">网络异常监听</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//注册一个监听连接状态的listener</span></div><div class="line">EMChatManager.getInstance().addConnectionListener(<span class="keyword">new</span> MyConnectionListener());</div><div class="line"></div><div class="line"><span class="comment">//实现ConnectionListener接口</span></div><div class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">MyConnectionListener</span> <span class="keyword">implements</span> <span class="title">ConnectionListener</span></span>{</div><div class="line"></div><div class="line">	<span class="annotation">@Override</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onConnected</span>() {</div><div class="line">		</div><div class="line">	}</div><div class="line"></div><div class="line">	<span class="annotation">@Override</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDisConnected</span>(String errorString) {</div><div class="line">		<span class="keyword">if</span>(errorString!=<span class="keyword">null</span>&&errorString.contains(<span class="string">"conflict"</span>))</div><div class="line">		{</div><div class="line">			<span class="comment">//收到帐号在其他手机登录</span></div><div class="line">			<span class="comment">// TODO </span></div><div class="line">		}<span class="keyword">else</span>{</div><div class="line">			</div><div class="line">			<span class="comment">//"连接不到聊天服务器"</span></div><div class="line">		}</div><div class="line">	}</div><div class="line"></div><div class="line">	<span class="annotation">@Override</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReConnected</span>() {</div><div class="line">		</div><div class="line">	}</div><div class="line"></div><div class="line">	<span class="annotation">@Override</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReConnecting</span>() {</div><div class="line">	}</div><div class="line"></div><div class="line">	<span class="annotation">@Override</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onConnecting</span>(String progress) {</div><div class="line"></div><div class="line">	}</div><div class="line">	</div><div class="line">}</div></pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Android/">Android</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/SDK/">SDK</a><a href="/tags/IM/">IM</a><a href="/tags/环信/">环信</a>
+  </div>
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://seniorzhai.github.io/2014/09/19/环信SDK(二)/" data-title="环信SDK(二) | Zoe&#39;s blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/09/19/Git分支与协作/" title="Git分支与协作">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Git分支与协作</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/09/18/环信SDK(一)/"  title="环信SDK(一)">
+ <strong>下一篇：</strong><br/> 
+ <span>环信SDK(一)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#登陆"><span class="toc-number">1.</span> <span class="toc-text">登陆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注销"><span class="toc-number">2.</span> <span class="toc-text">注销</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#发送文本消息"><span class="toc-number">3.</span> <span class="toc-text">发送文本消息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#发送语音消息"><span class="toc-number">4.</span> <span class="toc-text">发送语音消息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#发送图片消息"><span class="toc-number">5.</span> <span class="toc-text">发送图片消息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#发送地理位置消息"><span class="toc-number">6.</span> <span class="toc-text">发送地理位置消息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#发送文件消息"><span class="toc-number">7.</span> <span class="toc-text">发送文件消息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接收消息"><span class="toc-number">8.</span> <span class="toc-text">接收消息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取聊天记录"><span class="toc-number">9.</span> <span class="toc-text">获取聊天记录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取未读消息数量"><span class="toc-number">10.</span> <span class="toc-text">获取未读消息数量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#未读消息清零"><span class="toc-number">11.</span> <span class="toc-text">未读消息清零</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#清空会话记录"><span class="toc-number">12.</span> <span class="toc-text">清空会话记录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除聊天记录"><span class="toc-number">13.</span> <span class="toc-text">删除聊天记录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置自定义的消息提示"><span class="toc-number">14.</span> <span class="toc-text">设置自定义的消息提示</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置notification点击跳转的intent"><span class="toc-number">15.</span> <span class="toc-text">设置notification点击跳转的intent</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#好友列表"><span class="toc-number">16.</span> <span class="toc-text">好友列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加好友"><span class="toc-number">17.</span> <span class="toc-text">添加好友</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除好友"><span class="toc-number">18.</span> <span class="toc-text">删除好友</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#同意好友请求"><span class="toc-number">19.</span> <span class="toc-text">同意好友请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#拒绝好友请求"><span class="toc-number">20.</span> <span class="toc-text">拒绝好友请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#监听好友请求"><span class="toc-number">21.</span> <span class="toc-text">监听好友请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取黑名单"><span class="toc-number">22.</span> <span class="toc-text">获取黑名单</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#加入黑名单"><span class="toc-number">23.</span> <span class="toc-text">加入黑名单</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#从黑名单中移除"><span class="toc-number">24.</span> <span class="toc-text">从黑名单中移除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#网络异常监听"><span class="toc-number">25.</span> <span class="toc-text">网络异常监听</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/Android/" title="Android">Android<sup>184</sup></a></li>
+		
+			<li><a href="/categories/Camera/" title="Camera">Camera<sup>1</sup></a></li>
+		
+			<li><a href="/categories/Cocos2d-X/" title="Cocos2d-X">Cocos2d-X<sup>11</sup></a></li>
+		
+			<li><a href="/categories/Prose/" title="Prose">Prose<sup>27</sup></a></li>
+		
+			<li><a href="/categories/Python/" title="Python">Python<sup>22</sup></a></li>
+		
+			<li><a href="/categories/ReactNative/" title="ReactNative">ReactNative<sup>7</sup></a></li>
+		
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>79</sup></a></li>
+		
+			<li><a href="/categories/node-js/" title="node.js">node.js<sup>29</sup></a></li>
+		
+			<li><a href="/categories/杂文/" title="杂文">杂文<sup>3</sup></a></li>
+		
+		</ul>
+		<ul>
+		<script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"></script>
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AFNetworking/" style="font-size: 10.00px;">AFNetworking</a><a href="/tags/APK/" style="font-size: 10.00px;">APK</a><a href="/tags/AS/" style="font-size: 10.00px;">AS</a><a href="/tags/Adapter/" style="font-size: 10.00px;">Adapter</a><a href="/tags/Android/" style="font-size: 20.00px;">Android</a><a href="/tags/Android-5-0/" style="font-size: 10.00px;">Android 5.0</a><a href="/tags/Android-Studio/" style="font-size: 13.33px;">Android Studio</a><a href="/tags/AndroidAninotations/" style="font-size: 10.00px;">AndroidAninotations</a><a href="/tags/AndroidStudio/" style="font-size: 18.33px;">AndroidStudio</a><a href="/tags/Animation/" style="font-size: 15.00px;">Animation</a><a href="/tags/Api/" style="font-size: 13.33px;">Api</a><a href="/tags/App/" style="font-size: 10.00px;">App</a><a href="/tags/Apple/" style="font-size: 10.00px;">Apple</a><a href="/tags/Async/" style="font-size: 10.00px;">Async</a><a href="/tags/Atom/" style="font-size: 11.67px;">Atom</a><a href="/tags/BaseAdapter/" style="font-size: 10.00px;">BaseAdapter</a><a href="/tags/Blur/" style="font-size: 10.00px;">Blur</a><a href="/tags/Box2D/" style="font-size: 10.00px;">Box2D</a><a href="/tags/Broadcast/" style="font-size: 10.00px;">Broadcast</a><a href="/tags/CardView/" style="font-size: 10.00px;">CardView</a><a href="/tags/CocoaPods/" style="font-size: 10.00px;">CocoaPods</a><a href="/tags/Cocos2d-X/" style="font-size: 16.67px;">Cocos2d-X</a><a href="/tags/CocosPods/" style="font-size: 10.00px;">CocosPods</a><a href="/tags/ContentProvider/" style="font-size: 10.00px;">ContentProvider</a><a href="/tags/Context/" style="font-size: 10.00px;">Context</a><a href="/tags/Crouton/" style="font-size: 10.00px;">Crouton</a><a href="/tags/CursorLoader/" style="font-size: 10.00px;">CursorLoader</a><a href="/tags/Demo/" style="font-size: 11.67px;">Demo</a><a href="/tags/Dialog/" style="font-size: 10.00px;">Dialog</a><a href="/tags/EditView/" style="font-size: 10.00px;">EditView</a><a href="/tags/EventBus/" style="font-size: 10.00px;">EventBus</a><a href="/tags/Express/" style="font-size: 10.00px;">Express</a><a href="/tags/Express学习笔记/" style="font-size: 10.00px;">Express学习笔记</a><a href="/tags/Flex/" style="font-size: 10.00px;">Flex</a><a href="/tags/Fragment/" style="font-size: 11.67px;">Fragment</a><a href="/tags/GET/" style="font-size: 10.00px;">GET</a><a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/Gradle/" style="font-size: 11.67px;">Gradle</a><a href="/tags/GridLayout/" style="font-size: 10.00px;">GridLayout</a><a href="/tags/GridView/" style="font-size: 11.67px;">GridView</a>
+    </div>
+  </div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">25</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a><span class="archive-list-count">42</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">June 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">20</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a><span class="archive-list-count">24</span></li></ul>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://imid.me/" target="_blank" title="iMID">iMID's Blog</a></li>
+      <li><a href="http://www.trinea.cn/" target="_blank" title="trinea">Trinea's Blog</a></li>
+      <li><a href="http://stormzhang.github.io/" target="_blank" title="stormzhang">StormZhang's Blog</a></li>
+      <li><a href="http://daimajia.com/" target="_blank" title="daimajia">DaiMaJia.Blog</a></li>
+      <li><a href="http://macrotea.com/welcome/" target="_blank" title="daimajia">Macrotea.Blog</a></li>
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello,I&#39;m Zoe,a Android and iOS developers. <br/>
+			This is my blog,I hope you will enjoy them.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2292032577" target="_blank" class="icon-weibo" title="weibo"></a>
+		
+		
+		<a href="https://github.com/seniorzhai" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:developer.zhaitao@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2016 
+		
+		<a href="http://seniorzhai.github.io/about" target="_blank" title="Zoe">Zoe</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zt1991616"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-54646832-1', 'null');  
+ga('send', 'pageview');
+</script>
+
+
+
+
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<script src="/js/totop.js"></script>
+
+
+
+
+  </body>
+</html>
+
+<a href="https://github.com/seniorzhai"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>

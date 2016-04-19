@@ -1,0 +1,754 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title><![CDATA[Zoe's blog]]></title>
+  <subtitle><![CDATA[宅学长的博客]]></subtitle>
+  <link href="/atom.xml" rel="self"/>
+  <link href="http://seniorzhai.github.io/"/>
+  <updated>2016-04-11T07:12:42.350Z</updated>
+  <id>http://seniorzhai.github.io/</id>
+  
+  <author>
+    <name><![CDATA[Zoe]]></name>
+    <email><![CDATA[developer.zhaitao@gmail.com]]></email>
+  </author>
+  
+  <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[ProGuard详解]]></title>
+    <link href="http://seniorzhai.github.io/2016/04/11/ProGuard%E8%AF%A6%E8%A7%A3/"/>
+    <id>http://seniorzhai.github.io/2016/04/11/ProGuard详解/</id>
+    <published>2016-04-11T06:16:42.000Z</published>
+    <updated>2016-04-11T06:55:53.000Z</updated>
+    <content type="html"><![CDATA[<p><a id="more"></a><br>ProGuard包括4各功能：</p>
+<ul>
+<li>压缩(Shrink) 移除代码中无用的类、字段、方法、和特性</li>
+<li>优化(Optimize) 对字节码进行优化，移除无用的指令</li>
+<li>混淆(Obfuscate) 使用剪短无意义的名称对类、字段、方法重命名</li>
+<li>预检(Preveirfy) 在Java平台上对处理后的代码进行预检</li>
+</ul>
+<h2 id="ProGuard的工作原理">ProGuard的工作原理</h2>
+<p>ProGuard由<code>Shrink</code>,<code>Optimize</code>,<code>Obfuscate</code>,<code>Preveirfy</code>四个步骤组成，其中每个步骤都是可选的</p>
+<h2 id="编写ProGuard文件">编写ProGuard文件</h2>
+<ol>
+<li>基本指令</li>
+</ol>
+<ul>
+<li>代码混淆压缩比，在0~7之间，默认为5，<code>-optimizationpasses 5</code></li>
+<li>混淆时不使用大小写混合，混淆的类名为小写 <code>-dontusemixedcaseclassnames</code></li>
+<li>指定不去忽略废公共的库的类 <code>-dontskipnonpubliclibaryclasses</code></li>
+<li>指定不去忽略废公共的库的类的成员 <code>-dontskipnonpubliclibaryclassesmembers</code></li>
+<li>不做预校验 <code>-dontpreverify</code></li>
+<li>生成映射文件 <code>-verbose</code></li>
+<li>使用printmapping指定映射文件的名称 <code>-printmapping proguardMapping.txt</code></li>
+<li>指定混淆时采用的算法 <code>-optimizations ! code/ simplification/ arithmetic,!fiedld/*,class/merging/*</code></li>
+<li>保护代码中的Annotation不被混淆 <code>-keepattributes *Annotation*</code></li>
+<li>避免混淆泛型 <code>-keepattributes Signature</code></li>
+<li>抛出异常时保留代码行数 <code>-keepattributes SourceFile,LineNumberTable</code></li>
+</ul>
+<ol>
+<li>需要保留的</li>
+</ol>
+<ul>
+<li>保留本地native方法不被混淆</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">-<span class="ruby"> keepclasseswithmembernames <span class="class"><span class="keyword">class</span> * {</span></span></div><div class="line">  native &lt;methods&gt;;</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<ul>
+<li>保留某些子类不被混淆</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- keep <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> * <span class="keyword">extends</span> <span class="title">android</span>.<span class="title">app</span>.<span class="title">Activity</span></span></div></pre></td></tr></table></figure>
+
+<ul>
+<li>保护在XML中设置onClick不被影响</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">- keepclassmembers <span class="class"><span class="keyword">class</span> * <span class="inheritance"><span class="keyword">extends</span></span> <span class="title">android</span>.<span class="title">app</span>.<span class="title">Activity</span> </span>{</div><div class="line">  <span class="keyword">public</span> <span class="keyword">void</span> *(android.view.View);</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<ul>
+<li>保护Fragment <code>- keep public class android.support.v4.app.Fragment.** {*;}</code></li>
+<li>保留枚举不被混淆</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">- keepclassmembers <span class="keyword">enum</span> * {</div><div class="line">  <span class="keyword">public</span> <span class="keyword">static</span> **{} values();</div><div class="line">  <span class="keyword">public</span> <span class="keyword">static</span> ** <span class="title">valueOf</span>(Java.lang.String);</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<ul>
+<li>保留自定义控件不被混淆</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- keep <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> * <span class="keyword">extends</span> <span class="title">android</span>.<span class="title">view</span>.<span class="title">View</span> </span>{</div><div class="line">  *** get*();</div><div class="line">  <span class="keyword">void</span> set*(***);</div><div class="line">  <span class="keyword">public</span> &lt;init&gt;(android.content.Context);</div><div class="line">  <span class="keyword">public</span> &lt;init&gt;(android.content.Context,android.util.ArrtibuteSet);</div><div class="line">  <span class="keyword">public</span> &lt;init&gt;(android.content.Context,android.util.ArrtibuteSet,<span class="keyword">int</span>);</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<ul>
+<li>保留Parcelable序列化不被混淆</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">- keep <span class="class"><span class="keyword">class</span> * <span class="keyword">implements</span> <span class="title">android</span>.<span class="title">os</span>.<span class="title">Parcelable</span> </span>{</div><div class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> android.os.Parcelable<span class="variable">$Creator</span> *;</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<ul>
+<li>保留Serializable序列化类不被混淆</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">- keepclassemembers <span class="class"><span class="keyword">class</span> * <span class="inheritance"><span class="keyword">implements</span></span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span> </span>{</div><div class="line">  <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionID;</div><div class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> java.io.ObjectStreamField[] serialPersistentFields;</div><div class="line">  <span class="keyword">private</span> <span class="keyword">void</span> writeObject(java.io.ObjectOutputStream);</div><div class="line">  <span class="keyword">private</span> <span class="keyword">void</span> readObject(java.io.ObjectInputStream);</div><div class="line">  java.lang.Object writeReplace();</div><div class="line">  java.lang.Object readResolve();</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<ul>
+<li>保留R文件下的资源不被混淆</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-<span class="ruby"> keep <span class="class"><span class="keyword">class</span> **.<span class="title">R</span>${*;</span>}</span></div></pre></td></tr></table></figure>
+
+<ul>
+<li>保留内部类不被混淆</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-<span class="ruby"> keep <span class="class"><span class="keyword">class</span> <span class="title">com</span>.<span class="title">example</span>.<span class="title">app</span>.<span class="title">ui</span>.<span class="title">MainActivity</span>$*{*;</span>}</span></div></pre></td></tr></table></figure>
+
+]]></content>
+    <summary type="html"><![CDATA[<p>]]></summary>
+    
+      <category term="ProGuard" scheme="http://seniorzhai.github.io/tags/ProGuard/"/>
+    
+      <category term="混淆" scheme="http://seniorzhai.github.io/tags/%E6%B7%B7%E6%B7%86/"/>
+    
+      <category term="Android" scheme="http://seniorzhai.github.io/categories/Android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[在Drawable里指定ripple]]></title>
+    <link href="http://seniorzhai.github.io/2016/03/15/%E5%9C%A8Drawable%E9%87%8C%E6%8C%87%E5%AE%9Aripple/"/>
+    <id>http://seniorzhai.github.io/2016/03/15/在Drawable里指定ripple/</id>
+    <published>2016-03-15T03:05:29.000Z</published>
+    <updated>2016-03-15T03:26:41.000Z</updated>
+    <content type="html"><![CDATA[<p><a id="more"></a><br>在<code>drawable</code>中</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">selector</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">item</span> <span class="attribute">android:state_pressed</span>=<span class="value">"true"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="title">shape</span> <span class="attribute">android:shape</span>=<span class="value">"rectangle"</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="title">solid</span> <span class="attribute">android:color</span>=<span class="value">"@android:color/darker_gray"</span> /&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="title">shape</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="title">item</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">item</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="title">shape</span> <span class="attribute">android:shape</span>=<span class="value">"rectangle"</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="title">solid</span> <span class="attribute">android:color</span>=<span class="value">"@android:color/white"</span> /&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="title">shape</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="title">item</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="title">selector</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<p>在<code>drawable-v21</code>中</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">ripple</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span></span></div><div class="line">    <span class="attribute">android:color</span>=<span class="value">"@android:color/darker_gray"</span>&gt;</div><div class="line">    <span class="tag">&lt;<span class="title">item</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="title">shape</span> <span class="attribute">android:shape</span>=<span class="value">"rectangle"</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="title">solid</span> <span class="attribute">android:color</span>=<span class="value">"@android:color/white"</span> /&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="title">shape</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="title">item</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="title">ripple</span>&gt;</span></div></pre></td></tr></table></figure>
+
+]]></content>
+    <summary type="html"><![CDATA[<p>]]></summary>
+    
+      <category term="ripple" scheme="http://seniorzhai.github.io/tags/ripple/"/>
+    
+      <category term="Android" scheme="http://seniorzhai.github.io/categories/Android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[使用jadx]]></title>
+    <link href="http://seniorzhai.github.io/2016/03/10/%E4%BD%BF%E7%94%A8jadx/"/>
+    <id>http://seniorzhai.github.io/2016/03/10/使用jadx/</id>
+    <published>2016-03-10T06:11:00.000Z</published>
+    <updated>2016-03-10T09:44:19.000Z</updated>
+    <content type="html"><![CDATA[<p><a id="more"></a></p>
+<h1 id="使用">使用</h1>
+<p>将<a href="https://github.com/skylot/jadx" target="_blank" rel="external">jadx</a>克隆到本地，进行编译</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git clone http<span class="variable">s:</span>//github.<span class="keyword">com</span>/skylot/jadx</div><div class="line"><span class="keyword">cd</span> jadx</div><div class="line">./gradlew dist</div></pre></td></tr></table></figure>
+
+<p>编译完成后可以在<code>build/jadx/bin</code>中找到运行文件</p>
+<h2 id="运行">运行</h2>
+<p>GUI界面可以点击运行<code>jadx-gui</code>文件<br>命令行可以使用<code>./jadx</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">jadx</span> demo.apk</div></pre></td></tr></table></figure>
+
+<ul>
+<li>命令格式</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">jadx[-gui] [options] &lt;input file&gt; (.dex , .apk , .jar or .class)</div><div class="line">options:</div><div class="line">  -<span class="ruby">d,--output-dir         指定输出文件夹</span></div><div class="line">  -<span class="ruby">j,--threads-count      执行线程数量</span></div><div class="line">  -<span class="ruby">f,--fallback</span></div><div class="line">  -<span class="ruby">r,--no-res             不解码资源文件</span></div><div class="line">  -<span class="ruby">s,--no-src             不反编代码</span></div><div class="line">     -<span class="ruby">-show-bad-code      显示不正确的反编译代码</span></div><div class="line">     -<span class="ruby">-cfg                </span></div><div class="line">     -<span class="ruby">-raw-cfg</span></div><div class="line">  -<span class="ruby">v,--verbose            详细输出</span></div><div class="line">     -<span class="ruby">-deobf              激活deofuscation</span></div><div class="line">     -<span class="ruby">-deobf-min</span></div><div class="line">     -<span class="ruby">-deobf-max</span></div><div class="line">     -<span class="ruby">-deobf-rewrite-cfg</span></div><div class="line">  -<span class="ruby">h,--help</span></div></pre></td></tr></table></figure>
+
+<blockquote>
+<p>—deobf —deobf-rewrite-cfg</p>
+</blockquote>
+]]></content>
+    <summary type="html"><![CDATA[<p>]]></summary>
+    
+      <category term="反编译" scheme="http://seniorzhai.github.io/tags/%E5%8F%8D%E7%BC%96%E8%AF%91/"/>
+    
+      <category term="Android" scheme="http://seniorzhai.github.io/categories/Android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Kotlin简单的开始]]></title>
+    <link href="http://seniorzhai.github.io/2016/02/18/Kotlin%E7%AE%80%E5%8D%95%E7%9A%84%E5%BC%80%E5%A7%8B/"/>
+    <id>http://seniorzhai.github.io/2016/02/18/Kotlin简单的开始/</id>
+    <published>2016-02-18T09:23:49.000Z</published>
+    <updated>2016-03-10T09:35:51.000Z</updated>
+    <content type="html"><![CDATA[<p><a id="more"></a></p>
+<h2 id="安装Kotlin插件">安装Kotlin插件</h2>
+<ul>
+<li>Kotlin 使Android Studio可以识别kotlin代码</li>
+<li>Kotlin Android Extensions 使Android Studio可以自动地从XML中注入所有的View到Activity</li>
+</ul>
+<h2 id="修改Gradle">修改Gradle</h2>
+<figure class="highlight Gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">apply plugin: <span class="string">'com.android.application'</span></div><div class="line">apply plugin: <span class="string">'kotlin-android'</span></div><div class="line">android {</div><div class="line">  ...</div><div class="line">  <span class="keyword">sourceSets</span> {</div><div class="line">    main.java.srcDirs += <span class="string">'src/main/kotlin'</span></div><div class="line">  }</div><div class="line">}</div><div class="line"></div><div class="line"><span class="keyword">dependencies</span> {</div><div class="line">  ...    </div><div class="line">  <span class="keyword">compile</span> <span class="string">"org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"</span></div><div class="line">}</div><div class="line"></div><div class="line"><span class="keyword">buildscript</span> {</div><div class="line">    ext.kotlin_version = <span class="string">'1.0.0'</span></div><div class="line">    <span class="keyword">repositories</span> {</div><div class="line">        mavenCentral()</div><div class="line">    }</div><div class="line">    <span class="keyword">dependencies</span> {</div><div class="line">        <span class="keyword">classpath</span> <span class="string">"org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"</span></div><div class="line">    }</div><div class="line">}</div><div class="line"><span class="keyword">repositories</span> {</div><div class="line">    mavenCentral()</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>PS：未修改处省略</p>
+<h2 id="修改MainActivity">修改MainActivity</h2>
+<p>选择MainActivity.java-&gt;Code-&gt;Convert Java File to Kotlin File</p>
+]]></content>
+    <summary type="html"><![CDATA[<p>]]></summary>
+    
+      <category term="Kotlin" scheme="http://seniorzhai.github.io/tags/Kotlin/"/>
+    
+      <category term="Android" scheme="http://seniorzhai.github.io/categories/Android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[(转)ReactNative-ES5 ES6写法对照]]></title>
+    <link href="http://seniorzhai.github.io/2016/01/25/-%E8%BD%AC-ReactNative-ES5-ES6%E5%86%99%E6%B3%95%E5%AF%B9%E7%85%A7/"/>
+    <id>http://seniorzhai.github.io/2016/01/25/-转-ReactNative-ES5-ES6写法对照/</id>
+    <published>2016-01-25T12:37:20.000Z</published>
+    <updated>2016-01-26T02:46:27.000Z</updated>
+    <content type="html"><![CDATA[<p>转至<a href="http://bbs.reactnative.cn/topic/15/react-react-native-%E7%9A%84es5-es6%E5%86%99%E6%B3%95%E5%AF%B9%E7%85%A7%E8%A1%A8/2" target="_blank" rel="external">http://bbs.reactnative.cn/topic/15/react-react-native-%E7%9A%84es5-es6%E5%86%99%E6%B3%95%E5%AF%B9%E7%85%A7%E8%A1%A8/2</a><br>很多<code>React/React Native</code>的初学者都被ES6的问题迷惑：各路大神都建议我们直接学习ES6的语法(class Foo extends React.Component)，然而网上搜到的很多教程和例子都是ES5版本的，所以很多人在学习的时候连照猫画虎都不知道怎么做。今天在此整理了一些ES5和ES6的写法对照表，希望大家以后读到ES5的代码，也能通过对照，在ES6下实现相同的功能。</p>
+<h2 id="模块">模块</h2>
+<h3 id="引用">引用</h3>
+<p>在ES5里，如果使用CommonJS标准，引入React包基本通过require进行，代码类似这样：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//ES5</span></div><div class="line"><span class="keyword">var</span> React = <span class="built_in">require</span>(<span class="string">"react-native"</span>);</div><div class="line"><span class="keyword">var</span> {</div><div class="line">    Image,</div><div class="line">    Text,</div><div class="line">    PropTypes</div><div class="line">} = React;  <span class="comment">//引用不同的React Native组件</span></div></pre></td></tr></table></figure>
+
+<p>在ES6里，import写法更为标准</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//ES6</span></div><div class="line">import React, {</div><div class="line">    Image,</div><div class="line">    Text,</div><div class="line">    PropTypes</div><div class="line">} from <span class="string">'react-native'</span>;</div></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意在React Native里，import直到0.12+才能正常运作。</p>
+</blockquote>
+<h3 id="导出单个类">导出单个类</h3>
+<p>在ES5里，要导出一个类给别的模块用，一般通过module.exports来导出</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//ES5</span></div><div class="line"><span class="keyword">var</span> MyComponent = React.createClass({</div><div class="line">    ...</div><div class="line">});</div><div class="line"><span class="built_in">module</span>.exports = MyComponent;</div></pre></td></tr></table></figure>
+
+<p>在ES6里，通常用export default来实现相同的功能：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//ES6</span></div><div class="line">export <span class="keyword">default</span> <span class="keyword">class</span> MyComponent extends React.Component{</div><div class="line">    ...</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>引用的时候也类似：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//ES5</span></div><div class="line"><span class="keyword">var</span> MyComponent = <span class="built_in">require</span>(<span class="string">'./MyComponent.js'</span>);</div></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//ES6</span></div><div class="line">import MyComponent from <span class="string">'./MyComponent.js'</span>;</div></pre></td></tr></table></figure>
+
+<h3 id="定义组件">定义组件</h3>
+<p>在ES5里，通常通过React.createClass来定义一个组件类，像这样：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//ES5</span></div><div class="line"><span class="keyword">var</span> Photo = React.createClass({</div><div class="line">    render: <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">        <span class="keyword">return</span> (</div><div class="line">            <span class="xml"><span class="tag">&lt;<span class="title">Image</span> <span class="attribute">source</span>=<span class="value">{this.props.source}</span> /&gt;</span></span></div><div class="line">        );</div><div class="line">    },</div><div class="line">});</div></pre></td></tr></table></figure>
+
+<p>在ES6里，我们通过定义一个继承自React.Component的class来定义一个组件类，像这样：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//ES6</span></div><div class="line"><span class="keyword">class</span> Photo extends React.Component {</div><div class="line">    render() {</div><div class="line">        <span class="keyword">return</span> (</div><div class="line">            <span class="xml"><span class="tag">&lt;<span class="title">Image</span> <span class="attribute">source</span>=<span class="value">{this.props.source}</span> /&gt;</span></span></div><div class="line">        );</div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<h3 id="给组件定义方法">给组件定义方法</h3>
+<p>从上面的例子里可以看到，给组件定义方法不再用 名字: function()的写法，而是直接用名字()，在方法的最后也不能有逗号了。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//ES5</span></div><div class="line"><span class="keyword">var</span> Photo = React.createClass({</div><div class="line">    componentWillMount: <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line"></div><div class="line">    },</div><div class="line">    render: <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">        <span class="keyword">return</span> (</div><div class="line">            <span class="xml"><span class="tag">&lt;<span class="title">Image</span> <span class="attribute">source</span>=<span class="value">{this.props.source}</span> /&gt;</span></span></div><div class="line">        );</div><div class="line">    },</div><div class="line">});</div></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//ES6</span></div><div class="line"><span class="keyword">class</span> Photo extends React.Component {</div><div class="line">    componentWillMount() {</div><div class="line"></div><div class="line">    }</div><div class="line">    render() {</div><div class="line">        <span class="keyword">return</span> (</div><div class="line">            <span class="xml"><span class="tag">&lt;<span class="title">Image</span> <span class="attribute">source</span>=<span class="value">{this.props.source}</span> /&gt;</span></span></div><div class="line">        );</div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<h3 id="定义组件的属性类型和默认属性">定义组件的属性类型和默认属性</h3>
+<p>在ES5里，属性类型和默认属性分别通过propTypes成员和getDefaultProps方法来实现</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//ES5</span></div><div class="line"><span class="keyword">var</span> Video = React.createClass({</div><div class="line">    getDefaultProps: <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">        <span class="keyword">return</span> {</div><div class="line">            autoPlay: <span class="literal">false</span>,</div><div class="line">            maxLoops: <span class="number">10</span>,</div><div class="line">        };</div><div class="line">    },</div><div class="line">    propTypes: {</div><div class="line">        autoPlay: React.PropTypes.bool.isRequired,</div><div class="line">        maxLoops: React.PropTypes.number.isRequired,</div><div class="line">        posterFrameSrc: React.PropTypes.string.isRequired,</div><div class="line">        videoSrc: React.PropTypes.string.isRequired,</div><div class="line">    },</div><div class="line">    render: <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">        <span class="keyword">return</span> (</div><div class="line">            <span class="xml"><span class="tag">&lt;<span class="title">View</span> /&gt;</span></span></div><div class="line">        );</div><div class="line">    },</div><div class="line">});</div></pre></td></tr></table></figure>
+
+<p>在ES6里，可以统一使用static成员来实现</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//ES6</span></div><div class="line"><span class="keyword">class</span> Video extends React.Component {</div><div class="line">    static defaultProps = {</div><div class="line">        autoPlay: <span class="literal">false</span>,</div><div class="line">        maxLoops: <span class="number">10</span>,</div><div class="line">    };  <span class="comment">// 注意这里有分号</span></div><div class="line">    static propTypes = {</div><div class="line">        autoPlay: React.PropTypes.bool.isRequired,</div><div class="line">        maxLoops: React.PropTypes.number.isRequired,</div><div class="line">        posterFrameSrc: React.PropTypes.string.isRequired,</div><div class="line">        videoSrc: React.PropTypes.string.isRequired,</div><div class="line">    };  <span class="comment">// 注意这里有分号</span></div><div class="line">    render() {</div><div class="line">        <span class="keyword">return</span> (</div><div class="line">            <span class="xml"><span class="tag">&lt;<span class="title">View</span> /&gt;</span></span></div><div class="line">        );</div><div class="line">    } // 注意这里既没有分号也没有逗号</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>也有人这么写，虽然不推荐，但读到代码的时候你应当能明白它的意思：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//ES6</span></div><div class="line"><span class="keyword">class</span> Video extends React.Component {</div><div class="line">    render() {</div><div class="line">        <span class="keyword">return</span> (</div><div class="line">            <span class="xml"><span class="tag">&lt;<span class="title">View</span> /&gt;</span></span></div><div class="line">        );</div><div class="line">    }</div><div class="line">}</div><div class="line">Video.defaultProps = {</div><div class="line">    autoPlay: false,</div><div class="line">    maxLoops: 10,</div><div class="line">};</div><div class="line">Video.propTypes = {</div><div class="line">    autoPlay: React.PropTypes.bool.isRequired,</div><div class="line">    maxLoops: React.PropTypes.number.isRequired,</div><div class="line">    posterFrameSrc: React.PropTypes.string.isRequired,</div><div class="line">    videoSrc: React.PropTypes.string.isRequired,</div><div class="line">};</div></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意: 对React开发者而言，static成员在IE10及之前版本不能被继承，而在IE11和其它浏览器上可以，这有时候会带来一些问题。React Native开发者可以不用担心这个问题。</p>
+</blockquote>
+<h3 id="初始化state">初始化state</h3>
+<p>ES5下情况类似，</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//ES5</span></div><div class="line"><span class="keyword">var</span> Video = React.createClass({</div><div class="line">    getInitialState: <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">        <span class="keyword">return</span> {</div><div class="line">            loopsRemaining: <span class="keyword">this</span>.props.maxLoops,</div><div class="line">        };</div><div class="line">    },</div><div class="line">})</div></pre></td></tr></table></figure>
+
+<p>ES6下，有两种写法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//ES6</span></div><div class="line"><span class="keyword">class</span> Video extends React.Component {</div><div class="line">    state = {</div><div class="line">        loopsRemaining: <span class="keyword">this</span>.props.maxLoops,</div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>不过我们推荐更易理解的在构造函数中初始化（这样你还可以根据需要做一些计算）：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//ES6</span></div><div class="line"><span class="keyword">class</span> Video extends React.Component {</div><div class="line">    constructor(props){</div><div class="line">        super(props);</div><div class="line">        <span class="keyword">this</span>.state = {</div><div class="line">            loopsRemaining: <span class="keyword">this</span>.props.maxLoops,</div><div class="line">        };</div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>把方法作为回调提供<br>很多习惯于ES6的用户反而不理解在ES5下可以这么做：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//ES5</span></div><div class="line"><span class="keyword">var</span> PostInfo = React.createClass({</div><div class="line">    handleOptionsButtonClick: <span class="function"><span class="keyword">function</span><span class="params">(e)</span> </span>{</div><div class="line">        <span class="comment">// Here, 'this' refers to the component instance.</span></div><div class="line">        <span class="keyword">this</span>.setState({showOptionsModal: <span class="literal">true</span>});</div><div class="line">    },</div><div class="line">    render: <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line">        <span class="keyword">return</span> (</div><div class="line">            <span class="xml"><span class="tag">&lt;<span class="title">TouchableHighlight</span> <span class="attribute">onPress</span>=<span class="value">{this.handleOptionsButtonClick}</span>&gt;</span></span></div><div class="line">                <span class="tag">&lt;<span class="title">Text</span>&gt;</span>{this.props.label}<span class="tag">&lt;/<span class="title">Text</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="title">TouchableHighlight</span>&gt;</span></div><div class="line">        )</div><div class="line">    },</div><div class="line">});</div></pre></td></tr></table></figure>
+
+<p>在ES5下，React.createClass会把所有的方法都bind一遍，这样可以提交到任意的地方作为回调函数，而this不会变化。但官方现在逐步认为这反而是不标准、不易理解的。</p>
+<p>在ES6下，你需要通过bind来绑定this引用，或者使用箭头函数（它会绑定当前scope的this引用）来调用</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//ES6</span></div><div class="line"><span class="keyword">class</span> PostInfo extends React.Component</div><div class="line">{</div><div class="line">    handleOptionsButtonClick(e){</div><div class="line">        <span class="keyword">this</span>.setState({showOptionsModal: <span class="literal">true</span>});</div><div class="line">    }</div><div class="line">    render(){</div><div class="line">        <span class="keyword">return</span> (</div><div class="line">            <span class="xml"><span class="tag">&lt;<span class="title">TouchableHighlight</span></span></span></div><div class="line">                <span class="attribute">onPress</span>=<span class="value">{this.handleOptionsButtonClick.bind(this)}</span></div><div class="line">                <span class="attribute">onPress</span>=<span class="value">{e=</span>&gt;this.handleOptionsButtonClick(e)}</div><div class="line">                &gt;</div><div class="line">                <span class="tag">&lt;<span class="title">Text</span>&gt;</span>{this.props.label}<span class="tag">&lt;/<span class="title">Text</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="title">TouchableHighlight</span>&gt;</span></div><div class="line">        )</div><div class="line">    },</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>箭头函数实际上是在这里定义了一个临时的函数，箭头函数的箭头=&gt;之前是一个空括号、单个的参数名、或用括号括起的多个参数名，而箭头之后可以是一个表达式（作为函数的返回值），或者是用花括号括起的函数体（需要自行通过return来返回值，否则返回的是undefined）。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 箭头函数的例子</span></div><div class="line">()=&gt;<span class="number">1</span></div><div class="line">v=&gt;v+<span class="number">1</span></div><div class="line">(a,b)=&gt;a+b</div><div class="line">()=&gt;{</div><div class="line">    alert(<span class="string">"foo"</span>);</div><div class="line">}</div><div class="line">e=&gt;{</div><div class="line">    <span class="keyword">if</span> (e == <span class="number">0</span>){</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    }</div><div class="line">    <span class="keyword">return</span> <span class="number">1000</span>/e;</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>需要注意的是，不论是bind还是箭头函数，每次被执行都返回的是一个新的函数引用，因此如果你还需要函数的引用去做一些别的事情（譬如卸载监听器），那么你必须自己保存这个引用</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 错误的做法</span></div><div class="line"><span class="keyword">class</span> PauseMenu extends React.Component{</div><div class="line">    componentWillMount(){</div><div class="line">        AppStateIOS.addEventListener(<span class="string">'change'</span>, <span class="keyword">this</span>.onAppPaused.bind(<span class="keyword">this</span>));</div><div class="line">    }</div><div class="line">    componentDidUnmount(){</div><div class="line">        AppStateIOS.removeEventListener(<span class="string">'change'</span>, <span class="keyword">this</span>.onAppPaused.bind(<span class="keyword">this</span>));</div><div class="line">    }</div><div class="line">    onAppPaused(event){</div><div class="line">    }</div><div class="line">}</div><div class="line"><span class="comment">// 正确的做法</span></div><div class="line"><span class="keyword">class</span> PauseMenu extends React.Component{</div><div class="line">    constructor(props){</div><div class="line">        super(props);</div><div class="line">        <span class="keyword">this</span>._onAppPaused = <span class="keyword">this</span>.onAppPaused.bind(<span class="keyword">this</span>);</div><div class="line">    }</div><div class="line">    componentWillMount(){</div><div class="line">        AppStateIOS.addEventListener(<span class="string">'change'</span>, <span class="keyword">this</span>._onAppPaused);</div><div class="line">    }</div><div class="line">    componentDidUnmount(){</div><div class="line">        AppStateIOS.removeEventListener(<span class="string">'change'</span>, <span class="keyword">this</span>._onAppPaused);</div><div class="line">    }</div><div class="line">    onAppPaused(event){</div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>从这个帖子中我们还学习到一种新的做法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 正确的做法</span></div><div class="line"><span class="keyword">class</span> PauseMenu extends React.Component{</div><div class="line">    componentWillMount(){</div><div class="line">        AppStateIOS.addEventListener(<span class="string">'change'</span>, <span class="keyword">this</span>.onAppPaused);</div><div class="line">    }</div><div class="line">    componentDidUnmount(){</div><div class="line">        AppStateIOS.removeEventListener(<span class="string">'change'</span>, <span class="keyword">this</span>.onAppPaused);</div><div class="line">    }</div><div class="line">    onAppPaused = (event) =&gt; {</div><div class="line">        <span class="comment">//把方法直接作为一个arrow function的属性来定义，初始化的时候就绑定好了this指针</span></div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<h3 id="Mixins">Mixins</h3>
+<p>在ES5下，我们经常使用mixin来为我们的类添加一些新的方法，譬如PureRenderMixin</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> PureRenderMixin = <span class="built_in">require</span>(<span class="string">'react-addons-pure-render-mixin'</span>);</div><div class="line">React.createClass({</div><div class="line">  mixins: [PureRenderMixin],</div><div class="line"></div><div class="line">  render: <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">    <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">className</span>=<span class="value">{this.props.className}</span>&gt;</span>foo<span class="tag">&lt;/<span class="title">div</span>&gt;</span>;</span></div><div class="line">  }</div><div class="line">});</div></pre></td></tr></table></figure>
+
+<p>然而现在官方已经不再打算在ES6里继续推行Mixin，他们说：Mixins Are Dead. Long Live Composition。</p>
+<p>尽管如果要继续使用mixin，还是有一些第三方的方案可以用，譬如这个方案</p>
+<p>不过官方推荐，对于库编写者而言，应当尽快放弃Mixin的编写方式，上文中提到Sebastian Markbåge的一段代码推荐了一种新的编码方式：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//Enhance.js</span></div><div class="line">import { Component } from <span class="string">"React"</span>;</div><div class="line"></div><div class="line">export <span class="keyword">var</span> Enhance = ComposedComponent =&gt; <span class="keyword">class</span> extends Component {</div><div class="line">    constructor() {</div><div class="line">        <span class="keyword">this</span>.state = { data: <span class="literal">null</span> };</div><div class="line">    }</div><div class="line">    componentDidMount() {</div><div class="line">        <span class="keyword">this</span>.setState({ data: <span class="string">'Hello'</span> });</div><div class="line">    }</div><div class="line">    render() {</div><div class="line">        <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="title">ComposedComponent</span> {<span class="attribute">...this.props</span>} <span class="attribute">data</span>=<span class="value">{this.state.data}</span> /&gt;</span>;</span></div><div class="line">    }</div><div class="line">};</div><div class="line"></div><div class="line"><span class="comment">//HigherOrderComponent.js</span></div><div class="line">import { Enhance } from <span class="string">"./Enhance"</span>;</div><div class="line"></div><div class="line"><span class="keyword">class</span> MyComponent {</div><div class="line">    render() {</div><div class="line">        <span class="keyword">if</span> (!<span class="keyword">this</span>.data) <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="title">div</span>&gt;</span>Waiting...<span class="tag">&lt;/<span class="title">div</span>&gt;</span>;</span></div><div class="line">        <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="title">div</span>&gt;</span>{this.data}<span class="tag">&lt;/<span class="title">div</span>&gt;</span>;</span></div><div class="line">    }</div><div class="line">}</div><div class="line"></div><div class="line">export <span class="keyword">default</span> Enhance(MyComponent); <span class="comment">// Enhanced component</span></div></pre></td></tr></table></figure>
+
+<p>用一个“增强函数”，来某个类增加一些方法，并且返回一个新类，这无疑能实现mixin所实现的大部分需求。</p>
+<h2 id="ES6+带来的其它好处">ES6+带来的其它好处</h2>
+<h3 id="解构&amp;属性延展_">解构&amp;属性延展　</h3>
+<p>结合使用ES6+的解构和属性延展，我们给孩子传递一批属性更为方便了。这个例子把className以外的所有属性传递给div标签：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> AutoloadingPostsGrid extends React.Component {</div><div class="line">    render() {</div><div class="line">        <span class="keyword">var</span> {</div><div class="line">            className,</div><div class="line">            ...others,  <span class="comment">// contains all properties of this.props except for className</span></div><div class="line">        } = <span class="keyword">this</span>.props;</div><div class="line">        <span class="keyword">return</span> (</div><div class="line">            <span class="xml"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">className</span>=<span class="value">{className}</span>&gt;</span></span></div><div class="line">                <span class="tag">&lt;<span class="title">PostsGrid</span> {<span class="attribute">...others</span>} /&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="title">button</span> <span class="attribute">onClick</span>=<span class="value">{this.handleLoadMoreClick}</span>&gt;</span>Load more<span class="tag">&lt;/<span class="title">button</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="title">div</span>&gt;</span></div><div class="line">        );</div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>下面这种写法，则是传递所有属性的同时，用覆盖新的className值：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;div {...this.props} className=<span class="string">"override"</span>&gt;</div><div class="line">    …</div><div class="line">&lt;<span class="regexp">/div&gt;</span></div></pre></td></tr></table></figure>
+
+<p>这个例子则相反，如果属性中没有包含className，则提供默认的值，而如果属性中已经包含了，则使用属性中的值</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;div className=<span class="string">"base"</span> {...this.props}&gt;</div><div class="line">    …</div><div class="line">&lt;<span class="regexp">/div&gt;</span></div></pre></td></tr></table></figure>
+
+]]></content>
+    
+    
+      <category term="SE5" scheme="http://seniorzhai.github.io/tags/SE5/"/>
+    
+      <category term="SE6" scheme="http://seniorzhai.github.io/tags/SE6/"/>
+    
+      <category term="ReactNative" scheme="http://seniorzhai.github.io/tags/ReactNative/"/>
+    
+      <category term="Android" scheme="http://seniorzhai.github.io/categories/Android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[ReactNative-Flex]]></title>
+    <link href="http://seniorzhai.github.io/2016/01/23/ReactNative-Flex/"/>
+    <id>http://seniorzhai.github.io/2016/01/23/ReactNative-Flex/</id>
+    <published>2016-01-22T18:29:50.000Z</published>
+    <updated>2016-01-24T13:48:41.000Z</updated>
+    <content type="html"><![CDATA[<p><a id="more"></a><br><img src="/img/16012301.png" alt=""><br><img src="/img/16012302.png" alt=""><br><a href="https://github.com/SeniorZhai/FlexDemo" target="_blank" rel="external">https://github.com/SeniorZhai/FlexDemo</a></p>
+]]></content>
+    <summary type="html"><![CDATA[<p>]]></summary>
+    
+      <category term="Flex" scheme="http://seniorzhai.github.io/tags/Flex/"/>
+    
+      <category term="ReactNative" scheme="http://seniorzhai.github.io/categories/ReactNative/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[简单配置]]></title>
+    <link href="http://seniorzhai.github.io/2016/01/22/%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE/"/>
+    <id>http://seniorzhai.github.io/2016/01/22/简单配置/</id>
+    <published>2016-01-22T04:10:49.000Z</published>
+    <updated>2016-01-22T09:54:37.000Z</updated>
+    <content type="html"><![CDATA[<p>用了一段时间Atom来写React，觉得还是不够好用，虽然漂亮<br><a id="more"></a><br>重回老路，配置下WebStrom，发现也还可以</p>
+<p>最新的版本，是WebStrom 11，好像激活的方法有变更，不复述。<br><a href="http://www.oschina.net/question/1184821_2142539?fromerr=tlf5g1xd" target="_blank" rel="external">http://www.oschina.net/question/1184821_2142539?fromerr=tlf5g1xd</a></p>
+<p>关于Code Theme方面，这款<a href="http://color-themes.com/?view=theme&amp;id=563a1a6180b4acf11273ae3d" target="_blank" rel="external">Obsidian</a>也是不错的选择。</p>
+<p>为了方便开发，我还配置了一些Live Templeates，简单的处理下一个组件的初始化</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="pi">'use strict'</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> React = <span class="built_in">require</span>(<span class="string">'react-native'</span>)</div><div class="line"><span class="keyword">var</span> {</div><div class="line">    StyleSheet,</div><div class="line">    View,</div><div class="line">    } = React;</div><div class="line"></div><div class="line"><span class="keyword">var</span> $NAME$ = React.createClass({</div><div class="line">    render: <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>{</div><div class="line">        <span class="keyword">return</span> (</div><div class="line">            <span class="xml"><span class="tag">&lt;<span class="title">View</span>&gt;</span>$END$<span class="tag">&lt;/<span class="title">View</span>&gt;</span></span></div><div class="line">        );</div><div class="line">    }</div><div class="line">});</div><div class="line"></div><div class="line">var styles = StyleSheet.create({</div><div class="line"></div><div class="line">});</div><div class="line"></div><div class="line">exports.module = $NAME$;</div></pre></td></tr></table></figure>
+
+]]></content>
+    <summary type="html"><![CDATA[<p>用了一段时间Atom来写React，觉得还是不够好用，虽然漂亮<br>]]></summary>
+    
+      <category term="配置" scheme="http://seniorzhai.github.io/tags/%E9%85%8D%E7%BD%AE/"/>
+    
+      <category term="Atom" scheme="http://seniorzhai.github.io/tags/Atom/"/>
+    
+      <category term="WebStrom" scheme="http://seniorzhai.github.io/tags/WebStrom/"/>
+    
+      <category term="Sublime" scheme="http://seniorzhai.github.io/tags/Sublime/"/>
+    
+      <category term="ReactNative" scheme="http://seniorzhai.github.io/categories/ReactNative/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[SystemUI与FitsSystemWindows]]></title>
+    <link href="http://seniorzhai.github.io/2016/01/20/SystemUI%E4%B8%8EFitsSystemWindows/"/>
+    <id>http://seniorzhai.github.io/2016/01/20/SystemUI与FitsSystemWindows/</id>
+    <published>2016-01-20T04:30:17.000Z</published>
+    <updated>2016-01-21T09:25:51.000Z</updated>
+    <content type="html"><![CDATA[<p>在亘古时代(Android 2.+)的时候，全屏操作简单粗暴，但是切换显示、隐藏时丑陋之极。<br><a id="more"></a></p>
+<ul>
+<li>在theme中设置</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;application</div><div class="line">  android:theme="@android:style/Theme.Holo.NaoActionBar.Fullscreen"</div><div class="line">...</div><div class="line">&lt;/application&gt;</div></pre></td></tr></table></figure>
+
+<ul>
+<li>在activity渲染之前</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line">  <span class="annotation">@Override</span></div><div class="line">  <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span>(Bundle savedInstanceState){</div><div class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">    <span class="keyword">if</span> (Build.VERSION.SDK_INT &lt; <span class="number">16</span>) {</div><div class="line">      getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);</div><div class="line">    }</div><div class="line">    setContentView(...);</div><div class="line">    ...</div><div class="line">  }</div><div class="line">...</div></pre></td></tr></table></figure>
+
+<p>因为设置了WindowManager的flag，想要切换只能重置flag，而且因为大小变了，activity的界面也会改变。</p>
+<p>在改革春风吹满地的新时代(Android 4.0+)，SDK提供了我们新的选择，使用setSystemUiVisibility()来操控SystemUI，这里不只StatusBar还有NavigationBar</p>
+<h2 id="4-0可使用的方法">4.0可使用的方法</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">View decorView = getWindow().getDecorView();</div><div class="line"><span class="keyword">int</span> uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;</div><div class="line">decorView.setSystemUiVisibilit(uiOptions);</div></pre></td></tr></table></figure>
+
+<ul>
+<li>触摸屏幕任何位置都会使得导航、状态栏出现，且<code>SYSTEM_UI_FLAG_HIDE_NAVIGATION</code>被清除</li>
+<li>一旦标志位被清除，需要重新设置</li>
+<li>在不用地方UI FLAG是不同的，所有最好在onReasume()和onWindowFocusChaned()中设置</li>
+<li>被调用的View显示时才会生效<h2 id="4-1以后">4.1以后</h2>
+上面的方法设置后，内容还是会因为场景的变化而变化，所以我们需要让我们的内容放在SystemUI的后面</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">View decorView = getWindow().getDecorView();</div><div class="line"><span class="keyword">int</span> uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;</div><div class="line">decorView.setSystemUiVisibilit(uiOptions);</div></pre></td></tr></table></figure>
+
+<p>值得注意的是，有些控件我们是不希望不覆盖住的，比如toolbar，这个时候需要给它加上FitsSystemWindows属性，保证不会被SystemUI遮住。<br>从示例上看，系统会为View设置上Padding，所以，如果要做切换时，可能要考虑还原View的Padding。</p>
+<h1 id="示例">示例</h1>
+<p><a href="https://github.com/SeniorZhai/SystemUI" target="_blank" rel="external">https://github.com/SeniorZhai/SystemUI</a></p>
+]]></content>
+    <summary type="html"><![CDATA[<p>在亘古时代(Android 2.+)的时候，全屏操作简单粗暴，但是切换显示、隐藏时丑陋之极。<br>]]></summary>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[gradle下载地址]]></title>
+    <link href="http://seniorzhai.github.io/2016/01/18/gradle%E4%B8%8B%E8%BD%BD%E5%9C%B0%E5%9D%80/"/>
+    <id>http://seniorzhai.github.io/2016/01/18/gradle下载地址/</id>
+    <published>2016-01-18T14:19:42.000Z</published>
+    <updated>2016-01-23T20:13:11.000Z</updated>
+    <content type="html"><![CDATA[<a id="more"></a>
+
+<p><a href="https://services.gradle.org/distributions/" target="_blank" rel="external">https://services.gradle.org/distributions/</a></p>
+<p>放到<code>~/.gradle/wrapper/dists</code>目录下</p>
+<blockquote>
+<p>不知道是不是我环境的问题，用P2P下载文件一直有问题，还是直接下载的好</p>
+</blockquote>
+]]></content>
+    
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[ReactNative-ListView]]></title>
+    <link href="http://seniorzhai.github.io/2016/01/17/ReactNative-ListView/"/>
+    <id>http://seniorzhai.github.io/2016/01/17/ReactNative-ListView/</id>
+    <published>2016-01-17T15:26:29.000Z</published>
+    <updated>2016-01-17T15:26:29.000Z</updated>
+    <content type="html"><![CDATA[<a id="more"></a>]]></content>
+    
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[ReactNative-Navigator]]></title>
+    <link href="http://seniorzhai.github.io/2016/01/17/ReactNative-Navigator/"/>
+    <id>http://seniorzhai.github.io/2016/01/17/ReactNative-Navigator/</id>
+    <published>2016-01-17T15:22:02.000Z</published>
+    <updated>2016-01-17T15:23:39.000Z</updated>
+    <content type="html"><![CDATA[<p><a id="more"></a></p>
+<h1 id="基本用法">基本用法</h1>
+<p>Navigator可以切换不同场景，导航器通过路由来分辨不同的场景。<br><code>renderScene</code>方法用来指定渲染的场景，<code>configureScene</code>属性指定路由对象的配置信息，可以指定进场动画或者手势。</p>
+<h1 id="方法">方法</h1>
+<ul>
+<li><code>getCurrentRoutes()</code> 获取当前栈里的路由</li>
+<li><code>jumpBack()</code> 跳回之前的路由，当前场景保留</li>
+<li><code>jumpForward()</code> 跳回之后的路由</li>
+<li><code>jumpTo(route)</code> 跳转到已有的场景并且不卸载</li>
+<li><code>push(route)</code> 跳转到新的场景</li>
+<li><code>pop()</code> 跳转出去并且卸载当前场景</li>
+<li><code>replace(route)</code> 用一个新的路由替换掉当前场景</li>
+<li><code>replaceAtIndex(rote,index)</code> 替换掉指定序列的场景</li>
+<li><code>replacePrevious(route)</code> 替换掉之前的场景</li>
+<li><code>immediatelyResetRouteStack(routeStack)</code>  用新的路由重置路由栈</li>
+<li><code>popToRoute(route)</code> pop到路由指定的场景，其他的场景将被卸载</li>
+<li><code>popToTp()</code> pop到栈中单第一个场景，卸载掉所有的其他场景<h1 id="属性">属性</h1>
+</li>
+<li><code>configureScene</code> 可选函数，用来指定场景动画和手势</li>
+<li><code>initialRoute</code> 指定启动时加载的路由</li>
+<li><code>initialRouteStack</code> 指定一个路由集合来初始化</li>
+<li><code>navigatorBar</code> 可选参数，提供一个场景切换时保持的导航栏</li>
+<li><code>navigator</code> 可选参数，提供父类导航获取导航器对象</li>
+<li><code>renderScene</code> 必选参数，用来指定路由渲染的场景</li>
+<li><code>sceneStyle</code> 指定每个场景的容器上的样式</li>
+</ul>
+]]></content>
+    <summary type="html"><![CDATA[<p>]]></summary>
+    
+      <category term="Navigator" scheme="http://seniorzhai.github.io/tags/Navigator/"/>
+    
+      <category term="路由" scheme="http://seniorzhai.github.io/tags/%E8%B7%AF%E7%94%B1/"/>
+    
+      <category term="切换" scheme="http://seniorzhai.github.io/tags/%E5%88%87%E6%8D%A2/"/>
+    
+      <category term="ReactNative" scheme="http://seniorzhai.github.io/categories/ReactNative/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[AsyncStorage的使用]]></title>
+    <link href="http://seniorzhai.github.io/2016/01/17/AsyncStorage%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
+    <id>http://seniorzhai.github.io/2016/01/17/AsyncStorage的使用/</id>
+    <published>2016-01-17T13:50:50.000Z</published>
+    <updated>2016-01-21T08:03:21.000Z</updated>
+    <content type="html"><![CDATA[<p>AsyncStorage是一个Key-Value存储系统，对于App是全局的。<br><a id="more"></a></p>
+<ul>
+<li>static getItem(key:string,callback?:?(error:?error,result:?string) =&gt; void)<ul>
+<li>读取key字段，将结果作为参数，传递给callback</li>
+</ul>
+</li>
+<li>static setItem(key:string,value:string,callback?:?(error:?Error)=&gt;void)<ul>
+<li>将key字段的值设置为value,结果调用callback</li>
+</ul>
+</li>
+<li>static removeItem(key:string,callback?:?(error:?Error)=&gt;void)<ul>
+<li>删除一个字段</li>
+</ul>
+</li>
+<li>static mergeItem(key:string,value:string,callback?:?(error:?Error)=&gt;)<ul>
+<li>假设已有的值和新的值都是字符串的JSON，将两个值合并</li>
+</ul>
+</li>
+<li>static clear(callback?:?(error:?Error)=&gt;void)<ul>
+<li>删除所有数据</li>
+</ul>
+</li>
+<li>static getAllKeys(callback?:?(error:?Error,keys:?Array<string>)=&gt;void)<ul>
+<li>获取所有key</li>
+</ul>
+</string></li>
+<li>static flushGetRequests()<ul>
+<li>清除所有进行中的查询操作</li>
+</ul>
+</li>
+<li>static multiGet(keys:Array<string>,callback?:?(errors: ?Array<error>, result: ?Array<array<string>&gt;) =&gt; void)<ul>
+<li>获取keys所包含的所有字段的值，返回key-value数组</li>
+</ul>
+</array<string></error></string></li>
+<li>static multiSet(keysValuePairs:Array<array<string>&gt;,callback?:?(errors:?Array<error>)=&gt;void)<ul>
+<li>设置keys-values，multiSet([[‘k1’:’val1’],[‘k2’:’val2’]],cb)</li>
+</ul>
+</error></array<string></li>
+<li>static multiRemove(keys:Array<string>,callback?:?(error:?Array<error>)=&gt;void)<ul>
+<li>删除所有keys的数据</li>
+</ul>
+</error></string></li>
+<li>static multiMerge(keyValuePairs: Array<array<string>&gt;, callback?: ?(errors: ?Array<error>) =&gt; void)<ul>
+<li>将多个输入的值和已有的值合并，要求都是字符串化的JSON</li>
+</ul>
+</error></array<string></li>
+</ul>
+]]></content>
+    <summary type="html"><![CDATA[<p>AsyncStorage是一个Key-Value存储系统，对于App是全局的。<br>]]></summary>
+    
+      <category term="缓存" scheme="http://seniorzhai.github.io/tags/%E7%BC%93%E5%AD%98/"/>
+    
+      <category term="持久化" scheme="http://seniorzhai.github.io/tags/%E6%8C%81%E4%B9%85%E5%8C%96/"/>
+    
+      <category term="ReactNative" scheme="http://seniorzhai.github.io/categories/ReactNative/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[@ViewDebug.ExportedProperty注解]]></title>
+    <link href="http://seniorzhai.github.io/2016/01/12/-ViewDebug-ExportedProperty%E6%B3%A8%E8%A7%A3/"/>
+    <id>http://seniorzhai.github.io/2016/01/12/-ViewDebug-ExportedProperty注解/</id>
+    <published>2016-01-12T13:16:27.000Z</published>
+    <updated>2016-01-12T10:44:33.000Z</updated>
+    <content type="html"><![CDATA[<p>使用<code>@ViewDebug.ExportedProperty</code>注解，可以在Monitor的Hierarchy Viewer中的调试View属性，可以直接观察注解过的变量和方法的值，实时观察View的状态变化。<br><a id="more"></a></p>
+<h2 id="使用">使用</h2>
+<ul>
+<li>category 指定属性的类别，比如<code>measurement</code>,<code>layout</code>,<code>drawing</code>等。</li>
+<li>resolveId 当resolveId为true时，变量或方法的值为int数据，那么这个值会被转换成Android对应的资源名称</li>
+<li>mapping 可以将int值映射成指定的字符串</li>
+<li>indexMapping 可以将数组的序号映射成指定的字符串</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="annotation">@ViewDebug</span>.ExportedProperty(category = <span class="string">"seniorzhai"</span>)</div><div class="line"><span class="keyword">int</span> x = <span class="number">1</span>;</div><div class="line"></div><div class="line"><span class="annotation">@Override</span></div><div class="line"><span class="annotation">@ViewDebug</span>.ExportedProperty(category = <span class="string">"seniorzhai"</span>)</div><div class="line"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isFocused</span>() {</div><div class="line">  <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="annotation">@Override</span></div><div class="line"><span class="annotation">@ViewDebug</span>.ExportedProperty(category = <span class="string">"seniorzhai"</span>)</div><div class="line"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isFocused</span>() {</div><div class="line">  <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="annotation">@ViewDebug</span>.ExportedProperty(category = <span class="string">"seniorzhai"</span>,resolveld = <span class="keyword">true</span>)</div><div class="line"><span class="keyword">int</span> b = R.id.no;</div><div class="line"></div><div class="line"><span class="annotation">@Override</span></div><div class="line"><span class="annotation">@ViewDebug</span>.ExportedProperty(category = <span class="string">"seniorzhai"</span>,</div><div class="line">    mapping = {</div><div class="line">                  <span class="annotation">@ViewDebug</span>.IntToString(from = VISIBLE, to = <span class="string">"SENIOR_VISIBLE"</span>),</div><div class="line">                  <span class="annotation">@ViewDebug</span>.IntToString(from = INVISIBLE, to = <span class="string">"SENIOR_INVISIBLE"</span>),</div><div class="line">                  <span class="annotation">@ViewDebug</span>.IntToString(from = GONE, to = <span class="string">"SENIOR_GONE"</span>)</div><div class="line">              })</div><div class="line"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getVisibility</span>() {</div><div class="line">  <span class="keyword">return</span> <span class="keyword">super</span>.getVisibility();    </div><div class="line">}</div><div class="line"></div><div class="line"><span class="annotation">@ViewDebug</span>.ExportedProperty(category = <span class="string">"seniorzhai"</span>,</div><div class="line">indexMapping = {</div><div class="line">                  <span class="annotation">@ViewDebug</span>.IntToString(from = <span class="number">0</span>, to = <span class="string">"SENIOR_FIRST"</span>),            <span class="annotation">@ViewDebug</span>.IntToString(from = <span class="number">1</span>, to = <span class="string">"SENIOR_SECOND"</span>),</div><div class="line">                  <span class="annotation">@ViewDebug</span>.IntToString(from = <span class="number">2</span>, to = <span class="string">"SENIOR_THIRD"</span>)</div><div class="line">                })</div><div class="line"><span class="keyword">int</span>[] elements = <span class="keyword">new</span> <span class="keyword">int</span>[] {<span class="number">123</span>, <span class="number">223</span>, <span class="number">323</span>};</div></pre></td></tr></table></figure>
+
+]]></content>
+    <summary type="html"><![CDATA[<p>使用<code>@ViewDebug.ExportedProperty</code>注解，可以在Monitor的Hierarchy Viewer中的调试View属性，可以直接观察注解过的变量和方法的值，实时观察View的状态变化。<br>]]></summary>
+    
+      <category term="注解" scheme="http://seniorzhai.github.io/tags/%E6%B3%A8%E8%A7%A3/"/>
+    
+      <category term="Android" scheme="http://seniorzhai.github.io/categories/Android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[View的一些重要方法]]></title>
+    <link href="http://seniorzhai.github.io/2016/01/10/View%E7%9A%84%E4%B8%80%E4%BA%9B%E9%87%8D%E8%A6%81%E6%96%B9%E6%B3%95/"/>
+    <id>http://seniorzhai.github.io/2016/01/10/View的一些重要方法/</id>
+    <published>2016-01-10T08:42:42.000Z</published>
+    <updated>2016-01-10T14:29:28.000Z</updated>
+    <content type="html"><![CDATA[<p><a id="more"></a></p>
+<ul>
+<li><code>onFinishInflate()</code>从XML加载组件后回调</li>
+<li><code>onSizeChanged()</code>组件大小改变时回调</li>
+<li><code>onMeasure()</code>测量大小</li>
+<li><code>onLayout()</code>确定显示位置</li>
+<li><code>onTouchEvent</code>监听触摸事件</li>
+</ul>
+]]></content>
+    <summary type="html"><![CDATA[<p>]]></summary>
+    
+      <category term="View" scheme="http://seniorzhai.github.io/tags/View/"/>
+    
+      <category term="绘制" scheme="http://seniorzhai.github.io/tags/%E7%BB%98%E5%88%B6/"/>
+    
+      <category term="自定义" scheme="http://seniorzhai.github.io/tags/%E8%87%AA%E5%AE%9A%E4%B9%89/"/>
+    
+      <category term="Android" scheme="http://seniorzhai.github.io/categories/Android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Xcode上的ActivatePowerMode也来了]]></title>
+    <link href="http://seniorzhai.github.io/2015/12/02/Xcode%E4%B8%8A%E7%9A%84ActivatePowerMode%E4%B9%9F%E6%9D%A5%E4%BA%86/"/>
+    <id>http://seniorzhai.github.io/2015/12/02/Xcode上的ActivatePowerMode也来了/</id>
+    <published>2015-12-02T07:10:09.000Z</published>
+    <updated>2015-12-02T07:13:55.000Z</updated>
+    <content type="html"><![CDATA[<p>前天介绍才<a href="http://seniorzhai.github.io/2015/11/30/%E7%89%9B%E9%80%BC%E5%88%B0%E5%A4%A9%E4%B8%8A%E7%9A%84Atom%E6%8F%92%E4%BB%B6/" target="_blank" rel="external">ActivatePowerMode</a><br>很快的Xcode上的插件也来了<a href="https://github.com/qfish/XActivatePowerMode" target="_blank" rel="external">https://github.com/qfish/XActivatePowerMode</a><br>在<a href="http://alcatraz.io/" target="_blank" rel="external">Alcatraz</a>搜索安装，<code>Edit</code>-&gt;<code>Activate Power Mode</code>-&gt;<code>Enable</code>运行即可<br><img src="https://camo.githubusercontent.com/a25916ccc96abf4f949ae55a3fc8b0108ac578a8/687474703a2f2f3764396f30782e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f584163746976617465506f7765724d6f6465707265766965772e676966" alt=""></p>
+]]></content>
+    
+    
+      <category term="插件" scheme="http://seniorzhai.github.io/tags/%E6%8F%92%E4%BB%B6/"/>
+    
+      <category term="XCode" scheme="http://seniorzhai.github.io/tags/XCode/"/>
+    
+      <category term="Prose" scheme="http://seniorzhai.github.io/categories/Prose/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[牛逼到天上的Atom插件]]></title>
+    <link href="http://seniorzhai.github.io/2015/11/30/%E7%89%9B%E9%80%BC%E5%88%B0%E5%A4%A9%E4%B8%8A%E7%9A%84Atom%E6%8F%92%E4%BB%B6/"/>
+    <id>http://seniorzhai.github.io/2015/11/30/牛逼到天上的Atom插件/</id>
+    <published>2015-11-30T11:57:02.000Z</published>
+    <updated>2015-12-01T05:56:51.000Z</updated>
+    <content type="html"><![CDATA[<p>前几天为了学习<code>React Native</code>开始使用Atom，默默的替代了Sublime Text在我Dock上的地位<br>但<code>activate-power-mode</code>的出现让准备彻底走向Atom<br><img src="https://i.github-camo.com/c6db669d7886b25d9d9d85aecd5f351375886693/68747470733a2f2f636c6f75642e67697468756275736572636f6e74656e742e636f6d2f6173736574732f3638383431352f31313435333239372f62386632343965632d393630352d313165352d393738632d6562336262323165656364382e676966" alt=""></p>
+<blockquote>
+<p>注:要使用时用option+control+o开启，插件只能作用在当前Tab页，如果不起效，选择View-&gt;Reload重载页面</p>
+</blockquote>
+]]></content>
+    
+    
+      <category term="插件" scheme="http://seniorzhai.github.io/tags/%E6%8F%92%E4%BB%B6/"/>
+    
+      <category term="Atom" scheme="http://seniorzhai.github.io/tags/Atom/"/>
+    
+      <category term="Prose" scheme="http://seniorzhai.github.io/categories/Prose/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[ReactNative-样式]]></title>
+    <link href="http://seniorzhai.github.io/2015/11/24/ReactNative-%E6%A0%B7%E5%BC%8F/"/>
+    <id>http://seniorzhai.github.io/2015/11/24/ReactNative-样式/</id>
+    <published>2015-11-24T11:57:26.000Z</published>
+    <updated>2016-01-23T20:15:40.000Z</updated>
+    <content type="html"><![CDATA[<p><a id="more"></a></p>
+<h2 id="声明">声明</h2>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> styles = StyleSheet.create({</div><div class="line">	base: {</div><div class="line">		width:<span class="number">38</span>,</div><div class="line">		height:<span class="number">38</span>,</div><div class="line">	},</div><div class="line">	background:{</div><div class="line">		backgroundColor:<span class="string">"#222222"</span>,</div><div class="line">	},</div><div class="line">})</div></pre></td></tr></table></figure>
+
+<h2 id="使用">使用</h2>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;Text style={styles.base} /&gt;</div><div class="line"><span class="xml"><span class="tag">&lt;<span class="title">View</span> <span class="attribute">style</span>=<span class="value">{styles.background}</span> /&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="title">View</span> <span class="attribute">style</span>=<span class="value">{[styles.base,style.background]}</span> /&gt;</span> //可以接受多个style属性</div></pre></td></tr></table></figure>
+
+]]></content>
+    <summary type="html"><![CDATA[<p>]]></summary>
+    
+      <category term="样式" scheme="http://seniorzhai.github.io/tags/%E6%A0%B7%E5%BC%8F/"/>
+    
+      <category term="Style" scheme="http://seniorzhai.github.io/tags/Style/"/>
+    
+      <category term="Android" scheme="http://seniorzhai.github.io/tags/Android/"/>
+    
+      <category term="iOS" scheme="http://seniorzhai.github.io/tags/iOS/"/>
+    
+      <category term="ReactNative" scheme="http://seniorzhai.github.io/categories/ReactNative/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[ReactNative-真机运行]]></title>
+    <link href="http://seniorzhai.github.io/2015/11/12/ReactNative-%E7%AC%AC%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE/"/>
+    <id>http://seniorzhai.github.io/2015/11/12/ReactNative-第一个项目/</id>
+    <published>2015-11-12T06:57:26.000Z</published>
+    <updated>2016-01-23T20:15:38.000Z</updated>
+    <content type="html"><![CDATA[<p><a id="more"></a></p>
+<ul>
+<li>iOS<ul>
+<li>在项目中运行Debug Server</li>
+<li>根据电脑的IP，修改AppDelegate.m中的jsCodeLocation的host改为电脑的IP</li>
+<li>或者使用<code>jsCodeLocation = [[NSBundle mainBundle] URLForResource:@&quot;main&quot; withExtension:@&quot;jsbundle&quot;]</code></li>
+</ul>
+</li>
+<li>Android<ul>
+<li>Android 5.0以上机型使用<code>adb reverse tcp:8081 tcp:8081</code>反向代理到Mac上</li>
+<li>Android 5.0以下选择菜单中Dev Setting &gt; Debug Service host for device选择Mac的IP</li>
+<li>使用<code>react-native run-android</code>启动应用</li>
+<li>或者启动Debug Server(react-native start)</li>
+<li>使用Android Studio进行调试</li>
+</ul>
+</li>
+</ul>
+]]></content>
+    <summary type="html"><![CDATA[<p>]]></summary>
+    
+      <category term="第一个项目" scheme="http://seniorzhai.github.io/tags/%E7%AC%AC%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE/"/>
+    
+      <category term="Android" scheme="http://seniorzhai.github.io/tags/Android/"/>
+    
+      <category term="iOS" scheme="http://seniorzhai.github.io/tags/iOS/"/>
+    
+      <category term="ReactNative" scheme="http://seniorzhai.github.io/categories/ReactNative/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Android Studio上的NDK开发]]></title>
+    <link href="http://seniorzhai.github.io/2015/10/14/Android-Studio%E4%B8%8A%E7%9A%84NDK%E5%BC%80%E5%8F%91/"/>
+    <id>http://seniorzhai.github.io/2015/10/14/Android-Studio上的NDK开发/</id>
+    <published>2015-10-14T03:51:41.000Z</published>
+    <updated>2015-12-01T05:53:32.000Z</updated>
+    <content type="html"><![CDATA[<p>在AndroidStudio全面支持NDK开发前，使用的方法大概是这样的<a href="http://seniorzhai.github.io/2015/03/19/AndroidStudio%E4%B8%8A%E4%BD%BF%E7%94%A8NDK/" target="_blank" rel="external">http://seniorzhai.github.io/2015/03/19/AndroidStudio%E4%B8%8A%E4%BD%BF%E7%94%A8NDK/</a><br>在AS 1.3版本后，NDK终于可以在AndroidStudio正式支持了，不过还在实验阶段，后续可能还会有些许不同，但至少能管中窥豹了。<br><a id="more"></a></p>
+<h2 id="环境">环境</h2>
+<ul>
+<li>Android Studio 1.3+</li>
+<li>Gradle 2.5</li>
+<li>NDK r10e</li>
+<li>Build Tools 19.0.0+</li>
+</ul>
+<h2 id="修改配置文件">修改配置文件</h2>
+<ul>
+<li>gradle/wrapper/gradle-wrapper.properties，修改distributionUrl使用Gradle2.5</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">distributionUrl=https\<span class="symbol">://services</span>.gradle.org/distributions/gradle-<span class="number">2.5</span>-all.zip</div></pre></td></tr></table></figure>
+
+<ul>
+<li>build.gradle，使用gradle-experimental替代gradle</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">classpath</span> <span class="string">'com.android.tools.build:gradle-experimental:0.2.0'</span></div></pre></td></tr></table></figure>
+
+<ul>
+<li>app/build.gradle，新版的Gradle语法有很大的改变，最外层为model，赋值使用=，新增项使用+=（具体可以在<a href="https://github.com/SeniorZhai/AS_NDK/commit/5b4e3c8ee345360d0d0067234a87d0d35e2d096b" target="_blank" rel="external">这儿</a>查看）</li>
+</ul>
+<h2 id="创建JNI">创建JNI</h2>
+<ol>
+<li>创建JNI的目录</li>
+<li>定义JNI Java类，使用javah生产头文件</li>
+<li>编写c文件<br>详情见<a href="https://github.com/SeniorZhai/AS_NDK/commit/81ea7c1285e1a0ca61c79f035b3af01bff14ab11" target="_blank" rel="external">https://github.com/SeniorZhai/AS_NDK/commit/81ea7c1285e1a0ca61c79f035b3af01bff14ab11</a></li>
+</ol>
+]]></content>
+    <summary type="html"><![CDATA[<p>在AndroidStudio全面支持NDK开发前，使用的方法大概是这样的<a href="http://seniorzhai.github.io/2015/03/19/AndroidStudio%E4%B8%8A%E4%BD%BF%E7%94%A8NDK/" target="_blank" rel="external">http://seniorzhai.github.io/2015/03/19/AndroidStudio%E4%B8%8A%E4%BD%BF%E7%94%A8NDK/</a><br>在AS 1.3版本后，NDK终于可以在AndroidStudio正式支持了，不过还在实验阶段，后续可能还会有些许不同，但至少能管中窥豹了。<br>]]></summary>
+    
+      <category term="ndk" scheme="http://seniorzhai.github.io/tags/ndk/"/>
+    
+      <category term="AndroidStudio" scheme="http://seniorzhai.github.io/tags/AndroidStudio/"/>
+    
+      <category term="Android" scheme="http://seniorzhai.github.io/categories/Android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[SD的种类]]></title>
+    <link href="http://seniorzhai.github.io/2015/10/04/SD%E7%9A%84%E7%A7%8D%E7%B1%BB/"/>
+    <id>http://seniorzhai.github.io/2015/10/04/SD的种类/</id>
+    <published>2015-10-04T11:10:56.000Z</published>
+    <updated>2015-10-04T11:11:37.000Z</updated>
+    <content type="html"><![CDATA[<p><a id="more"></a></p>
+<h1 id="SD卡的种类">SD卡的种类</h1>
+<p>SD卡包括SD、SDHC和SDXC卡，这三种卡的区别在存储容量：SD卡≤2GB，SDHC卡4-32GB，SDXC卡式64-2048GB。<br>SD卡的版本是向下兼容的，比如支持SDXC卡的相机，也支持SD卡和SDHC卡。<br>值得注意的是<code>SDXC存储卡由于采用了恶心FAT格式，WinXP SP2或者更低版本系统式无法识别的</code></p>
+<h1 id="存储卡的速度">存储卡的速度</h1>
+<p>SD卡上通常会标注速度，有倍速(如300X)或者是+MB/s两种表示方式。1倍速=150KB/s=0.15MB/s(存储算法，不是理论算法)，所以300X是45MB/s，600X是90MB/s<br>如果卡面上只标注倍速或一个数字，那么一般都是读取速度。写入速度影响了拍摄间隔时间、持续连拍张数、视频记录的最高格式，读取速度则会影响回放、传输速度。一般情况存储设备的写入速度都要低于读取速度。<br>SD卡有速度等级(Class)、高速等级(UHS Class)两个评价等级，可以辅助判断SD卡的速度。</p>
+<ul>
+<li>Class 6代表了最低写入速度6M/s；Class 10表示最低写入速度10MB/s</li>
+<li>UHS-Ⅰ Class 1表示最低写入速度是10MB/s；UHS-Ⅰ Class 3表示最低写入速度是30MB/s<br>Class 10和UHS-Class 1都表示存储卡的最低写入速度是10MB/s，那么它们又有事吗区别呢？非UHS存储卡的理论最高速度只有25MB/s，而UHS-I存储卡则能达到104MB/s。即使两张卡的写入速度相同，UHS-I存储卡的读取速度通常也会更高一些。</li>
+</ul>
+]]></content>
+    <summary type="html"><![CDATA[<p>]]></summary>
+    
+      <category term="SD卡" scheme="http://seniorzhai.github.io/tags/SD%E5%8D%A1/"/>
+    
+      <category term="Camera" scheme="http://seniorzhai.github.io/categories/Camera/"/>
+    
+  </entry>
+  
+</feed>

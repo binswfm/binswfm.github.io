@@ -1,0 +1,462 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="google-site-verification" content="WNyUn91IXtlyHB-gfFfg8K6MCkItzKWdzzw_Nh17ksE" />
+  <meta name="baidu-site-verification" content="e5ZaZQ3Tx8" />
+  
+    <title>使用Gradle发布项目到JCenter仓库 | Zoe&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Zoe">
+    
+    <meta name="description" content="JCenter是Android Studio中repositories的默认节点。">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Zoe&#39;s blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Zoe&#39;s blog" title="Zoe&#39;s blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Zoe&#39;s blog">Zoe&#39;s blog</a></h1>
+				<h2 class="blog-motto">宅学长的博客</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:seniorzhai.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/02/04/使用Gradle发布项目到JCenter仓库/" title="使用Gradle发布项目到JCenter仓库" itemprop="url">使用Gradle发布项目到JCenter仓库</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://seniorzhai.github.io/about" title="Zoe" target="_blank" itemprop="author">Zoe</a>
+		
+  <p class="article-time">
+    <time datetime="2015-02-04T08:47:29.000Z" itemprop="datePublished"> 发表于 2月 4 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#申请Bintray账号"><span class="toc-number">1.</span> <span class="toc-text">申请Bintray账号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生成项目的JavaDoc和source_JARs"><span class="toc-number">2.</span> <span class="toc-text">生成项目的JavaDoc和source JARs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#上传到Bintray"><span class="toc-number">3.</span> <span class="toc-text">上传到Bintray</span></a></li></ol>
+		
+		</div>
+		
+		<p><code>JCenter</code>是Android Studio中repositories的默认节点。<br><a id="more"></a></p>
+<h2 id="申请Bintray账号">申请Bintray账号</h2>
+<p>需要在<a href="https://bintray.com/" target="_blank" rel="external">Bintray</a>注册一个账号</p>
+<h2 id="生成项目的JavaDoc和source_JARs">生成项目的JavaDoc和source JARs</h2>
+<p>JCenter需要我上传远程仓库以上两个文件，这一步需要<code>android-maven-plugin</code>插件，所以在项目中的<code>build.gragle</code>(项目最外层)构建依赖</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">buildscript{</div><div class="line">	repositories {</div><div class="line">		jcenter();</div><div class="line">	}</div><div class="line">	dependencies {</div><div class="line">		classpath 'com.android.tools.build:gradle:1.0.0'</div><div class="line">		classpath 'com.github.dcendents:android-maven-plugin:1.2'</div><div class="line">	}</div><div class="line">	allprojects {</div><div class="line">		repositories {</div><div class="line">			jcenter()</div><div class="line">		}</div><div class="line">	}</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>然后在需要发布的那个module的<code>build.gradle</code>里配置修改</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div></pre></td><td class="code"><pre><div class="line">apply plugin: 'com.android.library'</div><div class="line">apply plugin: 'com.github.dcendents.android-maven'</div><div class="line">apply plugin: 'com.jfrog.bintray'</div><div class="line"></div><div class="line"><span class="constant">version</span> = "1.0.0"</div><div class="line">android{</div><div class="line">	compileSdkVersion 21</div><div class="line">	buildToolsVersion <span class="string">"21.1.2"</span></div><div class="line">	resourcePrefix <span class="string">"resourcePrefix"</span> // 这个随便填</div><div class="line">	defaultConfig {</div><div class="line">		minSdkVersion 9</div><div class="line">		targetSdkVersion 21</div><div class="line">		versionCode 1</div><div class="line">		versionName version</div><div class="line">	}</div><div class="line">	buildTypes {</div><div class="line">		release {</div><div class="line">			minifyEnabled false</div><div class="line">			proguardFiles getDefaultProguardFile('proguard-android.txt'),'proguard-rules.pro'</div><div class="line">		}</div><div class="line">	}</div><div class="line">}</div><div class="line">dependencies {</div><div class="line">	compile fileTree(dir: 'libs',include: ['*.jar'])</div><div class="line">	compile 'com.nineoldandroid:library:2.4.0+'</div><div class="line">}</div><div class="line">def siteUrl = 'https://github.com/XXX/XXX'	// 项目的主页</div><div class="line">def gitUrl = 'https://github.com/XXX/XXX.git'	// git仓库URL</div><div class="line">install {</div><div class="line">	repositories.mavenInstaller {</div><div class="line">		pom {</div><div class="line">			project {</div><div class="line">				packaging 'arr'</div><div class="line">				name 'Project'	// 项目名</div><div class="line">				url siteUrl</div><div class="line">				licenses {		// 协议</div><div class="line">					license {</div><div class="line">						name 'The Apache Software License, Version 2.0'</div><div class="line">						url 'http://www.apache.org/licenses/LICENSE-2.0.txt'</div><div class="line">					}</div><div class="line">				}</div><div class="line">				developers {</div><div class="line">					developer {	// 基本信息</div><div class="line">						id 'seniorzhai'</div><div class="line">						name 'zhaitao'</div><div class="line">						email 'developer.zhaitao@gmail.com'</div><div class="line">					}</div><div class="line">				}</div><div class="line">				scm {</div><div class="line">					connection gitUrl</div><div class="line">					developerConnection gitUrl</div><div class="line">					url siteUrl</div><div class="line">				}</div><div class="line">			}</div><div class="line">		}</div><div class="line">	}</div><div class="line">}</div><div class="line">task sourcesJar(type: Jar) {</div><div class="line">	from android.sourceSets.main.java.srcDirs</div><div class="line">	classifier = 'sources'</div><div class="line">}</div><div class="line">task javadoc(type: Javadoc) {</div><div class="line">	source = android.sourceSets.main.java.srcDirs</div><div class="line">	classpath += project.files(android.getBootClassPath().join(File.pathSeparator))</div><div class="line">}</div><div class="line">task javadocJar(type: Jar,dependsOn: javadoc) {</div><div class="line">	classifier = 'javadoc'</div><div class="line">	from javadoc.desinationDir</div><div class="line">}</div><div class="line">artifacts {</div><div class="line">	archiver javadocJar</div><div class="line">	archiver sourcesJar</div><div class="line">}</div><div class="line">Properties properties = new Properties()</div><div class="line">properties.load(project.rootProject.file('local.properties'),newDataInputStream())</div><div class="line">bintray {</div><div class="line">	user = properties.getProperty(<span class="string">"bintray.user"</span>)</div><div class="line">	key = properties.getProperty(<span class="string">"bintray.apikey"</span>)</div><div class="line">	configurations = ['archives']</div><div class="line">	pkg {</div><div class="line">		repo = 'maven'</div><div class="line">		name = <span class="string">"ProjectName"</span></div><div class="line">		websiteUrl = siteUrl</div><div class="line">		vcsUrl = gitUrl</div><div class="line">		licenses = [<span class="string">"Apache-2.0"</span>]</div><div class="line">		publish = true</div><div class="line">	}</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>上述的<code>local.properties</code>文件在项目的根目录，用于配置<code>bintray</code>账号信息，这个文件需要<code>gitignore</code>防止泄露账号信息</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">bitray.<span class="variable">user=</span>your_user_name</div><div class="line">bitray.<span class="variable">apokey=</span>yor_apikey</div></pre></td></tr></table></figure>
+
+<p>Rebuild一下项目，module里的build文件夹会生成相应文件，项目生成到本地仓库，Android Studio默认在<code>Android\sdk\extras\android\m2repository</code>文件夹中<br>执行<code>gradlew install</code></p>
+<h2 id="上传到Bintray">上传到Bintray</h2>
+<p>上传需要<code>gradle-bintray-plugin</code>的支持<br>在<code>build.gradle</code>里构建</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">dependencies {</div><div class="line">	<span class="keyword">...</span></div><div class="line">	classpath <span class="string">'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'</span></div><div class="line">	<span class="keyword">...</span></div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>再<code>Rebuild</code>下，然后执行<code>gradlew bintrayUpload</code><br>上传完成后就可再Bintray上找到Repo，最后申请Repo添加到JCenter，在<a href="https://bintray.com/bintray/jcenter" target="_blank" rel="external">https://bintray.com/bintray/jcenter</a>输入项目的名字点击匹配到的项目，然后写一写Comments再send即可，等管理员审批即可。<br>成功后，在其他项目中调用添加denpendcies即可</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Android/">Android</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/AS/">AS</a><a href="/tags/JCenter/">JCenter</a><a href="/tags/Gradle/">Gradle</a>
+  </div>
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://seniorzhai.github.io/2015/02/04/使用Gradle发布项目到JCenter仓库/" data-title="使用Gradle发布项目到JCenter仓库 | Zoe&#39;s blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/02/05/AndroidStudio快捷键汇总/" title="AndroidStudio快捷键汇总">
+  <strong>上一篇：</strong><br/>
+  <span>
+  AndroidStudio快捷键汇总</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/02/04/Android事件/"  title="Android事件">
+ <strong>下一篇：</strong><br/> 
+ <span>Android事件
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#申请Bintray账号"><span class="toc-number">1.</span> <span class="toc-text">申请Bintray账号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生成项目的JavaDoc和source_JARs"><span class="toc-number">2.</span> <span class="toc-text">生成项目的JavaDoc和source JARs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#上传到Bintray"><span class="toc-number">3.</span> <span class="toc-text">上传到Bintray</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/Android/" title="Android">Android<sup>184</sup></a></li>
+		
+			<li><a href="/categories/Camera/" title="Camera">Camera<sup>1</sup></a></li>
+		
+			<li><a href="/categories/Cocos2d-X/" title="Cocos2d-X">Cocos2d-X<sup>11</sup></a></li>
+		
+			<li><a href="/categories/Prose/" title="Prose">Prose<sup>27</sup></a></li>
+		
+			<li><a href="/categories/Python/" title="Python">Python<sup>22</sup></a></li>
+		
+			<li><a href="/categories/ReactNative/" title="ReactNative">ReactNative<sup>7</sup></a></li>
+		
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>79</sup></a></li>
+		
+			<li><a href="/categories/node-js/" title="node.js">node.js<sup>29</sup></a></li>
+		
+			<li><a href="/categories/杂文/" title="杂文">杂文<sup>3</sup></a></li>
+		
+		</ul>
+		<ul>
+		<script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"></script>
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AFNetworking/" style="font-size: 10.00px;">AFNetworking</a><a href="/tags/APK/" style="font-size: 10.00px;">APK</a><a href="/tags/AS/" style="font-size: 10.00px;">AS</a><a href="/tags/Adapter/" style="font-size: 10.00px;">Adapter</a><a href="/tags/Android/" style="font-size: 20.00px;">Android</a><a href="/tags/Android-5-0/" style="font-size: 10.00px;">Android 5.0</a><a href="/tags/Android-Studio/" style="font-size: 13.33px;">Android Studio</a><a href="/tags/AndroidAninotations/" style="font-size: 10.00px;">AndroidAninotations</a><a href="/tags/AndroidStudio/" style="font-size: 18.33px;">AndroidStudio</a><a href="/tags/Animation/" style="font-size: 15.00px;">Animation</a><a href="/tags/Api/" style="font-size: 13.33px;">Api</a><a href="/tags/App/" style="font-size: 10.00px;">App</a><a href="/tags/Apple/" style="font-size: 10.00px;">Apple</a><a href="/tags/Async/" style="font-size: 10.00px;">Async</a><a href="/tags/Atom/" style="font-size: 11.67px;">Atom</a><a href="/tags/BaseAdapter/" style="font-size: 10.00px;">BaseAdapter</a><a href="/tags/Blur/" style="font-size: 10.00px;">Blur</a><a href="/tags/Box2D/" style="font-size: 10.00px;">Box2D</a><a href="/tags/Broadcast/" style="font-size: 10.00px;">Broadcast</a><a href="/tags/CardView/" style="font-size: 10.00px;">CardView</a><a href="/tags/CocoaPods/" style="font-size: 10.00px;">CocoaPods</a><a href="/tags/Cocos2d-X/" style="font-size: 16.67px;">Cocos2d-X</a><a href="/tags/CocosPods/" style="font-size: 10.00px;">CocosPods</a><a href="/tags/ContentProvider/" style="font-size: 10.00px;">ContentProvider</a><a href="/tags/Context/" style="font-size: 10.00px;">Context</a><a href="/tags/Crouton/" style="font-size: 10.00px;">Crouton</a><a href="/tags/CursorLoader/" style="font-size: 10.00px;">CursorLoader</a><a href="/tags/Demo/" style="font-size: 11.67px;">Demo</a><a href="/tags/Dialog/" style="font-size: 10.00px;">Dialog</a><a href="/tags/EditView/" style="font-size: 10.00px;">EditView</a><a href="/tags/EventBus/" style="font-size: 10.00px;">EventBus</a><a href="/tags/Express/" style="font-size: 10.00px;">Express</a><a href="/tags/Express学习笔记/" style="font-size: 10.00px;">Express学习笔记</a><a href="/tags/Flex/" style="font-size: 10.00px;">Flex</a><a href="/tags/Fragment/" style="font-size: 11.67px;">Fragment</a><a href="/tags/GET/" style="font-size: 10.00px;">GET</a><a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/Gradle/" style="font-size: 11.67px;">Gradle</a><a href="/tags/GridLayout/" style="font-size: 10.00px;">GridLayout</a><a href="/tags/GridView/" style="font-size: 11.67px;">GridView</a>
+    </div>
+  </div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">25</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a><span class="archive-list-count">42</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">June 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">20</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a><span class="archive-list-count">24</span></li></ul>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://imid.me/" target="_blank" title="iMID">iMID's Blog</a></li>
+      <li><a href="http://www.trinea.cn/" target="_blank" title="trinea">Trinea's Blog</a></li>
+      <li><a href="http://stormzhang.github.io/" target="_blank" title="stormzhang">StormZhang's Blog</a></li>
+      <li><a href="http://daimajia.com/" target="_blank" title="daimajia">DaiMaJia.Blog</a></li>
+      <li><a href="http://macrotea.com/welcome/" target="_blank" title="daimajia">Macrotea.Blog</a></li>
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello,I&#39;m Zoe,a Android and iOS developers. <br/>
+			This is my blog,I hope you will enjoy them.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2292032577" target="_blank" class="icon-weibo" title="weibo"></a>
+		
+		
+		<a href="https://github.com/seniorzhai" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:developer.zhaitao@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2016 
+		
+		<a href="http://seniorzhai.github.io/about" target="_blank" title="Zoe">Zoe</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zt1991616"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-54646832-1', 'null');  
+ga('send', 'pageview');
+</script>
+
+
+
+
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<script src="/js/totop.js"></script>
+
+
+
+
+  </body>
+</html>
+
+<a href="https://github.com/seniorzhai"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>

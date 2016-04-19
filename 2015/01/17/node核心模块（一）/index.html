@@ -1,0 +1,516 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="google-site-verification" content="WNyUn91IXtlyHB-gfFfg8K6MCkItzKWdzzw_Nh17ksE" />
+  <meta name="baidu-site-verification" content="e5ZaZQ3Tx8" />
+  
+    <title>node核心模块（一） | Zoe&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Zoe">
+    
+    <meta name="description" content="">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Zoe&#39;s blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Zoe&#39;s blog" title="Zoe&#39;s blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Zoe&#39;s blog">Zoe&#39;s blog</a></h1>
+				<h2 class="blog-motto">宅学长的博客</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:seniorzhai.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/01/17/node核心模块（一）/" title="node核心模块（一）" itemprop="url">node核心模块（一）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://seniorzhai.github.io/about" title="Zoe" target="_blank" itemprop="author">Zoe</a>
+		
+  <p class="article-time">
+    <time datetime="2015-01-17T05:33:12.000Z" itemprop="datePublished"> 发表于 1月 17 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#全局对象"><span class="toc-number">1.</span> <span class="toc-text">全局对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#process"><span class="toc-number">1.1.</span> <span class="toc-text">process</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#console"><span class="toc-number">1.2.</span> <span class="toc-text">console</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常用工具util"><span class="toc-number">2.</span> <span class="toc-text">常用工具util</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#util-inherits"><span class="toc-number">2.1.</span> <span class="toc-text">util.inherits</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#util-inspect"><span class="toc-number">2.2.</span> <span class="toc-text">util.inspect</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#事件驱动events"><span class="toc-number">3.</span> <span class="toc-text">事件驱动events</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#事件发射器"><span class="toc-number">3.1.</span> <span class="toc-text">事件发射器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#error事件"><span class="toc-number">3.2.</span> <span class="toc-text">error事件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#继承EventEmitter"><span class="toc-number">3.3.</span> <span class="toc-text">继承EventEmitter</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件系统fs"><span class="toc-number">4.</span> <span class="toc-text">文件系统fs</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#fs-readFile"><span class="toc-number">4.1.</span> <span class="toc-text">fs.readFile</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fs-readFileSync"><span class="toc-number">4.2.</span> <span class="toc-text">fs.readFileSync</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fs-open"><span class="toc-number">4.3.</span> <span class="toc-text">fs.open</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fs-read"><span class="toc-number">4.4.</span> <span class="toc-text">fs.read</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p><a id="more"></a></p>
+<h2 id="全局对象">全局对象</h2>
+<p>Node.js中的全局对象是<code>global</code>，所有全局变量都是<code>global</code>的属性</p>
+<h3 id="process">process</h3>
+<p>process是一个全局变量，用于描述当前Node.js进程状态，提供了一个与操作系统的简单接口</p>
+<ul>
+<li>process.argv是命令行参数的数组</li>
+<li>process.studout 标准输出流</li>
+<li>process.stdin 标准输入流，初始化时它使被暂停的，必须恢复读取数据，并手动编写流的时间响应函数</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">process.stdin.resume()</div><div class="line">process.stdin.on(<span class="string">'data'</span>,<span class="function"><span class="keyword">function</span><span class="params">(data)</span></span>{</div><div class="line">	process.stdout.write(<span class="string">'read from console: '</span> + data.toString());</div><div class="line">});</div></pre></td></tr></table></figure>
+
+<ul>
+<li>process.nextTick(callback) 为事件循环设置一项任务，Node.js会在下次时间循环响应时调用callback</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">doSomething</span><span class="params">(args,callback)</span> </span>{</div><div class="line">	somthingComplicated(args);</div><div class="line">	callback();</div><div class="line">}</div><div class="line"></div><div class="line">doSomething(<span class="function"><span class="keyword">function</span> <span class="title">onEnd</span><span class="params">()</span></span>{</div><div class="line">	compute();</div><div class="line">});</div></pre></td></tr></table></figure>
+
+<p>假设上面的代码中<code>somthingComplicated()</code>和<code>compute()</code>函数都是较为耗时的函数，上面的代码会先执行<code>somthingComplicated()</code>立即执行<code>compute()</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">doSometing</span><span class="params">(args,callback)</span> </span>{</div><div class="line">	somthingComplicated(args);</div><div class="line">	process.nextTick(callback);</div><div class="line">}</div><div class="line"></div><div class="line">doSomething(fucntion onEnd(){</div><div class="line">	compute();</div><div class="line">})</div></pre></td></tr></table></figure>
+
+<h3 id="console">console</h3>
+<p>console用于控制台的标准输出</p>
+<ul>
+<li>console.log() 向标准输出流打印字符串以及换行符，也可以接受C语言printf()命令的格式输出</li>
+<li>console.error() 向标准错误流输出</li>
+<li>console.trace() 向标准错误流输出当前的调用栈<h2 id="常用工具util">常用工具util</h2>
+util是Node.js核心模块，提供了常用函数的集合，用于弥补核心JavaScript的功能过于精简的不足<h3 id="util-inherits">util.inherits</h3>
+实现对象原型继承的函数</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> util = <span class="built_in">require</span>(<span class="string">'util'</span>);</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Base</span><span class="params">()</span> </span>{</div><div class="line">	<span class="keyword">this</span>.name = <span class="string">'base'</span>;</div><div class="line">	<span class="keyword">this</span>.base = <span class="number">1991</span>;</div><div class="line"></div><div class="line">	<span class="keyword">this</span>.sayHello = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">'Hello'</span> + <span class="keyword">this</span>.name);</div><div class="line">	}</div><div class="line"></div><div class="line">	<span class="keyword">this</span>.prototype.showName = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">		<span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</div><div class="line">	}</div><div class="line">};</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Sub</span><span class="params">()</span> </span>{</div><div class="line">	<span class="keyword">this</span>.name = <span class="string">'sub'</span>;</div><div class="line">}</div><div class="line"></div><div class="line">util.inherits(Sub,Base);</div><div class="line"><span class="keyword">var</span> obj = <span class="keyword">new</span> Sub()</div><div class="line">obj.showName</div><div class="line"><span class="built_in">console</span>.log(obj)</div></pre></td></tr></table></figure>
+
+<pre><code>注；Sub仅仅继承了Base在原型中定义的函数，内部创造的<span class="keyword">base</span>和sayHeloo都没有被继承
+</code></pre><h3 id="util-inspect">util.inspect</h3>
+<p>util.inspect(object,[showHidden],[depth],[colors])是将任意对象转换成字符串的方法<br>可选参数showHideen控制是否输出更多隐藏信息<br>depth表示最大递归层数，默认递归2层，指定为null表示不限层数完整递归<br>color控制是否用ANSI颜色编码输出</p>
+<h2 id="事件驱动events">事件驱动events</h2>
+<p><code>events</code>是Node.js最终要的模块，原因是Node.js本身的架构就是事件式的</p>
+<h3 id="事件发射器">事件发射器</h3>
+<p><code>events</code>模块只提供一个对象<code>events.EventEmitter</code>。EventEmitter对事件发射和事件监听功能进行了封装，每个事件由事件名和若干个参数组成，事件名是一个字符串。对于每个事件，EventEmitter支持若干个事件监听器，当事件发送时注册的事件监听器被依次调用，事件参数作为回调函数参数传递</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> events = <span class="built_in">require</span>(<span class="string">'events'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> emitter = <span class="keyword">new</span> events.EventEmitter();</div><div class="line"></div><div class="line"><span class="comment">// 注册`someEvent`事件监听</span></div><div class="line">emitter.on(<span class="string">'someEvent'</span>,<span class="function"><span class="keyword">function</span><span class="params">(arg1,arg2)</span></span>{</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'listner1'</span>,arg1,arg2);</div><div class="line">})</div><div class="line"></div><div class="line">emitter.on(<span class="string">'someEvent'</span>,<span class="function"><span class="keyword">function</span><span class="params">(arg1,arg2)</span></span>{</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'listner2'</span>,arg1,arg2);</div><div class="line">})</div><div class="line"><span class="comment">// 发送事件</span></div><div class="line">emitter.emit(<span class="string">'someEvent'</span>,<span class="string">'zoe'</span>,<span class="number">1991</span>);</div></pre></td></tr></table></figure>
+
+<ul>
+<li>EventEmitter.on(event,listener) 为指定事件注册一个监听器</li>
+<li>EventEmitter.emit(event,[arg1],[arg2],[…]) 发射<code>event</code>时间，可传递若干参数</li>
+<li>EventEmitter.once(event,listener) 为指定时间注册一个单次监听器，即监听器最多只会触发一次，触发后立即解除监听</li>
+<li>EventEmitter.removeListener(event,listener) 移除指定事件的某个监听器，listener必须是该事件已经注册过的监听器</li>
+<li>EventEmitter.removeAllListener([event]) 移除所有时间的所有监听器，如果指定event则移除指定时间的所有监听器<h3 id="error事件">error事件</h3>
+EventEmitter定义了一个特殊的时间error，在遇到异常时会发射error，如果没有响应的监听器，Node.js会把它当做异常，退出程序打印调用栈。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> events = <span class="built_in">require</span>(<span class="string">'events'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> emitter = <span class="keyword">new</span> events.EventEmitter();</div><div class="line"></div><div class="line">emitter.emitter(<span class="string">'error'</span>);</div></pre></td></tr></table></figure>
+
+<h3 id="继承EventEmitter">继承EventEmitter</h3>
+<p>很多时候，我们不会直接使用EventEmitter，而是在对象中继承它，包括<code>fs</code>，<code>net</code>，<code>http</code>在内的基于事件响应的核心模块都是EventEmitter的子类</p>
+<h2 id="文件系统fs">文件系统fs</h2>
+<p><code>fs</code>模块是文件操作的封装，它提供了文件的读取、写入、更名、删除、遍历目录、链接等文件系统操作，fs还提供了异步和同步两个版本</p>
+<h3 id="fs-readFile">fs.readFile</h3>
+<p>fs.readFile(filename,[encoding],[callback(err,data)])是最简单的读取文件的函数，它接受一个必选参数filename表示要读取的文件名，第二个参数encoding表示文件的字符编码，callback是回调函数，err表示是否有错误，data是文件内容，如果没有指定encoding，data会是Buffer形式表示的二进制数据</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</div><div class="line"></div><div class="line">fs.readFile(<span class="string">'error.js'</span>,<span class="string">'utf-8'</span>,<span class="function"><span class="keyword">function</span><span class="params">(err,data)</span></span>{</div><div class="line">	<span class="keyword">if</span>(err){</div><div class="line">		<span class="built_in">console</span>.log(err)</div><div class="line">	} <span class="keyword">else</span> {</div><div class="line">		<span class="built_in">console</span>.log(data)</div><div class="line">	}</div><div class="line">})</div></pre></td></tr></table></figure>
+
+<h3 id="fs-readFileSync">fs.readFileSync</h3>
+<p>fs.readFileSync是fs.readFile同步版本，读取到的数据会以返回值的形式返回，需要使用try和catch捕捉处理异常</p>
+<h3 id="fs-open">fs.open</h3>
+<p><code>fs.open(path,flags,[mode],[callback(err,fd)])</code>，path为文件路径，flags可以使以下值</p>
+<ul>
+<li>r 以<code>读取模式</code>打开文件</li>
+<li>r+ 以<code>读写模式</code>打开文件</li>
+<li>w 以<code>写入模式</code>打开文件，如果文件不存在则创建</li>
+<li>w+ 以<code>读写模式</code>打开文件，如果文件不存在则创建</li>
+<li>a 以<code>追加模式</code>打开文件，如果不存在则创建</li>
+<li>a+ 以<code>读取追加模式</code>打开文件，如果不存在则创建<br>mode参数用于创建文件制定权限，默认是0666，回调函数将会传递一个文件描述符fd<h3 id="fs-read">fs.read</h3>
+<code>fs.read(fd,buffer,offset,length,postion,[callback(err,bytesRead,buffer)])</code>从制定的文件描述符fd中读取数据并写入buffer指向的缓冲区对象，offset是buffer的写入偏移量，length是要从文件中读取的字节数，position是文件读取的起始位置，如果position的值为null，则会从当前文件指针的位置读取，回调函数传递bytesRead和buffer分别表示读取的字节数和缓冲区对象</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/node-js/">node.js</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/HTTP/">HTTP</a>
+  </div>
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://seniorzhai.github.io/2015/01/17/node核心模块（一）/" data-title="node核心模块（一） | Zoe&#39;s blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/01/17/node核心模块（二）/" title="node核心模块（二）">
+  <strong>上一篇：</strong><br/>
+  <span>
+  node核心模块（二）</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/01/16/node-js包/"  title="node.js包">
+ <strong>下一篇：</strong><br/> 
+ <span>node.js包
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#全局对象"><span class="toc-number">1.</span> <span class="toc-text">全局对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#process"><span class="toc-number">1.1.</span> <span class="toc-text">process</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#console"><span class="toc-number">1.2.</span> <span class="toc-text">console</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常用工具util"><span class="toc-number">2.</span> <span class="toc-text">常用工具util</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#util-inherits"><span class="toc-number">2.1.</span> <span class="toc-text">util.inherits</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#util-inspect"><span class="toc-number">2.2.</span> <span class="toc-text">util.inspect</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#事件驱动events"><span class="toc-number">3.</span> <span class="toc-text">事件驱动events</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#事件发射器"><span class="toc-number">3.1.</span> <span class="toc-text">事件发射器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#error事件"><span class="toc-number">3.2.</span> <span class="toc-text">error事件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#继承EventEmitter"><span class="toc-number">3.3.</span> <span class="toc-text">继承EventEmitter</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件系统fs"><span class="toc-number">4.</span> <span class="toc-text">文件系统fs</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#fs-readFile"><span class="toc-number">4.1.</span> <span class="toc-text">fs.readFile</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fs-readFileSync"><span class="toc-number">4.2.</span> <span class="toc-text">fs.readFileSync</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fs-open"><span class="toc-number">4.3.</span> <span class="toc-text">fs.open</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fs-read"><span class="toc-number">4.4.</span> <span class="toc-text">fs.read</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/Android/" title="Android">Android<sup>184</sup></a></li>
+		
+			<li><a href="/categories/Camera/" title="Camera">Camera<sup>1</sup></a></li>
+		
+			<li><a href="/categories/Cocos2d-X/" title="Cocos2d-X">Cocos2d-X<sup>11</sup></a></li>
+		
+			<li><a href="/categories/Prose/" title="Prose">Prose<sup>27</sup></a></li>
+		
+			<li><a href="/categories/Python/" title="Python">Python<sup>22</sup></a></li>
+		
+			<li><a href="/categories/ReactNative/" title="ReactNative">ReactNative<sup>7</sup></a></li>
+		
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>79</sup></a></li>
+		
+			<li><a href="/categories/node-js/" title="node.js">node.js<sup>29</sup></a></li>
+		
+			<li><a href="/categories/杂文/" title="杂文">杂文<sup>3</sup></a></li>
+		
+		</ul>
+		<ul>
+		<script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"></script>
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AFNetworking/" style="font-size: 10.00px;">AFNetworking</a><a href="/tags/APK/" style="font-size: 10.00px;">APK</a><a href="/tags/AS/" style="font-size: 10.00px;">AS</a><a href="/tags/Adapter/" style="font-size: 10.00px;">Adapter</a><a href="/tags/Android/" style="font-size: 20.00px;">Android</a><a href="/tags/Android-5-0/" style="font-size: 10.00px;">Android 5.0</a><a href="/tags/Android-Studio/" style="font-size: 13.33px;">Android Studio</a><a href="/tags/AndroidAninotations/" style="font-size: 10.00px;">AndroidAninotations</a><a href="/tags/AndroidStudio/" style="font-size: 18.33px;">AndroidStudio</a><a href="/tags/Animation/" style="font-size: 15.00px;">Animation</a><a href="/tags/Api/" style="font-size: 13.33px;">Api</a><a href="/tags/App/" style="font-size: 10.00px;">App</a><a href="/tags/Apple/" style="font-size: 10.00px;">Apple</a><a href="/tags/Async/" style="font-size: 10.00px;">Async</a><a href="/tags/Atom/" style="font-size: 11.67px;">Atom</a><a href="/tags/BaseAdapter/" style="font-size: 10.00px;">BaseAdapter</a><a href="/tags/Blur/" style="font-size: 10.00px;">Blur</a><a href="/tags/Box2D/" style="font-size: 10.00px;">Box2D</a><a href="/tags/Broadcast/" style="font-size: 10.00px;">Broadcast</a><a href="/tags/CardView/" style="font-size: 10.00px;">CardView</a><a href="/tags/CocoaPods/" style="font-size: 10.00px;">CocoaPods</a><a href="/tags/Cocos2d-X/" style="font-size: 16.67px;">Cocos2d-X</a><a href="/tags/CocosPods/" style="font-size: 10.00px;">CocosPods</a><a href="/tags/ContentProvider/" style="font-size: 10.00px;">ContentProvider</a><a href="/tags/Context/" style="font-size: 10.00px;">Context</a><a href="/tags/Crouton/" style="font-size: 10.00px;">Crouton</a><a href="/tags/CursorLoader/" style="font-size: 10.00px;">CursorLoader</a><a href="/tags/Demo/" style="font-size: 11.67px;">Demo</a><a href="/tags/Dialog/" style="font-size: 10.00px;">Dialog</a><a href="/tags/EditView/" style="font-size: 10.00px;">EditView</a><a href="/tags/EventBus/" style="font-size: 10.00px;">EventBus</a><a href="/tags/Express/" style="font-size: 10.00px;">Express</a><a href="/tags/Express学习笔记/" style="font-size: 10.00px;">Express学习笔记</a><a href="/tags/Flex/" style="font-size: 10.00px;">Flex</a><a href="/tags/Fragment/" style="font-size: 11.67px;">Fragment</a><a href="/tags/GET/" style="font-size: 10.00px;">GET</a><a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/Gradle/" style="font-size: 11.67px;">Gradle</a><a href="/tags/GridLayout/" style="font-size: 10.00px;">GridLayout</a><a href="/tags/GridView/" style="font-size: 11.67px;">GridView</a>
+    </div>
+  </div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">25</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a><span class="archive-list-count">42</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">June 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">20</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a><span class="archive-list-count">24</span></li></ul>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://imid.me/" target="_blank" title="iMID">iMID's Blog</a></li>
+      <li><a href="http://www.trinea.cn/" target="_blank" title="trinea">Trinea's Blog</a></li>
+      <li><a href="http://stormzhang.github.io/" target="_blank" title="stormzhang">StormZhang's Blog</a></li>
+      <li><a href="http://daimajia.com/" target="_blank" title="daimajia">DaiMaJia.Blog</a></li>
+      <li><a href="http://macrotea.com/welcome/" target="_blank" title="daimajia">Macrotea.Blog</a></li>
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello,I&#39;m Zoe,a Android and iOS developers. <br/>
+			This is my blog,I hope you will enjoy them.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2292032577" target="_blank" class="icon-weibo" title="weibo"></a>
+		
+		
+		<a href="https://github.com/seniorzhai" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:developer.zhaitao@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2016 
+		
+		<a href="http://seniorzhai.github.io/about" target="_blank" title="Zoe">Zoe</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zt1991616"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-54646832-1', 'null');  
+ga('send', 'pageview');
+</script>
+
+
+
+
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<script src="/js/totop.js"></script>
+
+
+
+
+  </body>
+</html>
+
+<a href="https://github.com/seniorzhai"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>

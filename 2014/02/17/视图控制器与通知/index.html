@@ -1,0 +1,531 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="google-site-verification" content="WNyUn91IXtlyHB-gfFfg8K6MCkItzKWdzzw_Nh17ksE" />
+  <meta name="baidu-site-verification" content="e5ZaZQ3Tx8" />
+  
+    <title>视图控制器与通知 | Zoe&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Zoe">
+    
+    <meta name="description" content="UIViewController
+
+视图控制器是数据和视图之间的桥梁，视图供职器提供了一个基本的框架来构建应用程序。
+UIViewController是所有视图控制器的父类
+iOS提供了许多内置的视图控制器，以支持标准的用户界面部分，比如导航控制器UINavigationController，标签栏">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Zoe&#39;s blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Zoe&#39;s blog" title="Zoe&#39;s blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Zoe&#39;s blog">Zoe&#39;s blog</a></h1>
+				<h2 class="blog-motto">宅学长的博客</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:seniorzhai.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/02/17/视图控制器与通知/" title="视图控制器与通知" itemprop="url">视图控制器与通知</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://seniorzhai.github.io/about" title="Zoe" target="_blank" itemprop="author">Zoe</a>
+		
+  <p class="article-time">
+    <time datetime="2014-02-17T04:00:50.000Z" itemprop="datePublished"> 发表于 2月 17 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#UIViewController"><span class="toc-number">1.</span> <span class="toc-text">UIViewController</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#视图控制器与视图的关系"><span class="toc-number">2.</span> <span class="toc-text">视图控制器与视图的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#视图控制器(UIViewController)的创建"><span class="toc-number">3.</span> <span class="toc-text">视图控制器(UIViewController)的创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UIViewController生命周期"><span class="toc-number">4.</span> <span class="toc-text">UIViewController生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#加载过程"><span class="toc-number">4.1.</span> <span class="toc-text">加载过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#各个方法执行顺序"><span class="toc-number">4.2.</span> <span class="toc-text">各个方法执行顺序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#视图卸载"><span class="toc-number">5.</span> <span class="toc-text">视图卸载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#试图控制器的响应链"><span class="toc-number">6.</span> <span class="toc-text">试图控制器的响应链</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模态视图"><span class="toc-number">7.</span> <span class="toc-text">模态视图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#支持多个方向"><span class="toc-number">8.</span> <span class="toc-text">支持多个方向</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="UIViewController">UIViewController</h2>
+<ul>
+<li>视图控制器是数据和视图之间的桥梁，视图供职器提供了一个基本的框架来构建应用程序。</li>
+<li>UIViewController是所有视图控制器的父类</li>
+<li>iOS提供了许多内置的视图控制器，以支持标准的用户界面部分，比如导航控制器<code>UINavigationController</code>，标签栏控制器<code>UITabBarController</code>,表视图控制器<code>UITableViewController</code>等</li>
+</ul>
+<h2 id="视图控制器与视图的关系">视图控制器与视图的关系</h2>
+<ul>
+<li>视图控制器是传统Modle-View-Controller(MVC)设计模式中————控制器对象</li>
+<li>视图控制器提供了许多控制器的基本功能</li>
+<li>对于某些功能，基类提供了解决方案的一部分，其他的自定义的功能由视图控制器的子类去实现，比如：用户选择设备，可以由子类去控制是否旋转</li>
+<li>视图控制器负责创建和管理一组视图，它本身提供一个视图，称为该试图控制器的根视图，协调管理数据的视图之间的交互<ul>
+<li>UIScreen对象时链接物理屏幕的标示</li>
+<li>UIWindow为UIScreen对象提供画布</li>
+<li>一组UIView对象就可以显示内容</li>
+<li>每个视图控制器管理和控制一系列的视图</li>
+<li>永远不要把UIView添加到UIWindow上，二是添加一个UIViewController</li>
+</ul>
+</li>
+</ul>
+<h2 id="视图控制器(UIViewController)的创建">视图控制器(UIViewController)的创建</h2>
+<figure class="highlight Objective-C"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 代码创建</span></div><div class="line"><span class="built_in">UIViewController</span> *mainViewController = [[UIViewCtroller alloc] init];</div><div class="line">mainViewController<span class="variable">.view</span><span class="variable">.backgroundColor</span> = [<span class="built_in">UIColor</span> redColor];</div><div class="line"><span class="keyword">self</span><span class="variable">.window</span><span class="variable">.rootViewController</span> = mainViewCtroller;</div><div class="line"><span class="comment">// nib创建</span></div><div class="line">RootViewController *rootViewController = [[RootViewController alloc] initWithNibName:<span class="string">@"view"</span> bundle:<span class="literal">nil</span>];</div><div class="line"><span class="keyword">self</span><span class="variable">.window</span><span class="variable">.rootViewController</span> = rootViewController;</div></pre></td></tr></table></figure>
+
+<h2 id="UIViewController生命周期">UIViewController生命周期</h2>
+<p><img src="https://github.com/zt1991616/blog/raw/master/Image/14021701.jpg" alt=""></p>
+<figure class="highlight Objective-c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">-(<span class="keyword">void</span>)loadView</div><div class="line">{</div><div class="line">    <span class="comment">// 调用父类来创建view</span></div><div class="line">    <span class="comment">// 从nib、storybord加载View，否则创建一个empty view</span></div><div class="line">    <span class="comment">// 创建一个自定义的视图，覆盖即可</span></div><div class="line">}</div><div class="line">-(<span class="keyword">void</span>)view</div></pre></td></tr></table></figure>
+
+<h3 id="加载过程">加载过程</h3>
+<ul>
+<li>首先去访问view属性</li>
+<li>如果存在view，判断之间加载。否则，则UIViewCtroller调用loadView方法<ul>
+<li>loadView方法执行如下操作<ul>
+<li>如果覆盖了该方法，则必须创建View给UIViewCtroller的View属性</li>
+<li>如果没有覆盖该方法，UIViewControlller会调用父类的方法<h3 id="各个方法执行顺序">各个方法执行顺序</h3>
+<ul>
+<li>(id)initWithNibName:(NSString <em>)nibNameOrNil bundle:(NSBundle </em>)nibBundleOrNil</li>
+<li>(void)loadView</li>
+<li>(void)viewDidLoad</li>
+<li>(void)viewWillAppear:(BOOL)animated</li>
+<li>(void)viewDidAppear:(BOOL)animated</li>
+<li>(void)viewWillDisappear:(BOOL)animated</li>
+<li>(void)viewDidDisappear:(BOOL)animated</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="视图卸载">视图卸载</h2>
+<p><img src="https://github.com/zt1991616/blog/raw/master/Image/14021702.jpg" alt=""></p>
+<ul>
+<li>iOS6之前使用<code>viewDidUnload:</code>方法来释放对象的引用</li>
+<li>iOS6之后使用<code>didRecevelMemoryWarning</code>内存紧张的时候调用</li>
+</ul>
+<ol>
+<li>viewWillDisappear    视图将被从屏幕上移除之前执行</li>
+<li>viewDidDisappear  视图已经被从屏幕上移除，用户看不到这个视图   </li>
+<li>dealloc  视图被销毁，此处需要对你在init和viewDidLoad中创建的对象进行释放</li>
+</ol>
+<h2 id="试图控制器的响应链">试图控制器的响应链</h2>
+<ul>
+<li>事件传递流程<br>  当前触发的事件-&gt;视图控制器的跟视图-&gt;视图控制器-&gt;窗口-&gt;UIApplication对象-&gt;不处理</li>
+</ul>
+<h2 id="模态视图">模态视图</h2>
+<ul>
+<li>模态视图不是特定的某个类，而是通过视图控制器的pressntModalViewController:方法弹出的视图称为模态视图</li>
+<li>模态视图出现的场景一般是临时弹出的窗口，譬如：登入窗口</li>
+<li>模态视图弹出时通过modalTransitionStyle属性设置不同的动画效果</li>
+<li>调用dismissModalViewControllerAnimated:方法关闭窗口</li>
+</ul>
+<figure class="highlight Objective-c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">-(<span class="keyword">void</span>)viewDidLoad</div><div class="line">{</div><div class="line">    [<span class="keyword">super</span> viewDidLoad];</div><div class="line">    <span class="keyword">self</span><span class="variable">.view</span><span class="variable">.backgroundColor</span> = [<span class="built_in">UIColor</span> purpleColor];</div><div class="line">    <span class="built_in">UIButton</span> *button = [<span class="built_in">UIButton</span> buttonWithType:UIButtonTypeRoundeRect];</div><div class="line">    button<span class="variable">.frame</span> = CGRectMake(<span class="number">320</span>/<span class="number">2</span> - <span class="number">140</span>/<span class="number">2</span>,<span class="number">80</span>,<span class="number">140</span>,<span class="number">40</span>);</div><div class="line">    [button setTitle:<span class="string">@"Present"</span> forState:UIControlStateNormal];</div><div class="line">    [button addTarget:<span class="keyword">self</span> action:<span class="keyword">@selector</span>[presentModalVc] forControlEvents:UIControlEventTouchUpInside];</div><div class="line">    [<span class="keyword">self</span><span class="variable">.view</span> addSubview:button];</div><div class="line">}</div><div class="line">-(<span class="keyword">void</span>)presentModalVC</div><div class="line">{</div><div class="line">    ModalViewController *modalVc = [[ModalViewController alloc] init];</div><div class="line">    <span class="comment">// 动画效果</span></div><div class="line">    modalVc<span class="variable">.modalTranstionSyle</span> = UIModalTransitionStylePatialCurl;</div><div class="line">    <span class="keyword">if</span>([[UIDevice currentDevice]<span class="variable">.systemVersion</span> floatValue] &lt; <span class="number">6.0</span>){</div><div class="line">        [<span class="keyword">self</span><span class="variable">.presentModalViewController</span>:modalVc animated:<span class="literal">YES</span>];</div><div class="line">    }<span class="keyword">else</span>{</div><div class="line">        [<span class="keyword">self</span><span class="variable">.presentModalViewController</span>:modalVc animated:<span class="literal">YES</span> completion:^{</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"call back"</span>);</div><div class="line">        }];</div><div class="line">    [modalVC relese];</div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight Objective-c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//ModalViewController.m</span></div><div class="line">-(<span class="keyword">void</span>)dismiss</div><div class="line">{   </div><div class="line">    <span class="comment">// 将模态视图关闭</span></div><div class="line">    [<span class="keyword">self</span> dismissViewControllerAnimated:<span class="literal">YES</span> completion:^{</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"dismiss"</span>)];</div><div class="line">    }];</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<h2 id="支持多个方向">支持多个方向</h2>
+<p><img src="https://github.com/zt1991616/blog/raw/master/Image/14021703.png" alt=""></p>
+<ul>
+<li>iOS设备中的加速计可以确定设备的当前方向。默认情况下，一个应用支持纵向和横向。当设备方向改变时，系统会发送UIDiviceOrientationDidChangeNotfication通知，默认情况下UIKit框架监听这个通知，并自定义更新这个方向。</li>
+</ul>
+<figure class="highlight Objective-c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">-(<span class="keyword">void</span>)viewDidLoad</div><div class="line">{</div><div class="line">    <span class="comment">// ...</span></div><div class="line">    <span class="comment">// 采用通知获取屏幕方向切换</span></div><div class="line">    [[UINotificationCenter defaultCenter] addObserver:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(deviceOrientation:)name:UIDeviceOrientationDidChangeNotifitation object:<span class="literal">nil</span>];</div><div class="line">}</div><div class="line">-(<span class="keyword">void</span>)deviceOrientation:(<span class="built_in">NSNotification</span> *)notification</div><div class="line">{</div><div class="line">    UIDevice *device = (UIDevice *)[notification object];</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"device:%d"</span>,device<span class="variable">.orientation</span>);</div><div class="line">}</div><div class="line">-(<span class="built_in">BOOL</span>)shoudlAutorotateToInterfaceOrientation:(<span class="built_in">UIInterfaceOrientation</span>)toInterfaceOrientation</div><div class="line">{</div><div class="line">    <span class="keyword">return</span> <span class="literal">NO</span>;   <span class="comment">//NO为不支持</span></div><div class="line">    <span class="comment">// return (toInterfaceOrientation != UIterfaceOrientationLandscapeLeft); // 不支持一个方向</span></div><div class="line">}</div><div class="line"><span class="preprocessor">#pragma mark - Orientation iOS 3.0_5.0</span></div><div class="line">-(<span class="built_in">BOOL</span>)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrienttation)toInterfaceOrientation</div><div class="line">{</div><div class="line">    <span class="keyword">return</span> <span class="literal">NO</span>;</div><div class="line">}</div><div class="line"><span class="preprocessor">#pragma mark - Orientation iOS 6.0</span></div><div class="line">-(<span class="built_in">BOOL</span>)shouldAutorotate</div><div class="line">{</div><div class="line">    <span class="keyword">return</span> <span class="literal">YES</span>;</div><div class="line">}</div><div class="line">-(<span class="keyword">void</span>)willAnimateRotationToInterfaceOrientation:(<span class="built_in">UIInterfaceOrientation</span>)toInterfaceOrientation duration:(<span class="built_in">NSTimeInterval</span>)duration</div><div class="line">{</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"duration:%f"</span>,duration);</div><div class="line">    <span class="built_in">UIView</span>* button = [<span class="keyword">self</span><span class="variable">.view</span> viewWithTag:<span class="number">101</span>];</div><div class="line">    <span class="keyword">if</span>(toInterfaceOrientation == UIInterfaceOrientationPortrait){</div><div class="line">        button<span class="variable">.frame</span> = CGRectMake(<span class="number">320</span>/<span class="number">2</span>-<span class="number">140</span>/<span class="number">2</span>,<span class="number">80</span>,<span class="number">140</span>,<span class="number">40</span>);</div><div class="line">    }<span class="keyword">else</span>{</div><div class="line">        button<span class="variable">.frame</span> = CGRectMake(<span class="number">480</span>/<span class="number">2</span>-<span class="number">140</span>/<span class="number">2</span>,<span class="number">80</span>,<span class="number">140</span>,<span class="number">40</span>);</div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/iOS/">iOS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://seniorzhai.github.io/2014/02/17/视图控制器与通知/" data-title="视图控制器与通知 | Zoe&#39;s blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/02/17/UIView/" title="UIView">
+  <strong>上一篇：</strong><br/>
+  <span>
+  UIView</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/02/17/UIKIT框架/"  title="UIKIT框架">
+ <strong>下一篇：</strong><br/> 
+ <span>UIKIT框架
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#UIViewController"><span class="toc-number">1.</span> <span class="toc-text">UIViewController</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#视图控制器与视图的关系"><span class="toc-number">2.</span> <span class="toc-text">视图控制器与视图的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#视图控制器(UIViewController)的创建"><span class="toc-number">3.</span> <span class="toc-text">视图控制器(UIViewController)的创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UIViewController生命周期"><span class="toc-number">4.</span> <span class="toc-text">UIViewController生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#加载过程"><span class="toc-number">4.1.</span> <span class="toc-text">加载过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#各个方法执行顺序"><span class="toc-number">4.2.</span> <span class="toc-text">各个方法执行顺序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#视图卸载"><span class="toc-number">5.</span> <span class="toc-text">视图卸载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#试图控制器的响应链"><span class="toc-number">6.</span> <span class="toc-text">试图控制器的响应链</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模态视图"><span class="toc-number">7.</span> <span class="toc-text">模态视图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#支持多个方向"><span class="toc-number">8.</span> <span class="toc-text">支持多个方向</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/Android/" title="Android">Android<sup>184</sup></a></li>
+		
+			<li><a href="/categories/Camera/" title="Camera">Camera<sup>1</sup></a></li>
+		
+			<li><a href="/categories/Cocos2d-X/" title="Cocos2d-X">Cocos2d-X<sup>11</sup></a></li>
+		
+			<li><a href="/categories/Prose/" title="Prose">Prose<sup>27</sup></a></li>
+		
+			<li><a href="/categories/Python/" title="Python">Python<sup>22</sup></a></li>
+		
+			<li><a href="/categories/ReactNative/" title="ReactNative">ReactNative<sup>7</sup></a></li>
+		
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>79</sup></a></li>
+		
+			<li><a href="/categories/node-js/" title="node.js">node.js<sup>29</sup></a></li>
+		
+			<li><a href="/categories/杂文/" title="杂文">杂文<sup>3</sup></a></li>
+		
+		</ul>
+		<ul>
+		<script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"></script>
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AFNetworking/" style="font-size: 10.00px;">AFNetworking</a><a href="/tags/APK/" style="font-size: 10.00px;">APK</a><a href="/tags/AS/" style="font-size: 10.00px;">AS</a><a href="/tags/Adapter/" style="font-size: 10.00px;">Adapter</a><a href="/tags/Android/" style="font-size: 20.00px;">Android</a><a href="/tags/Android-5-0/" style="font-size: 10.00px;">Android 5.0</a><a href="/tags/Android-Studio/" style="font-size: 13.33px;">Android Studio</a><a href="/tags/AndroidAninotations/" style="font-size: 10.00px;">AndroidAninotations</a><a href="/tags/AndroidStudio/" style="font-size: 18.33px;">AndroidStudio</a><a href="/tags/Animation/" style="font-size: 15.00px;">Animation</a><a href="/tags/Api/" style="font-size: 13.33px;">Api</a><a href="/tags/App/" style="font-size: 10.00px;">App</a><a href="/tags/Apple/" style="font-size: 10.00px;">Apple</a><a href="/tags/Async/" style="font-size: 10.00px;">Async</a><a href="/tags/Atom/" style="font-size: 11.67px;">Atom</a><a href="/tags/BaseAdapter/" style="font-size: 10.00px;">BaseAdapter</a><a href="/tags/Blur/" style="font-size: 10.00px;">Blur</a><a href="/tags/Box2D/" style="font-size: 10.00px;">Box2D</a><a href="/tags/Broadcast/" style="font-size: 10.00px;">Broadcast</a><a href="/tags/CardView/" style="font-size: 10.00px;">CardView</a><a href="/tags/CocoaPods/" style="font-size: 10.00px;">CocoaPods</a><a href="/tags/Cocos2d-X/" style="font-size: 16.67px;">Cocos2d-X</a><a href="/tags/CocosPods/" style="font-size: 10.00px;">CocosPods</a><a href="/tags/ContentProvider/" style="font-size: 10.00px;">ContentProvider</a><a href="/tags/Context/" style="font-size: 10.00px;">Context</a><a href="/tags/Crouton/" style="font-size: 10.00px;">Crouton</a><a href="/tags/CursorLoader/" style="font-size: 10.00px;">CursorLoader</a><a href="/tags/Demo/" style="font-size: 11.67px;">Demo</a><a href="/tags/Dialog/" style="font-size: 10.00px;">Dialog</a><a href="/tags/EditView/" style="font-size: 10.00px;">EditView</a><a href="/tags/EventBus/" style="font-size: 10.00px;">EventBus</a><a href="/tags/Express/" style="font-size: 10.00px;">Express</a><a href="/tags/Express学习笔记/" style="font-size: 10.00px;">Express学习笔记</a><a href="/tags/Flex/" style="font-size: 10.00px;">Flex</a><a href="/tags/Fragment/" style="font-size: 11.67px;">Fragment</a><a href="/tags/GET/" style="font-size: 10.00px;">GET</a><a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/Gradle/" style="font-size: 11.67px;">Gradle</a><a href="/tags/GridLayout/" style="font-size: 10.00px;">GridLayout</a><a href="/tags/GridView/" style="font-size: 11.67px;">GridView</a>
+    </div>
+  </div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">25</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a><span class="archive-list-count">42</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">June 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">20</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a><span class="archive-list-count">24</span></li></ul>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://imid.me/" target="_blank" title="iMID">iMID's Blog</a></li>
+      <li><a href="http://www.trinea.cn/" target="_blank" title="trinea">Trinea's Blog</a></li>
+      <li><a href="http://stormzhang.github.io/" target="_blank" title="stormzhang">StormZhang's Blog</a></li>
+      <li><a href="http://daimajia.com/" target="_blank" title="daimajia">DaiMaJia.Blog</a></li>
+      <li><a href="http://macrotea.com/welcome/" target="_blank" title="daimajia">Macrotea.Blog</a></li>
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello,I&#39;m Zoe,a Android and iOS developers. <br/>
+			This is my blog,I hope you will enjoy them.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2292032577" target="_blank" class="icon-weibo" title="weibo"></a>
+		
+		
+		<a href="https://github.com/seniorzhai" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:developer.zhaitao@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2016 
+		
+		<a href="http://seniorzhai.github.io/about" target="_blank" title="Zoe">Zoe</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zt1991616"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-54646832-1', 'null');  
+ga('send', 'pageview');
+</script>
+
+
+
+
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<script src="/js/totop.js"></script>
+
+
+
+
+  </body>
+</html>
+
+<a href="https://github.com/seniorzhai"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>

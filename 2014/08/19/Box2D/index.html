@@ -1,0 +1,588 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="google-site-verification" content="WNyUn91IXtlyHB-gfFfg8K6MCkItzKWdzzw_Nh17ksE" />
+  <meta name="baidu-site-verification" content="e5ZaZQ3Tx8" />
+  
+    <title>Box2D | Zoe&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Zoe">
+    
+    <meta name="description" content="一款功能强大、性能强劲的物理引擎。它能都维持在一个独立的运行空间。
+概述
+Box2D引擎创建的物体都属于理想的刚体，即它内部之间的距离永不改变。Box2D创建的物理世界具备以下三个特点。
+
+物理世界存在一个重力（可以为0）
+物理世界可以是一个存在边界的范围
+在世界中加入静态和动态物体（具有质量和位置">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Zoe&#39;s blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Zoe&#39;s blog" title="Zoe&#39;s blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Zoe&#39;s blog">Zoe&#39;s blog</a></h1>
+				<h2 class="blog-motto">宅学长的博客</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:seniorzhai.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/08/19/Box2D/" title="Box2D" itemprop="url">Box2D</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://seniorzhai.github.io/about" title="Zoe" target="_blank" itemprop="author">Zoe</a>
+		
+  <p class="article-time">
+    <time datetime="2014-08-19T03:31:33.000Z" itemprop="datePublished"> 发表于 8月 19 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#概念"><span class="toc-number">2.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模块"><span class="toc-number">3.</span> <span class="toc-text">模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据单位"><span class="toc-number">4.</span> <span class="toc-text">数据单位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用户数据"><span class="toc-number">5.</span> <span class="toc-text">用户数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#物理世界World"><span class="toc-number">6.</span> <span class="toc-text">物理世界World</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#世界运转起来"><span class="toc-number">7.</span> <span class="toc-text">世界运转起来</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#探索世界"><span class="toc-number">8.</span> <span class="toc-text">探索世界</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AABB查询"><span class="toc-number">9.</span> <span class="toc-text">AABB查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#光线投射(Ray_Casts)"><span class="toc-number">10.</span> <span class="toc-text">光线投射(Ray Casts)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#形状Shapes"><span class="toc-number">11.</span> <span class="toc-text">形状Shapes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#圆形(Circle_Shapes)"><span class="toc-number">11.1.</span> <span class="toc-text">圆形(Circle Shapes)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多边形(Polygon_Shape)"><span class="toc-number">11.2.</span> <span class="toc-text">多边形(Polygon Shape)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#框架Fixtures"><span class="toc-number">12.</span> <span class="toc-text">框架Fixtures</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#密度(Density)"><span class="toc-number">12.1.</span> <span class="toc-text">密度(Density)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#摩擦(Friction)"><span class="toc-number">12.2.</span> <span class="toc-text">摩擦(Friction)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#恢复(Resitution)"><span class="toc-number">12.3.</span> <span class="toc-text">恢复(Resitution)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#帅选(Filtering)"><span class="toc-number">12.4.</span> <span class="toc-text">帅选(Filtering)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#感应器(Sensors)"><span class="toc-number">12.5.</span> <span class="toc-text">感应器(Sensors)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#物体Bodies"><span class="toc-number">13.</span> <span class="toc-text">物体Bodies</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#位置和角度(Position_and_Angle)"><span class="toc-number">13.1.</span> <span class="toc-text">位置和角度(Position and Angle)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#阻尼(Damping)"><span class="toc-number">13.2.</span> <span class="toc-text">阻尼(Damping)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#休眠参数(Sleep_Parameters)"><span class="toc-number">13.3.</span> <span class="toc-text">休眠参数(Sleep Parameters)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#固定旋转(Fixed_Rotation)"><span class="toc-number">13.4.</span> <span class="toc-text">固定旋转(Fixed Rotation)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#子弹(Bullets)"><span class="toc-number">13.5.</span> <span class="toc-text">子弹(Bullets)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#活动状态(Activation)"><span class="toc-number">13.6.</span> <span class="toc-text">活动状态(Activation)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用户数据(User_Data)"><span class="toc-number">13.7.</span> <span class="toc-text">用户数据(User Data)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关节(Joints)"><span class="toc-number">14.</span> <span class="toc-text">关节(Joints)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#关节的定义(JointDef)"><span class="toc-number">14.1.</span> <span class="toc-text">关节的定义(JointDef)</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>一款功能强大、性能强劲的物理引擎。它能都维持在一个独立的运行空间。</p>
+<h2 id="概述">概述</h2>
+<p>Box2D引擎创建的物体都属于理想的刚体，即它内部之间的距离永不改变。Box2D创建的物理世界具备以下三个特点。</p>
+<ol>
+<li>物理世界存在一个重力（可以为0）</li>
+<li>物理世界可以是一个存在边界的范围</li>
+<li>在世界中加入静态和动态物体（具有质量和位置），它们被用来模拟现实的运动规律<h2 id="概念">概念</h2>
+</li>
+<li>物理世界（World)<br>一个物理世界就是由各种刚体、框架、形状互相作用的集合。</li>
+<li>刚体(Rigid Bodies)<br>理想刚体是一个有限尺寸、可以忽略形变的物体。不论是否感受到作用力，在刚体内部，点与点之间的距离都不会改变，可以认为是一个连续质量分布体。 在Box2D物理世界中，所有物体都是刚体，这些物体一旦被创建出来后，其形状就不会改变。</li>
+<li>形状(Shapes)<br>2D平面几何结构，主要用于世界里的物理碰撞的检测。</li>
+<li>框架(Fixtures)<br>框架代表物理世界中物体的固定物质形态，是连接物体和形状之间的框架，一个物体可以有多个框架，没个框架可以连接一个形状、它本身存储着物体的质量、密度、摩擦系数，同时包含碰撞标志、用户数据和是否使用碰撞检测器的标志。他存在的目的主要是为了物理引擎的运算考虑。</li>
+<li>关节(Joins)<br>关节的作用是将两个有一定运动自由度(水平、数组、转动)的物体连接起来，同时约束连接的物体。Box2D引擎支持的关节类型有旋转、棱柱、距离等等，通常具备两个共同属性：限制(Limits)和马达(Motors)<br> (1) 关节限制(joint limit) 限定了一个关节的运动范围。<br> (2) 关节马达(joint motor) 能依照关节的自由度来驱动所连接的物体。<h2 id="模块">模块</h2>
+Box2D引擎由三个模块组成：公共(Common)、碰撞(Collision)和动态(Dynamics)。<br>(1) Common核心模块包含了内存分配、数学计算和配置<br>(2) Collision模块定义了形状(shape)、broad-phase检测盒碰撞功能/查询(collision functions/queries)<br>(3) Dynamics模块提供对世界(world)、刚体(bodies)、框架(fixtures)和关节(joint)模拟<h2 id="数据单位">数据单位</h2>
+Box2D引擎使用浮点数进行计算，所以为看保证它的正常工作，必须使用一些公差来保证它的正常工作。引擎能够良好的处理0.1~10米之间的移动物体。<h2 id="用户数据">用户数据</h2>
+</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 创建一个精灵</span></div><div class="line">CCSprite* actor = CCSprite::node();</div><div class="line"><span class="comment">// 物体的定义</span></div><div class="line">b2BodyDef bodyDef;</div><div class="line"><span class="comment">// 指定数据</span></div><div class="line">bodyDef.userData = actor;</div><div class="line"><span class="comment">// 创建物体</span></div><div class="line">actor-&gt;body = box2Dworld-&gt;CreateBody(&bodyDef);</div></pre></td></tr></table></figure>
+
+<p>用户数据是可选的，并且能放入任何东西，为了保持一致性，通常保存精灵对象的指针。</p>
+<h2 id="物理世界World">物理世界World</h2>
+<p>创建一个世界</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">b2Vec2 gravity;	<span class="comment">// 重力</span></div><div class="line">gravity.Set(<span class="number">0.0f</span>,-<span class="number">10.0f</span>); </div><div class="line">world = <span class="keyword">new</span> b2World(gravity);</div><div class="line">world-&gt;SetAllowSleeping(<span class="keyword">true</span>);	<span class="comment">// 设置允许物体进入休眠状态</span></div><div class="line">world-&gt;SetContinuonsPhysics(<span class="keyword">true</span>); <span class="comment">// 设置使用连续物理检测</span></div></pre></td></tr></table></figure>
+
+<p>销毁世界</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">delete</span> world;</div><div class="line">world = NULL;</div></pre></td></tr></table></figure>
+
+<h2 id="世界运转起来">世界运转起来</h2>
+<p>物理世界类中用于驱动模拟的函数为<code>Step</code>，调用它时，需要指定一个时间步和一个速度及位置的迭代次数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">float32 timeStep = <span class="number">1.0f</span>/<span class="number">60.0f</span>;	<span class="comment">// 时间步，频率</span></div><div class="line">int32 velocityIterations = <span class="number">10</span>;	<span class="comment">// 速度迭代</span></div><div class="line">int32 positionIterations = <span class="number">8</span>;	<span class="comment">// 位置迭代次数</span></div><div class="line">myWorld-&gt;Step(timeStep,velocityIterations,positionIterations);	<span class="comment">// 驱动函数</span></div></pre></td></tr></table></figure>
+
+
+<p>在物理引擎执行一次时间步之后，最好是清除任何施加在物体上的力。可以使用<code>b2World::ClearForces</code>完成，可以去除力的持续作用效果。</p>
+<h2 id="探索世界">探索世界</h2>
+<p>物理世界中存在创建工厂，工厂则会创建物体、框架和关节对象，同时世界也是容器，它会容纳工厂创建出来的所有对象。可以通过遍历的方式来获取世界中所有物体、框架和关节。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (b2Body* b = myWorld()-&gt;GetBodyList();b;b = b-&gt;GetNext())</div><div class="line">{</div><div class="line">	b-&gt;WakeUp();	<span class="comment">// 唤醒物体</span></div><div class="line">}</div></pre></td></tr></table></figure>
+
+<h2 id="AABB查询">AABB查询</h2>
+<p>Box2D引擎当中提供了AABB查询的方式，需要得出一个区域内所有对象时的解决方法。为此专门使用<code>broad-phase</code>的数据结构，它提供了一个log(N)复杂度的快速查询方法。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> MyQueryCallback : <span class="keyword">public</span> b2QueryCallback</div><div class="line">{</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	<span class="keyword">bool</span> ReportFixture(b2Fixture* fixture)</div><div class="line">	{</div><div class="line">		b2Body* body = fixture-&gt;GetBody();</div><div class="line">		body-&gt;WakeUp();</div><div class="line">		<span class="keyword">return</span> ture; <span class="comment">// 继续查询</span></div><div class="line">	}</div><div class="line">}</div><div class="line"></div><div class="line">b2AABB aabb;</div><div class="line">aabb.lowerBound.Set(-<span class="number">1.0f</span>,-<span class="number">1.0f</span>);	<span class="comment">// 设置AABB的上边界</span></div><div class="line">aabb.upperBound.Set(<span class="number">1.0f</span>,<span class="number">1.0f</span>);		<span class="comment">// 设置AABB的下边界</span></div><div class="line">myWorld-&gt;Query(&callback,aabb);</div></pre></td></tr></table></figure>
+
+<h2 id="光线投射(Ray_Casts)">光线投射(Ray Casts)</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> MyRayCastCallBack : <span class="keyword">public</span> b2RayCastCallback</div><div class="line">{</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	MyRayCastCallback()</div><div class="line">	{</div><div class="line">		m_fixture = NULL;</div><div class="line">	}</div><div class="line">	float32 ReportFixture(b2Fixture* fixture,<span class="keyword">const</span> b2Vec2& point,<span class="keyword">const</span> b2Vec2& normal,float32 fraction)</div><div class="line">	{</div><div class="line">		<span class="comment">// 保存框架</span></div><div class="line">		m_fixture = fixture;</div><div class="line">		<span class="comment">// 保存交点</span></div><div class="line">		m_point = point;</div><div class="line">		<span class="comment">// 保存法向量</span></div><div class="line">		m_normal = normal;</div><div class="line">		<span class="comment">// 保存光线通过的分数距离</span></div><div class="line">		m_fraction = fraction;</div><div class="line">		<span class="keyword">return</span> fraction;</div><div class="line">	}</div><div class="line">	b2xFixture* m_fixture;</div><div class="line">	b2Vec2 m_point;</div><div class="line">	b2Vec2 m_normal;</div><div class="line">	float32 m_fraction;</div><div class="line">};</div><div class="line"><span class="comment">// 回调函数</span></div><div class="line">MyRayCastCallback callback;</div><div class="line"><span class="comment">// 光线投射的起始点</span></div><div class="line">b2Vec2 point(-<span class="number">1.0f</span>,<span class="number">0.0f</span>);</div><div class="line"><span class="comment">// 光线投射的结束点</span></div><div class="line">b2Vec2 point(<span class="number">3.0f</span>,<span class="number">1.0f</span>);</div><div class="line"><span class="comment">// 开始光线的投射</span></div><div class="line">myWorld-&gt;RayCast(&callback,point1,point2);</div></pre></td></tr></table></figure>
+
+<h2 id="形状Shapes">形状Shapes</h2>
+<p>形状是物体的包围盒，描述了可相互碰撞的几何对象的外形，它通常会是一个几何图形。被Shape是形状的基类，Box2D引擎中各种形状类都是继承自这个基类。此基类定义了几个常用函数：</p>
+<ol>
+<li>判断一个点与形状是否有重叠</li>
+<li>在形状上执行光线投射</li>
+<li>计算形状的AABB</li>
+<li>计算形状的质量<br>所有形状都有两个成员变量：类型(type)和半径(radius)，引擎存在两种类型的形状：圆形和多边形。<h3 id="圆形(Circle_Shapes)">圆形(Circle Shapes)</h3>
+圆形形状(b2CircleShape)是一个由位置和半径表示的集合图形。圆形形状都是实心的，主要的参数就是半径。</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">b2CircleShape circle;<span class="comment">// 创建圆形形状的对象</span></div><div class="line">circle.m_p.Set(<span class="number">1.0f</span>,<span class="number">2.0f</span>,<span class="number">3.0f</span>);<span class="comment">// 设置位置</span></div><div class="line">circle.m_radius = <span class="number">0.5f</span>;<span class="comment">// 设置半径</span></div></pre></td></tr></table></figure>
+
+<h3 id="多边形(Polygon_Shape)">多边形(Polygon Shape)</h3>
+<p>多边形(b2PolygonShape)是实现的凸(Convex)多边形。数学的定义：在多边形内部任意选择两点，作一线段，如果所有线段都跟多边形的边不想交，这个多边形就是凸多边形。在Box2D引擎中一个多边形形状是通过顶点来描述的。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">b2PolygonDef triangleDef;</div><div class="line">triangleDef.vertexCont = <span class="number">3</span>;</div><div class="line">triangleDef.vertices[<span class="number">0</span>].Set(-<span class="number">1.0f</span>,<span class="number">0.0f</span>);</div><div class="line">triangleDef.vertices[<span class="number">1</span>].Set(<span class="number">1.0f</span>,<span class="number">0.0f</span>);</div><div class="line">triangleDef.vertices[<span class="number">2</span>].Set(<span class="number">0.0f</span>,<span class="number">2.0f</span>);</div></pre></td></tr></table></figure>
+
+<p>在创建多边形时，顶点必须是逆时针排列。创建多边形时，顶点的数据可以通过数组来传递，数组中的顶点数最大值是核心模块中定义的b2maxPolygonVertices，默认情况下此数值是8。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">b2Vec2 vertices[<span class="number">4</span>];</div><div class="line">vertices[<span class="number">0</span>].Set(<span class="number">0.0f</span>,<span class="number">0.0f</span>);</div><div class="line">vertices[<span class="number">1</span>].Set(<span class="number">1.0f</span>,<span class="number">0.0f</span>);</div><div class="line">vertices[<span class="number">2</span>].Set(<span class="number">0.0f</span>,<span class="number">1.0f</span>);</div><div class="line">vertices[<span class="number">3</span>].Set(<span class="number">1.0f</span>,<span class="number">1.0f</span>);</div><div class="line"></div><div class="line">int32 count = <span class="number">4</span>;</div><div class="line">b2PolygonShape polygon;</div><div class="line">polygon.Set(vertices,count);</div></pre></td></tr></table></figure>
+
+<p>为了使用方便引擎还提供了一些定义好的初始化函数来创建固定的多边形形状：箱子(box)和边缘(edge，就是线段)</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span> SetAsbox(float32 hx,float32 hy);</div><div class="line"><span class="keyword">void</span> SetAsBox(float32 hx,float32 hy,<span class="keyword">const</span> b2Vec2& center,float32 angle);</div><div class="line"><span class="keyword">void</span> SetAsEdge(<span class="keyword">const</span> b2Vec2& v1,<span class="keyword">const</span> b2Vec& v2);</div></pre></td></tr></table></figure>
+
+<h2 id="框架Fixtures">框架Fixtures</h2>
+<p>Fixture是动态模块中重要的概念，用来物理模拟。<br>动态模块包含的内容：</p>
+<ul>
+<li>框架(Fixtures)</li>
+<li>物体(Bodies)</li>
+<li>接触(Contacts)</li>
+<li>关节(Joints)</li>
+<li>世界(World)</li>
+<li>监听器(Listener)<br>框架主要用于建立形状与物体之间的连接和进行物理模拟。<h3 id="密度(Density)">密度(Density)</h3>
+框架的密度用来计算物体的质量属性，密度可以为零或者其他整数。<h3 id="摩擦(Friction)">摩擦(Friction)</h3>
+Box2D支持静态摩擦和动态摩擦，两者都使用的相同的摩擦系数作为参数。摩擦的强度与正交力成正比。摩擦系数经常会设置为0到1之间，0意味着没有摩擦，1会产生强摩擦。当计算两个形状之间的摩擦时，引擎必须计算两个形状的摩擦参数。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">float32 friction;</div><div class="line">friction = sqrtf(shape1-&gt;friction * shape2-&gt;friction);</div></pre></td></tr></table></figure>
+
+<h3 id="恢复(Resitution)">恢复(Resitution)</h3>
+<p>为反弹的参数，它可以使对象弹起。恢复的值通常设置在0到1之间。恢复就是一个物体碰撞后反弹大小的参数，其值为0表示小球不会弹起，这称为非弹性碰撞。值为1表示小球的速度大小一样，只是方向相反，这称为完全弹性碰撞。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">float32 resitution;</div><div class="line">restitution = b2Max(shape1-&gt;resitution,shape2-&gt;resitution);</div></pre></td></tr></table></figure>
+
+<h3 id="帅选(Filtering)">帅选(Filtering)</h3>
+<p>用来设置某些游戏对象相互碰撞的关系。Box2D支持最多十六个种群进行筛选。在引擎中碰撞筛选是通过掩码来完成的。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">playerFixtureDef.filter.categoryBits = <span class="number">0x0002</span>;</div><div class="line">playerFixtureDef.filter.maskBits = <span class="number">0x0004</span>;</div><div class="line">monsterFixturDef.filter.categoryBits = <span class="number">0x0004</span>;</div><div class="line">monsterFixturDef.filter.maskBits = <span class="number">0x0002</span>;</div></pre></td></tr></table></figure>
+
+<p>还可以进行分组，可以让同一组内的所有框架总是互相碰撞(正索引)或者永不碰撞(负索引)</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">fixture1Def.filter.groupIndex = <span class="number">2</span>;</div><div class="line">fixture2Def.filter.groupIndex = <span class="number">2</span>;</div><div class="line">fixture3Def.filter.groupIndex = -<span class="number">8</span>;</div><div class="line">fixture4Def.filter.groupIndex = -<span class="number">8</span>;</div></pre></td></tr></table></figure>
+
+<ol>
+<li>静态物体上的框架永远不会与两一个静态物体上的框架发生碰撞，因为静态物体根本不会移动</li>
+<li>同一个物体上的框架永远不会相互碰撞</li>
+<li>如果物体用关节连接起来了，物体上的框架可以选择启用或禁止它们之间相互碰撞。<h3 id="感应器(Sensors)">感应器(Sensors)</h3>
+感应器是用来检测两个框架是否相交的对象。可以将任何一个框架对象设置为感应器，感应器可以是静态或者动态的。感应器发生碰撞时，是不会生成接触点的。</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">b2Contact::IsTouching	<span class="comment">// 这个函数可以得到感应器是否接触</span></div><div class="line">b2ContactListener::BeginContact和EndContact <span class="comment">// 开始接触点和结束接触点</span></div></pre></td></tr></table></figure>
+
+<h2 id="物体Bodies">物体Bodies</h2>
+<p>Box2D的物体均为刚体，它具有质量和惯性，运动状态由重心和受力决定，动态速度由线速度和角速度控制，可分为三类</p>
+<ol>
+<li>静态物体(b2_staticBody)质量为0，在模拟时，静态不可移动，不过可以手动设置移动。速度为零。另外它不会和其他静态、平台物体碰撞。</li>
+<li>平台物体(b2_kinematicBody)<br>是按照固定轨迹在运动的物体，其质量也为零，可以预设一个速度，它也不会和其他的静态或平台物体相互碰撞。</li>
+<li>动态物体(b2_dynamicBody)<br>具有质量、速度、摩擦等，它将会参与引擎中的碰撞检测与物理模拟。可以与物理世界中任何对象发生碰撞。<br>上述物体都可以被施加外力(forces)、扭矩(torques)、冲量(impulses)<h3 id="位置和角度(Position_and_Angle)">位置和角度(Position and Angle)</h3>
+是物体的最基本的属性，也就是物理世界都不会缺少这两个属性。<br>物体的两个主要有两个属性是最最主要的：</li>
+<li>第一个是物体的原点</li>
+<li>第二个是物体的知心，可以显式地通过<code>b2MassData</code>来设置。</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">bodyDef.position.Set(<span class="number">0.0f</span>,<span class="number">2.0f</span>); 	<span class="comment">// body的原点</span></div><div class="line">bodyDef.angle = <span class="number">0.25f</span> * b2_pi;		<span class="comment">// 弧度制下body的角</span></div></pre></td></tr></table></figure>
+
+<p>在引擎运转过程中，物体的位置和角度也会随时地改变。也可以通过物体类中的函数来改变。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span> SetTransform(<span class="keyword">const</span> b2Vec2& position,float32 angle);</div></pre></td></tr></table></figure>
+
+<h3 id="阻尼(Damping)">阻尼(Damping)</h3>
+<p>用于表示减小物体的世界中的速度的数值。阻尼和摩擦有所不同，摩擦仅在物体有接触的时候才会发生，而阻尼却时时刻刻阻碍着物体运动，比如空气阻力。阻尼参数的数值范围可以是从零到无穷大。通常来说阻尼的值应该在0~0.1之间。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">bodyDef.linearDamping = <span class="number">0.0f</span>;</div><div class="line">bodyDef.angularDamping = <span class="number">0.01f</span>;</div></pre></td></tr></table></figure>
+
+<h3 id="休眠参数(Sleep_Parameters)">休眠参数(Sleep Parameters)</h3>
+<p>确定一个物体已经停止了移动时，物体就会进入休眠状态，休眠物体只消耗很小的CPU开销。接触到一个醒着的物体，物体就会被唤醒，物体上艹关节或触点被销毁的时候，也会醒来。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">bodyDef.allowSleep = <span class="keyword">true</span>;	<span class="comment">// 可以休眠</span></div><div class="line">bodyDef.awake = ture;	<span class="comment">// 休眠物体</span></div></pre></td></tr></table></figure>
+
+<h3 id="固定旋转(Fixed_Rotation)">固定旋转(Fixed Rotation)</h3>
+<p>通过<code>bodyDef.fixedRotation = ture</code>物体的转动惯量设置成零，物体会保持初始化的角度，而不会发生旋转。</p>
+<h3 id="子弹(Bullets)">子弹(Bullets)</h3>
+<p>子弹通常指一类速度很快而尺寸较小的物体，容易击穿其他物体。<code>bodyDef.bullet = true</code></p>
+<h3 id="活动状态(Activation)">活动状态(Activation)</h3>
+<p>一个非活动状态的物体，将完全地与世隔绝，不会参与物理模拟和碰撞检测，关节也不会被迷你。<code>bodyDef.active = true</code></p>
+<h3 id="用户数据(User_Data)">用户数据(User Data)</h3>
+<p>一个存放用户数据的void指针，通常保存精灵对象</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">b2BodyDef bodyDef;</div><div class="line">bodyDef.userData = &myActor;</div></pre></td></tr></table></figure>
+
+<h2 id="关节(Joints)">关节(Joints)</h2>
+<p>关节是将两个或两个以上物体连接在一起的对象，主要有三个作用</p>
+<ol>
+<li>用于连接物体</li>
+<li>用于限制物体的移动，是一种约束</li>
+<li>它本身是一个能够活动的对象<h3 id="关节的定义(JointDef)">关节的定义(JointDef)</h3>
+关节包含一个用户数据的void指针，可以指定游戏元素，希望关节上的两个物体也能够发生碰撞，可以设置<code>collideConnected</code>布尔值来允许连接的物体之间进行碰撞。</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Cocos2d-X/">Cocos2d-X</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Box2D/">Box2D</a><a href="/tags/物理引擎/">物理引擎</a>
+  </div>
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://seniorzhai.github.io/2014/08/19/Box2D/" data-title="Box2D | Zoe&#39;s blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/08/19/Android-Activity-Fragment生命周期/" title="Android Activity Fragment生命周期">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Android Activity Fragment生命周期</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/08/18/AndroidStudio使用指南/"  title="AndroidStudio使用指南">
+ <strong>下一篇：</strong><br/> 
+ <span>AndroidStudio使用指南
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#概念"><span class="toc-number">2.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模块"><span class="toc-number">3.</span> <span class="toc-text">模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据单位"><span class="toc-number">4.</span> <span class="toc-text">数据单位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用户数据"><span class="toc-number">5.</span> <span class="toc-text">用户数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#物理世界World"><span class="toc-number">6.</span> <span class="toc-text">物理世界World</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#世界运转起来"><span class="toc-number">7.</span> <span class="toc-text">世界运转起来</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#探索世界"><span class="toc-number">8.</span> <span class="toc-text">探索世界</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AABB查询"><span class="toc-number">9.</span> <span class="toc-text">AABB查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#光线投射(Ray_Casts)"><span class="toc-number">10.</span> <span class="toc-text">光线投射(Ray Casts)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#形状Shapes"><span class="toc-number">11.</span> <span class="toc-text">形状Shapes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#圆形(Circle_Shapes)"><span class="toc-number">11.1.</span> <span class="toc-text">圆形(Circle Shapes)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多边形(Polygon_Shape)"><span class="toc-number">11.2.</span> <span class="toc-text">多边形(Polygon Shape)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#框架Fixtures"><span class="toc-number">12.</span> <span class="toc-text">框架Fixtures</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#密度(Density)"><span class="toc-number">12.1.</span> <span class="toc-text">密度(Density)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#摩擦(Friction)"><span class="toc-number">12.2.</span> <span class="toc-text">摩擦(Friction)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#恢复(Resitution)"><span class="toc-number">12.3.</span> <span class="toc-text">恢复(Resitution)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#帅选(Filtering)"><span class="toc-number">12.4.</span> <span class="toc-text">帅选(Filtering)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#感应器(Sensors)"><span class="toc-number">12.5.</span> <span class="toc-text">感应器(Sensors)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#物体Bodies"><span class="toc-number">13.</span> <span class="toc-text">物体Bodies</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#位置和角度(Position_and_Angle)"><span class="toc-number">13.1.</span> <span class="toc-text">位置和角度(Position and Angle)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#阻尼(Damping)"><span class="toc-number">13.2.</span> <span class="toc-text">阻尼(Damping)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#休眠参数(Sleep_Parameters)"><span class="toc-number">13.3.</span> <span class="toc-text">休眠参数(Sleep Parameters)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#固定旋转(Fixed_Rotation)"><span class="toc-number">13.4.</span> <span class="toc-text">固定旋转(Fixed Rotation)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#子弹(Bullets)"><span class="toc-number">13.5.</span> <span class="toc-text">子弹(Bullets)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#活动状态(Activation)"><span class="toc-number">13.6.</span> <span class="toc-text">活动状态(Activation)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用户数据(User_Data)"><span class="toc-number">13.7.</span> <span class="toc-text">用户数据(User Data)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关节(Joints)"><span class="toc-number">14.</span> <span class="toc-text">关节(Joints)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#关节的定义(JointDef)"><span class="toc-number">14.1.</span> <span class="toc-text">关节的定义(JointDef)</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/Android/" title="Android">Android<sup>184</sup></a></li>
+		
+			<li><a href="/categories/Camera/" title="Camera">Camera<sup>1</sup></a></li>
+		
+			<li><a href="/categories/Cocos2d-X/" title="Cocos2d-X">Cocos2d-X<sup>11</sup></a></li>
+		
+			<li><a href="/categories/Prose/" title="Prose">Prose<sup>27</sup></a></li>
+		
+			<li><a href="/categories/Python/" title="Python">Python<sup>22</sup></a></li>
+		
+			<li><a href="/categories/ReactNative/" title="ReactNative">ReactNative<sup>7</sup></a></li>
+		
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>79</sup></a></li>
+		
+			<li><a href="/categories/node-js/" title="node.js">node.js<sup>29</sup></a></li>
+		
+			<li><a href="/categories/杂文/" title="杂文">杂文<sup>3</sup></a></li>
+		
+		</ul>
+		<ul>
+		<script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"></script>
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AFNetworking/" style="font-size: 10.00px;">AFNetworking</a><a href="/tags/APK/" style="font-size: 10.00px;">APK</a><a href="/tags/AS/" style="font-size: 10.00px;">AS</a><a href="/tags/Adapter/" style="font-size: 10.00px;">Adapter</a><a href="/tags/Android/" style="font-size: 20.00px;">Android</a><a href="/tags/Android-5-0/" style="font-size: 10.00px;">Android 5.0</a><a href="/tags/Android-Studio/" style="font-size: 13.33px;">Android Studio</a><a href="/tags/AndroidAninotations/" style="font-size: 10.00px;">AndroidAninotations</a><a href="/tags/AndroidStudio/" style="font-size: 18.33px;">AndroidStudio</a><a href="/tags/Animation/" style="font-size: 15.00px;">Animation</a><a href="/tags/Api/" style="font-size: 13.33px;">Api</a><a href="/tags/App/" style="font-size: 10.00px;">App</a><a href="/tags/Apple/" style="font-size: 10.00px;">Apple</a><a href="/tags/Async/" style="font-size: 10.00px;">Async</a><a href="/tags/Atom/" style="font-size: 11.67px;">Atom</a><a href="/tags/BaseAdapter/" style="font-size: 10.00px;">BaseAdapter</a><a href="/tags/Blur/" style="font-size: 10.00px;">Blur</a><a href="/tags/Box2D/" style="font-size: 10.00px;">Box2D</a><a href="/tags/Broadcast/" style="font-size: 10.00px;">Broadcast</a><a href="/tags/CardView/" style="font-size: 10.00px;">CardView</a><a href="/tags/CocoaPods/" style="font-size: 10.00px;">CocoaPods</a><a href="/tags/Cocos2d-X/" style="font-size: 16.67px;">Cocos2d-X</a><a href="/tags/CocosPods/" style="font-size: 10.00px;">CocosPods</a><a href="/tags/ContentProvider/" style="font-size: 10.00px;">ContentProvider</a><a href="/tags/Context/" style="font-size: 10.00px;">Context</a><a href="/tags/Crouton/" style="font-size: 10.00px;">Crouton</a><a href="/tags/CursorLoader/" style="font-size: 10.00px;">CursorLoader</a><a href="/tags/Demo/" style="font-size: 11.67px;">Demo</a><a href="/tags/Dialog/" style="font-size: 10.00px;">Dialog</a><a href="/tags/EditView/" style="font-size: 10.00px;">EditView</a><a href="/tags/EventBus/" style="font-size: 10.00px;">EventBus</a><a href="/tags/Express/" style="font-size: 10.00px;">Express</a><a href="/tags/Express学习笔记/" style="font-size: 10.00px;">Express学习笔记</a><a href="/tags/Flex/" style="font-size: 10.00px;">Flex</a><a href="/tags/Fragment/" style="font-size: 11.67px;">Fragment</a><a href="/tags/GET/" style="font-size: 10.00px;">GET</a><a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/Gradle/" style="font-size: 11.67px;">Gradle</a><a href="/tags/GridLayout/" style="font-size: 10.00px;">GridLayout</a><a href="/tags/GridView/" style="font-size: 11.67px;">GridView</a>
+    </div>
+  </div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">25</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a><span class="archive-list-count">42</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">June 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">20</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a><span class="archive-list-count">24</span></li></ul>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://imid.me/" target="_blank" title="iMID">iMID's Blog</a></li>
+      <li><a href="http://www.trinea.cn/" target="_blank" title="trinea">Trinea's Blog</a></li>
+      <li><a href="http://stormzhang.github.io/" target="_blank" title="stormzhang">StormZhang's Blog</a></li>
+      <li><a href="http://daimajia.com/" target="_blank" title="daimajia">DaiMaJia.Blog</a></li>
+      <li><a href="http://macrotea.com/welcome/" target="_blank" title="daimajia">Macrotea.Blog</a></li>
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello,I&#39;m Zoe,a Android and iOS developers. <br/>
+			This is my blog,I hope you will enjoy them.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2292032577" target="_blank" class="icon-weibo" title="weibo"></a>
+		
+		
+		<a href="https://github.com/seniorzhai" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:developer.zhaitao@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2016 
+		
+		<a href="http://seniorzhai.github.io/about" target="_blank" title="Zoe">Zoe</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zt1991616"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-54646832-1', 'null');  
+ga('send', 'pageview');
+</script>
+
+
+
+
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<script src="/js/totop.js"></script>
+
+
+
+
+  </body>
+</html>
+
+<a href="https://github.com/seniorzhai"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>

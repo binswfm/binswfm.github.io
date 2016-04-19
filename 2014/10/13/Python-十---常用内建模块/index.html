@@ -1,0 +1,517 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="google-site-verification" content="WNyUn91IXtlyHB-gfFfg8K6MCkItzKWdzzw_Nh17ksE" />
+  <meta name="baidu-site-verification" content="e5ZaZQ3Tx8" />
+  
+    <title>Python-十 - 常用内建模块 | Zoe&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Zoe">
+    
+    <meta name="description" content="collections是Python内建的一个集合模块，提供了许多有用的集合类。">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Zoe&#39;s blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Zoe&#39;s blog" title="Zoe&#39;s blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Zoe&#39;s blog">Zoe&#39;s blog</a></h1>
+				<h2 class="blog-motto">宅学长的博客</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:seniorzhai.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/10/13/Python-十---常用内建模块/" title="Python-十 - 常用内建模块" itemprop="url">Python-十 - 常用内建模块</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://seniorzhai.github.io/about" title="Zoe" target="_blank" itemprop="author">Zoe</a>
+		
+  <p class="article-time">
+    <time datetime="2014-10-13T03:17:22.000Z" itemprop="datePublished"> 发表于 10月 13 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#namedtuple"><span class="toc-number">1.</span> <span class="toc-text">namedtuple</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#deque"><span class="toc-number">2.</span> <span class="toc-text">deque</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#defaultdict"><span class="toc-number">3.</span> <span class="toc-text">defaultdict</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OrderedDict"><span class="toc-number">4.</span> <span class="toc-text">OrderedDict</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Counter"><span class="toc-number">5.</span> <span class="toc-text">Counter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#base64"><span class="toc-number">6.</span> <span class="toc-text">base64</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#struct"><span class="toc-number">7.</span> <span class="toc-text">struct</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hashlib"><span class="toc-number">8.</span> <span class="toc-text">hashlib</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#摘要算法的应用"><span class="toc-number">8.1.</span> <span class="toc-text">摘要算法的应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XML"><span class="toc-number">9.</span> <span class="toc-text">XML</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTMLParser"><span class="toc-number">10.</span> <span class="toc-text">HTMLParser</span></a></li></ol>
+		
+		</div>
+		
+		<p>collections是Python内建的一个集合模块，提供了许多有用的集合类。<br><a id="more"></a></p>
+<h2 id="namedtuple">namedtuple</h2>
+<p><code>tuple</code>可以表示不变集合，例如一个二维坐标就可以表示成<code>p = (1,2)</code><br>如果使用class表示太过臃肿，<code>namedtuple</code>就可以派上用场</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> namedtuple</div><div class="line">Point namedtuple(<span class="string">'Point'</span>,[<span class="string">'x'</span>,<span class="string">'y'</span>])</div><div class="line">p = Point(<span class="number">1</span>,<span class="number">2</span>)</div></pre></td></tr></table></figure>
+
+<p><code>namedtuple</code>是一个函数，用来创建自定义的<code>tuple</code>对象，并且规定了<code>tuple</code>元素的个数，并可以用属性而不是索引来引用<code>tuple</code>的某个元素</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 定义一个圆</span></div><div class="line">Circle = namedtuple(<span class="string">'Circle'</span>,[<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'r'</span>])</div></pre></td></tr></table></figure>
+
+<h2 id="deque">deque</h2>
+<p><code>deque</code>可以高效地实现插入和删除操作的双向列表，适用于队列和栈</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> deque</div><div class="line">q = deque([<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>])</div><div class="line">q.append(<span class="string">'x'</span>)</div><div class="line">q.appendleft(<span class="string">'y'</span>)	<span class="comment"># 添加到头部</span></div></pre></td></tr></table></figure>
+
+<p><code>deque</code>除了实现list的<code>append()</code>和<code>pop()</code>外，还支持<code>appendleft()</code>和<code>popleft()</code>可以头部添加或删除元素</p>
+<h2 id="defaultdict">defaultdict</h2>
+<p>适用<code>dict</code>时，如果引用的key不存在，就会抛出<code>KeyError</code>，如果希望不存在时，返回一个默认值，就可以用<code>defaultdict</code>:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> defaultdict</div><div class="line">dd = defaultdict(<span class="keyword">lambda</span>: <span class="string">'N/A'</span>)</div><div class="line">dd[<span class="string">'key1'</span>] = <span class="string">'abc'</span></div><div class="line">dd[<span class="string">'key2'</span>]	<span class="comment"># 'N/A'</span></div></pre></td></tr></table></figure>
+
+<h2 id="OrderedDict">OrderedDict</h2>
+<p><code>dict</code>的Key是无序的，<code>OrderedDict</code>的key会按照插入的顺序排列，不是Key本身的排序</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> OrderedDict</div><div class="line">od = OrderedDict([(<span class="string">'a'</span>, <span class="number">1</span>), (<span class="string">'b'</span>, <span class="number">2</span>), (<span class="string">'c'</span>, <span class="number">3</span>)])</div></pre></td></tr></table></figure>
+
+<p><code>OrderedDict</code>可以实现一个FIFO（先进先出）的dict，当容量超出限制时，先删除最早添加的Key：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> OrderedDict</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">LastUpdatedOrderedDict</span><span class="params">(OrderedDict)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, capacity)</span>:</span></div><div class="line">        super(LastUpdatedOrderedDict, self).__init__()</div><div class="line">        self._capacity = capacity</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__setitem__</span><span class="params">(self, key, value)</span>:</span></div><div class="line">        containsKey = <span class="number">1</span> <span class="keyword">if</span> key <span class="keyword">in</span> self <span class="keyword">else</span> <span class="number">0</span></div><div class="line">        <span class="keyword">if</span> len(self) - containsKey &gt;= self._capacity:</div><div class="line">            last = self.popitem(last=<span class="keyword">False</span>)</div><div class="line">            <span class="keyword">print</span> <span class="string">'remove:'</span>, last</div><div class="line">        <span class="keyword">if</span> containsKey:</div><div class="line">            <span class="keyword">del</span> self[key]</div><div class="line">            <span class="keyword">print</span> <span class="string">'set:'</span>, (key, value)</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            <span class="keyword">print</span> <span class="string">'add:'</span>, (key, value)</div><div class="line">        OrderedDict.__setitem__(self, key, value)</div></pre></td></tr></table></figure>
+
+<h2 id="Counter">Counter</h2>
+<p><code>Counter</code>是<code>dict</code>的子类，是一个简单的计数器</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</div><div class="line">c = Counter()</div><div class="line"><span class="keyword">for</span> ch <span class="keyword">in</span> <span class="string">'programming'</span>:</div><div class="line">	c[ch] = c[ch] + <span class="number">1</span></div><div class="line">c <span class="comment"># Counter({'g': 2, 'm': 2, 'r': 2, 'a': 1, 'i': 1, 'o': 1, 'n': 1, 'p': 1})</span></div></pre></td></tr></table></figure>
+
+<h2 id="base64">base64</h2>
+<p>Base64是一种用64个字符表示任意二进制数据的方法<br>Base64的原理很简单，首先准备一个包含64个字符的数组：<br>    [‘A’, ‘B’, ‘C’, … ‘a’, ‘b’, ‘c’, … ‘0’, ‘1’, … ‘+’, ‘/‘]<br>每3个字节一组，一共<code>3x8=24bit</code>，划为4组，每组正好6bit:</p>
+<p><img src="/img/14101301.png" alt=""></p>
+<p>这样的得到4个字数作为索引，然后查表，获得相应的4个字符，就是编码后的字符串<br>Base64编码会把3个字节的二进制数据编码为4字节的文本数据，长度增加33%，好处是编码后的文本数据可以在邮件正文、网页等直接显示<br>如果要编码的二进制数据不是3的倍数，最后会剩下1个或2个字节怎么办？Base64用\x00字节在末尾补足后，再在编码的末尾加上1个或2个=号，表示补了多少字节，解码的时候，会自动去掉</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> base64</div><div class="line">base64.b64encode(<span class="string">'binary\x00string'</span>)	<span class="comment"># 'YmluYXJ5AHN0cmluZw=='</span></div><div class="line">base64.b64decode(<span class="string">'YmluYXJ5AHN0cmluZw=='</span>)<span class="comment"># 'binary\x00string'</span></div></pre></td></tr></table></figure>
+
+<p>标准的Base64编码后可能出线<code>+</code>和<code>/</code>，在URL就不能直接作为参数，可以使用<code>url safe</code>的base编码，把字符<code>+</code>和<code>/</code>分别变成<code>-</code>和<code>_</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">base64.b64encode(<span class="string">'i\xb7\x1d\xfb\xef\xff'</span>)	<span class="comment"># 'abcd++//'</span></div><div class="line">base64.urlsafe_b64encode(<span class="string">'i\xb7\x1d\xfb\xef\xff'</span>)	<span class="comment"># 'abcd--__'</span></div><div class="line">base64.urlsafe_b64decode(<span class="string">'abcd--__'</span>)	<span class="comment"># 'i\xb7\x1d\xfb\xef\xff'</span></div></pre></td></tr></table></figure>
+
+<p>由于<code>=</code>字符会出现在<code>Base64</code>编码中，但<code>=</code>用在URL、Cookie里面会造成歧义，很多Base64编码后会把<code>=</code>去掉<br>因为Base64是把3个字节变成4个字节，所以Base64编码的长度永远是4的倍数，去掉<code>=</code>后，解码时增加<code>=</code>到4的倍数，再正常解码</p>
+<h2 id="struct">struct</h2>
+<p>Python的<code>struct</code>模块用来处理<code>str</code>和其他二进制数据类型的转换</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> struct</div><div class="line">struct.pack(<span class="string">'&gt;I'</span>,<span class="number">10240099</span>)	<span class="comment"># '\x00\x9c@c' 把任意数据类型变成字符串</span></div></pre></td></tr></table></figure>
+
+<p><code>pack</code>第一个参数是处理指令，<code>&gt;</code>表示字节顺序是big-endian(网络序)，<code>I</code>表示4字节无符号整数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">struct.unpack(<span class="string">'&gt;IH'</span>,<span class="string">'\xf0\xf0\xf0\xf0\x80\x80'</span>)	<span class="comment"># (4042322160,32896)</span></div></pre></td></tr></table></figure>
+
+<p><code>H</code>表示2字节无符号整数<br>Windows的位图文件（.bmp）是一种非常简单的文件格式，我们来用struct分析一下。<br>首先找一个bmp文件，没有的话用“画图”画一个。<br>读入前30个字节来分析：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="prompt">&gt;&gt;&gt; </span>s = <span class="string">'\x42\x4d\x38\x8c\x0a\x00\x00\x00\x00\x00\x36\x00\x00\x00\x28\x00\x00\x00\x80\x02\x00\x00\x68\x01\x00\x00\x01\x00\x18\x00'</span></div><div class="line">BMP格式采用小端方式存储数据，文件头的结构按顺序如下：</div></pre></td></tr></table></figure>
+
+<p>两个字节：’BM’表示Windows位图，’BA’表示OS/2位图； 一个4字节整数：表示位图大小； 一个4字节整数：保留位，始终为0； 一个4字节整数：实际图像的偏移量； 一个4字节整数：Header的字节数； 一个4字节整数：图像宽度； 一个4字节整数：图像高度； 一个2字节整数：始终为1； 一个2字节整数：颜色数。<br>所以，组合起来用unpack读取：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="prompt">&gt;&gt;&gt; </span>struct.unpack(<span class="string">'&lt;ccIIIIIIHH'</span>, s)</div><div class="line">(<span class="string">'B'</span>, <span class="string">'M'</span>, <span class="number">691256</span>, <span class="number">0</span>, <span class="number">54</span>, <span class="number">40</span>, <span class="number">640</span>, <span class="number">360</span>, <span class="number">1</span>, <span class="number">24</span>)</div></pre></td></tr></table></figure>
+
+<p>结果显示，’B’、’M’说明是Windows位图，位图大小为640x360，颜色数为24。</p>
+<h2 id="hashlib">hashlib</h2>
+<p>hashlib提供了常见的摘要算法，如MD5，SHA1等<br>摘要算法又称为哈希算法、散列算法，通过函数把任意长度的数据转换成为一个长度固定的数据串(通常用16进制的字符串表示)<br>摘要算法是单向的，反向推导十分困难，原始数据有一点改动，都会导致计算出的摘要完全不同</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> hashlib</div><div class="line"></div><div class="line">md5 = hashlib.md5()</div><div class="line">md5.update(<span class="string">'how to use md5 in python hashlib?'</span>)</div><div class="line"><span class="keyword">print</span> md5.hexdugest()	<span class="comment"># d26a53750bc40b38b65a520292f69306</span></div><div class="line"><span class="comment"># 如果数据量很大，可以多次调用update()</span></div><div class="line">md5.update(<span class="string">'how to use md5 in'</span>)</div><div class="line">md5.update(<span class="string">'python hashlib?'</span>)</div></pre></td></tr></table></figure>
+
+<p>MD5是最常见的摘要算法，速度很快，生成结果是固定的128bit字节，通常用一个32位的16进制字符串表示<br>常见的摘要算法还有SHA1:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> hashlib</div><div class="line"></div><div class="line">sha1 = hashlib.sha1()</div><div class="line">sha1.update(<span class="string">'how to use sha1 in '</span>)</div><div class="line">sha1.update(<span class="string">'python hashlib?'</span>)</div><div class="line"><span class="keyword">print</span> sha1.hexdigest()</div></pre></td></tr></table></figure>
+
+<p>SHA1的结果是160bit字节，通常用一个40位的16进制字符串表示<br>比SHA1更安全的算法是SHA256和SHA512，不过越安全的算法越慢，而且摘要长度更长</p>
+<h3 id="摘要算法的应用">摘要算法的应用</h3>
+<p>比如用户的密码，使用明文保存十分的不安全，可以使用摘要算法保存摘要<br>一些常用口令的MD5值容易被计算出来，所以可以在用户口令基础上加复杂的字符串实现<code>加盐算法</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">calc_md5</span><span class="params">(password)</span>:</span></div><div class="line">	<span class="keyword">return</span> get_md5(password + <span class="string">'the-Salt'</span>)</div></pre></td></tr></table></figure>
+
+<p>只要Salt(盐)不泄露，即使再简单的MD5反推明文也是很难实现的</p>
+<h2 id="XML">XML</h2>
+<p>XML作为一种包装数据的形式，使用的范围越来越小，远远不及JSON，但是还是有必要了解<br>操作XML有两种方法：DOM和SAX，DOM会把整个XML读入到内存，因此占用内存大，解析慢，但是可以访问任意树的节点。SAX是流模式，边读边解析，占用内存小，解析快，但是要处理事件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 解析&lt;a href="/"&gt;python&lt;/a&gt;</span></div><div class="line"><span class="keyword">from</span> xml.parsers.expat <span class="keyword">import</span> ParseCreate</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">DefaultSaxHandler</span><span class="params">(object)</span>:</span></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">start_element</span><span class="params">(self,name,attrs)</span>:</span></div><div class="line">		print(<span class="string">'sax:start_element:%s,attrs:%s'</span> % (name,str(attrs)))</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">end_elemnet</span><span class="params">(self,name)</span>:</span></div><div class="line">		print(<span class="string">'sax:end_element:%s'</span> % name)</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">char_data</span><span class="params">(self,text)</span>:</span></div><div class="line">		print(<span class="string">'sax:char_data:%s'</span> % text)</div><div class="line"></div><div class="line">handler = DefaultSaxHandler()</div><div class="line">parser = ParserCreate()</div><div class="line">parser.returns_unicode = <span class="keyword">True</span>	<span class="comment"># 返回element名称和char_data都是unicode</span></div><div class="line">parser.StartElementHandler = handler.start_element</div><div class="line">parser.EndElementHandler = handler.end_element</div><div class="line">parser.CharacterDataHandler = handler.char_data</div><div class="line">parser.Parse(xml)</div></pre></td></tr></table></figure>
+
+<h2 id="HTMLParser">HTMLParser</h2>
+<p>HTML是XML子集，语法不如XML严格，解析时可以使用HTMLParser</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> HTMLParser <span class="keyword">import</span> HTMLParser</div><div class="line"><span class="keyword">from</span> htmlentitydefs <span class="keyword">import</span> name2codepoint</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyHTMLParser</span><span class="params">(HTMLParser)</span>:</span></div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">handle_starttag</span><span class="params">(self,tag,attrs)</span>:</span></div><div class="line">		print(<span class="string">'&lt;%s&gt;'</span> % tag)</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">handle_endtag</span><span class="params">(self,tag)</span>:</span></div><div class="line">		print(<span class="string">'&lt;/%s&gt;'</span> % tag)</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">handle_startendtag</span><span class="params">(self,tag,attrs)</span>:</span></div><div class="line">		print(<span class="string">'&lt;%s/&gt;'</span> % tag)</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">handle_data</span><span class="params">(self,data)</span>:</span></div><div class="line">		print(<span class="string">'data'</span>)</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">handle_comment</span><span class="params">(self,data)</span>:</span></div><div class="line">		print(<span class="string">'&lt;!-- --&gt;'</span>)</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">handle_entityref</span><span class="params">(self,name)</span>:</span></div><div class="line">		print(<span class="string">'&%s;'</span> % name)</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">handle_charref</span><span class="params">(self,name)</span>:</span></div><div class="line">		print(<span class="string">'&#%s;'</span> % name)</div><div class="line"></div><div class="line">parser = MyHTMLParser()</div><div class="line">parser.feed(<span class="string">'&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;Some &lt;a href=\"#\"&gt;html&lt;/a&gt; tutorial...&lt;br&gt;END&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;'</span>)</div></pre></td></tr></table></figure>
+
+<p><code>feed</code>可以调用多次，不一定要一次性把HTML字符串都塞进去</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Python/">Python</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Python/">Python</a>
+  </div>
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://seniorzhai.github.io/2014/10/13/Python-十---常用内建模块/" data-title="Python-十 - 常用内建模块 | Zoe&#39;s blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/10/13/Lambda/" title="Lambda">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Lambda</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/10/13/Python小技巧/"  title="Python小技巧">
+ <strong>下一篇：</strong><br/> 
+ <span>Python小技巧
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#namedtuple"><span class="toc-number">1.</span> <span class="toc-text">namedtuple</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#deque"><span class="toc-number">2.</span> <span class="toc-text">deque</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#defaultdict"><span class="toc-number">3.</span> <span class="toc-text">defaultdict</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OrderedDict"><span class="toc-number">4.</span> <span class="toc-text">OrderedDict</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Counter"><span class="toc-number">5.</span> <span class="toc-text">Counter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#base64"><span class="toc-number">6.</span> <span class="toc-text">base64</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#struct"><span class="toc-number">7.</span> <span class="toc-text">struct</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hashlib"><span class="toc-number">8.</span> <span class="toc-text">hashlib</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#摘要算法的应用"><span class="toc-number">8.1.</span> <span class="toc-text">摘要算法的应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XML"><span class="toc-number">9.</span> <span class="toc-text">XML</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTMLParser"><span class="toc-number">10.</span> <span class="toc-text">HTMLParser</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/Android/" title="Android">Android<sup>184</sup></a></li>
+		
+			<li><a href="/categories/Camera/" title="Camera">Camera<sup>1</sup></a></li>
+		
+			<li><a href="/categories/Cocos2d-X/" title="Cocos2d-X">Cocos2d-X<sup>11</sup></a></li>
+		
+			<li><a href="/categories/Prose/" title="Prose">Prose<sup>27</sup></a></li>
+		
+			<li><a href="/categories/Python/" title="Python">Python<sup>22</sup></a></li>
+		
+			<li><a href="/categories/ReactNative/" title="ReactNative">ReactNative<sup>7</sup></a></li>
+		
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>79</sup></a></li>
+		
+			<li><a href="/categories/node-js/" title="node.js">node.js<sup>29</sup></a></li>
+		
+			<li><a href="/categories/杂文/" title="杂文">杂文<sup>3</sup></a></li>
+		
+		</ul>
+		<ul>
+		<script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"></script>
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AFNetworking/" style="font-size: 10.00px;">AFNetworking</a><a href="/tags/APK/" style="font-size: 10.00px;">APK</a><a href="/tags/AS/" style="font-size: 10.00px;">AS</a><a href="/tags/Adapter/" style="font-size: 10.00px;">Adapter</a><a href="/tags/Android/" style="font-size: 20.00px;">Android</a><a href="/tags/Android-5-0/" style="font-size: 10.00px;">Android 5.0</a><a href="/tags/Android-Studio/" style="font-size: 13.33px;">Android Studio</a><a href="/tags/AndroidAninotations/" style="font-size: 10.00px;">AndroidAninotations</a><a href="/tags/AndroidStudio/" style="font-size: 18.33px;">AndroidStudio</a><a href="/tags/Animation/" style="font-size: 15.00px;">Animation</a><a href="/tags/Api/" style="font-size: 13.33px;">Api</a><a href="/tags/App/" style="font-size: 10.00px;">App</a><a href="/tags/Apple/" style="font-size: 10.00px;">Apple</a><a href="/tags/Async/" style="font-size: 10.00px;">Async</a><a href="/tags/Atom/" style="font-size: 11.67px;">Atom</a><a href="/tags/BaseAdapter/" style="font-size: 10.00px;">BaseAdapter</a><a href="/tags/Blur/" style="font-size: 10.00px;">Blur</a><a href="/tags/Box2D/" style="font-size: 10.00px;">Box2D</a><a href="/tags/Broadcast/" style="font-size: 10.00px;">Broadcast</a><a href="/tags/CardView/" style="font-size: 10.00px;">CardView</a><a href="/tags/CocoaPods/" style="font-size: 10.00px;">CocoaPods</a><a href="/tags/Cocos2d-X/" style="font-size: 16.67px;">Cocos2d-X</a><a href="/tags/CocosPods/" style="font-size: 10.00px;">CocosPods</a><a href="/tags/ContentProvider/" style="font-size: 10.00px;">ContentProvider</a><a href="/tags/Context/" style="font-size: 10.00px;">Context</a><a href="/tags/Crouton/" style="font-size: 10.00px;">Crouton</a><a href="/tags/CursorLoader/" style="font-size: 10.00px;">CursorLoader</a><a href="/tags/Demo/" style="font-size: 11.67px;">Demo</a><a href="/tags/Dialog/" style="font-size: 10.00px;">Dialog</a><a href="/tags/EditView/" style="font-size: 10.00px;">EditView</a><a href="/tags/EventBus/" style="font-size: 10.00px;">EventBus</a><a href="/tags/Express/" style="font-size: 10.00px;">Express</a><a href="/tags/Express学习笔记/" style="font-size: 10.00px;">Express学习笔记</a><a href="/tags/Flex/" style="font-size: 10.00px;">Flex</a><a href="/tags/Fragment/" style="font-size: 11.67px;">Fragment</a><a href="/tags/GET/" style="font-size: 10.00px;">GET</a><a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/Gradle/" style="font-size: 11.67px;">Gradle</a><a href="/tags/GridLayout/" style="font-size: 10.00px;">GridLayout</a><a href="/tags/GridView/" style="font-size: 11.67px;">GridView</a>
+    </div>
+  </div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">25</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a><span class="archive-list-count">42</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">June 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">20</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a><span class="archive-list-count">24</span></li></ul>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://imid.me/" target="_blank" title="iMID">iMID's Blog</a></li>
+      <li><a href="http://www.trinea.cn/" target="_blank" title="trinea">Trinea's Blog</a></li>
+      <li><a href="http://stormzhang.github.io/" target="_blank" title="stormzhang">StormZhang's Blog</a></li>
+      <li><a href="http://daimajia.com/" target="_blank" title="daimajia">DaiMaJia.Blog</a></li>
+      <li><a href="http://macrotea.com/welcome/" target="_blank" title="daimajia">Macrotea.Blog</a></li>
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello,I&#39;m Zoe,a Android and iOS developers. <br/>
+			This is my blog,I hope you will enjoy them.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2292032577" target="_blank" class="icon-weibo" title="weibo"></a>
+		
+		
+		<a href="https://github.com/seniorzhai" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:developer.zhaitao@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2016 
+		
+		<a href="http://seniorzhai.github.io/about" target="_blank" title="Zoe">Zoe</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zt1991616"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-54646832-1', 'null');  
+ga('send', 'pageview');
+</script>
+
+
+
+
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<script src="/js/totop.js"></script>
+
+
+
+
+  </body>
+</html>
+
+<a href="https://github.com/seniorzhai"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>

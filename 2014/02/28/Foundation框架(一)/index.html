@@ -1,0 +1,536 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="google-site-verification" content="WNyUn91IXtlyHB-gfFfg8K6MCkItzKWdzzw_Nh17ksE" />
+  <meta name="baidu-site-verification" content="e5ZaZQ3Tx8" />
+  
+    <title>Foundation框架(一) | Zoe&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Zoe">
+    
+    <meta name="description" content="字符串（NSString与NSMutableString）
+
+NSString代表字符串序列不可变的字符串，NSMutableString代表序列可变的字符串
+NSString常用方法
+
+1234567891011121314151617181920NSString *str = @&quot;This is">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Zoe&#39;s blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Zoe&#39;s blog" title="Zoe&#39;s blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Zoe&#39;s blog">Zoe&#39;s blog</a></h1>
+				<h2 class="blog-motto">宅学长的博客</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:seniorzhai.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/02/28/Foundation框架(一)/" title="Foundation框架(一)" itemprop="url">Foundation框架(一)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://seniorzhai.github.io/about" title="Zoe" target="_blank" itemprop="author">Zoe</a>
+		
+  <p class="article-time">
+    <time datetime="2014-02-28T04:46:48.000Z" itemprop="datePublished"> 发表于 2月 28 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#字符串（NSString与NSMutableString）"><span class="toc-number">1.</span> <span class="toc-text">字符串（NSString与NSMutableString）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#日期与时间（NSDate）"><span class="toc-number">2.</span> <span class="toc-text">日期与时间（NSDate）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#日期格式器（NSDateFormatter）"><span class="toc-number">3.</span> <span class="toc-text">日期格式器（NSDateFormatter）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#日历（NSCalendar）与日期组件（NSDateComponents）"><span class="toc-number">4.</span> <span class="toc-text">日历（NSCalendar）与日期组件（NSDateComponents）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#定时器（NSTimer）"><span class="toc-number">5.</span> <span class="toc-text">定时器（NSTimer）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对象复制"><span class="toc-number">6.</span> <span class="toc-text">对象复制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NSCopying与NSMutableCopy协议"><span class="toc-number">6.1.</span> <span class="toc-text">NSCopying与NSMutableCopy协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#浅复制(shallow_copy)与深复制(deep_copy)"><span class="toc-number">6.2.</span> <span class="toc-text">浅复制(shallow copy)与深复制(deep copy)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#setter方法的copy选项"><span class="toc-number">6.2.1.</span> <span class="toc-text">setter方法的copy选项</span></a></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<h2 id="字符串（NSString与NSMutableString）">字符串（NSString与NSMutableString）</h2>
+<ul>
+<li>NSString代表字符串序列不可变的字符串，NSMutableString代表序列可变的字符串</li>
+<li>NSString常用方法</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">NSString *<span class="keyword">str</span> = @<span class="string">"This is a String!"</span>;<span class="comment">//以字符串常量创建字符串</span></div><div class="line">NSString *<span class="keyword">str</span> = [[NSString alloc] init];</div><div class="line"><span class="keyword">str</span> = @<span class="string">"This is a String!"</span>;<span class="comment">//创建空字符串，赋值</span></div><div class="line">NSString *<span class="keyword">str</span> = [[NSString alloc] initWithString:@<span class="string">"This is a String!"</span><span class="comment">//初始化字符串</span></div><div class="line"><span class="keyword">char</span> *Cstring = <span class="string">"This is a String!"</span></div><div class="line">NSString *<span class="keyword">str</span> = [[NSString alloc] initWithCString:Cstring];<span class="comment">//以标准c字符串初始化创建字符串</span></div><div class="line">NSString *<span class="keyword">str</span> = [[NSString alloc] stringWithFormat:@<span class="string">"%s is a String"</span>,<span class="string">"This"</span>];<span class="comment">//格式化创建字符串</span></div><div class="line">NSString *path = [[NSBundle mainBundle] pathForResouce:@<span class="string">"text"</span> ofType:@<span class="string">"txt"</span>];</div><div class="line">NSString *<span class="keyword">str</span> = [[NSString alloc] initWithContentsOfFile:path];<span class="comment">//从文件创建字符串</span></div><div class="line">[<span class="keyword">str</span> writeToFile:path atomically:YES];<span class="comment">//写入文件</span></div><div class="line">BOOL result = [str1 isEqualToString:str2];<span class="comment">//判断相等与否</span></div><div class="line"><span class="keyword">str</span> = [<span class="keyword">str</span> stringByAppendingString:@<span class="string">"iOS!"</span>];<span class="comment">//追加字符串</span></div><div class="line"><span class="keyword">char</span>* cstr = [<span class="keyword">str</span> UTF8String];<span class="comment">//获取字符串对应的C风格字符串</span></div><div class="line">[<span class="keyword">str</span> length];<span class="comment">//获取字符串长度</span></div><div class="line">[<span class="keyword">str</span> lengthOfBytesUsingEncoding:NSUTF8StringEncoding];<span class="comment">//str按UTF-8字符集解码后字节数</span></div><div class="line">[<span class="keyword">str</span> substringToIndex:<span class="number">10</span>];<span class="comment">//获取str的前10个字符组成的字符串</span></div><div class="line">[<span class="keyword">str</span> substringFromIndex:<span class="number">5</span>];/获取从第<span class="number">5</span>个字符串开始，与后面字符组成的字符串</div><div class="line">[<span class="keyword">str</span> substringWithRange:NSMakeRange(<span class="number">5</span>,<span class="number">15</span>)];<span class="comment">//获取str从第5个字符开始，到第15个字符组成的字符串</span></div><div class="line">[<span class="keyword">str</span> rangeOfString:@<span class="string">"ios"</span>];<span class="comment">//返回ios在字符串中出现的位置</span></div><div class="line">[<span class="keyword">str</span> uppercassString];<span class="comment">//str所有字符转为大写</span></div></pre></td></tr></table></figure>
+
+<ul>
+<li>NSMutableString可改变序列</li>
+<li>NSMutableString常用方法</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[<span class="keyword">str</span> appendString:@<span class="string">",iOS"</span>];<span class="comment">//追加固定字符串</span></div><div class="line">[<span class="keyword">str</span> appendFormat:@<span class="string">"%s is ios"</span>,@<span class="string">",iOS"</span>];<span class="comment">//追加字符串</span></div><div class="line">[<span class="keyword">str</span> insertString:@<span class="string">"insert"</span> atIndex:<span class="number">6</span>];<span class="comment">//指定位置插入字符串</span></div><div class="line">[<span class="keyword">str</span> deleteCharactersInRange:NSMakeRange(<span class="number">6</span>,<span class="number">12</span>)];<span class="comment">//删除6到12位置的所有字符串</span></div><div class="line">[<span class="keyword">str</span> replaceCharactersInRange:NSMakeRange(<span class="number">6</span>,<span class="number">9</span>) withString:@<span class="string">"Objective-C"</span>];<span class="comment">//替换6到9位置的字符串</span></div></pre></td></tr></table></figure>
+
+<h2 id="日期与时间（NSDate）">日期与时间（NSDate）</h2>
+<ul>
+<li>常用方法</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSDate</span>* date1 = [<span class="built_in">NSDate</span> date];<span class="comment">//获取代表当前日期、时间的NSDate</span></div><div class="line"><span class="built_in">NSDate</span>* date2 = [[<span class="built_in">NSDate</span> alloc] initWithTimeIntervalSinceNow:<span class="number">3600</span>*<span class="number">24</span>];<span class="comment">//获取从当前时间开始3天之后的日期</span></div><div class="line"><span class="built_in">NSDate</span>* date3 = [<span class="built_in">NSDate</span> dateWithTimeIntervalSince1970:<span class="number">3600</span>*<span class="number">24</span>*<span class="number">366</span>*<span class="number">20</span>];<span class="comment">//从1970年1月1日开始，20年之后的日期</span></div><div class="line">NSLo</div><div class="line">cale* cn = [NSLocale currentLocale];<span class="comment">//获取本地位置</span></div><div class="line">[dete1 descriptionWithLocal:cn];<span class="comment">//过去NSDate在当前位置对应的字符串</span></div><div class="line">[date1 earlieDate:date2];<span class="comment">//获取两个日期之间较早的日期</span></div><div class="line">[date laterDate:date2];<span class="comment">//获取两个日期之间较晚的日期</span></div><div class="line"><span class="keyword">switch</span>([date1 compare date2])</div><div class="line">{</div><div class="line">    <span class="keyword">case</span> NSOrderedAscending:</div><div class="line">        <span class="keyword">break</span>;  <span class="comment">//date1在之前</span></div><div class="line">    <span class="keyword">case</span> NSOrderedSame:</div><div class="line">        <span class="keyword">break</span>;  <span class="comment">//date1与date2日期相同</span></div><div class="line">    <span class="keyword">case</span> NSOrderedDescending:</div><div class="line">        <span class="keyword">break</span>;  <span class="comment">//date1在之后</span></div><div class="line">}</div><div class="line">[date1 timeIntervalSinceDate:date2];<span class="comment">//时间差</span></div><div class="line">[date1 timeIntervalSinceNow];<span class="comment">//与现在时间差</span></div></pre></td></tr></table></figure>
+
+<pre><code><span class="addition">+ NSLocale待遇一个语言、国际环境</span>
+</code></pre><h2 id="日期格式器（NSDateFormatter）">日期格式器（NSDateFormatter）</h2>
+<ul>
+<li>NSDateFoematter代表一个日期格式器，用来完成NSDate与NSString之间的转换</li>
+</ul>
+<ol>
+<li>创建一个NSDateFormatter对象</li>
+<li>调用NSDateFormatter的<code>setStyle:</code>、<code>setTimeStyle:</code>方法设置格式化日期、时间的风格，日期、时间风格支持如下的枚举值：<ul>
+<li>NSDateFormatterNoStyle:不显示日期、时间的风格</li>
+<li>NSDateFormatterShortStyle:显示“短”的日期、时间风格</li>
+<li>NSDateFormatterMediumStyle:显示“中等”的日期、时间风格</li>
+<li>NSDateFormatterLongStyle:显示“长”的日期、时间风格</li>
+<li>NSDateFormatterFullStyle:显示“完整”的日期、时间风格</li>
+</ul>
+</li>
+<li>NSDate转换成NSString可以调用NSDateFormatter的stringFromDate:方法执行格式化即可</li>
+<li>NSString转换成NSDate可以调用NSDateFormatter的dateFromString:方法执行格式化即可</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 自定义格式式模板</span></div><div class="line"><span class="type">NSDateFormatter</span>* df = [[<span class="type">NSDateFormatter</span> alloc]<span class="keyword">init</span>];</div><div class="line">[df setDateFormatter:@<span class="string">"公元yyyy年MM月DD日HH时mm分"</span>];</div><div class="line"><span class="type">NSLog</span>(@<span class="string">"%@"</span>,[df stringFromDate:date]);</div></pre></td></tr></table></figure>
+
+<h2 id="日历（NSCalendar）与日期组件（NSDateComponents）">日历（NSCalendar）与日期组件（NSDateComponents）</h2>
+<ul>
+<li>NSCalender对象用于处理NSDate对象所包含的各个字段的数据</li>
+<li>NSCalendar常用方法<ul>
+<li>(NSDateComponents*)components:fromDate:从NSDate提取年、月、日、时、分、秒各时间字段的信息。</li>
+<li>dateFromComponents:(NSDateComponents*)comps:使用comps对象包含的年、月、日、时、分、秒各时间字段的信息来创建NSDate.</li>
+</ul>
+</li>
+</ul>
+<h2 id="定时器（NSTimer）">定时器（NSTimer）</h2>
+<ol>
+<li>调用NSTimer的scheduledTimerWithTimeInterval:invocation:repeats:或scheduledTimerWithTimeInterval:target:selector:userInfo:repeats:类方法来创建NSTimer对象。<ul>
+<li>timerInterval:指定每个多少秒执行一次任务。</li>
+<li>invocation或target与selector:指定重复执行的任务。如果指定target和selector参数，则指定用某个对象的特定方法作为重复执行的任务；如果指定invacation参数，该参数需要传入一个NSInvocation对象，其中NSInvocation对象也是封装target和selector的，其中也是指定用某个对象的特定方法作为重复执行的任务。</li>
+<li>userInfo:该参数用于传入额外的附加信息。</li>
+<li>repeats:该参数需要指定BOOL值，该参数控制是否需要重复执行任务。</li>
+</ul>
+</li>
+<li>为第一步的任务编写方法。</li>
+<li>销毁定时器，调用定时器的invalidate方法即可。</li>
+</ol>
+<h2 id="对象复制">对象复制</h2>
+<ul>
+<li>NSObject类提供了copy和mutableCopy方法，通过这两个方法即可复制已有对象的副本。</li>
+<li>copy方法总是返回不可修改的副本，及时改对象本身是可修改的。</li>
+<li>mutableCopy方法用于复制对象的可变副本，即便对象本事是不可修改的，如NSString，返回的是NSMutableString对象。</li>
+</ul>
+<h3 id="NSCopying与NSMutableCopy协议">NSCopying与NSMutableCopy协议</h3>
+<ul>
+<li>为了保证自定义类能够使用copy、mutableCopy方法，需要做如下的事<ul>
+<li>让该类实现NSCopying（NSMutableCopying）协议</li>
+<li>让该类实现copyWithZone:(mutableCopyWithZone:)方法</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight Objective-C"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">-(<span class="keyword">id</span>)copyWithZone:(NSZone*)zone</div><div class="line">{</div><div class="line">    ZTApple apple= [[[<span class="keyword">self</span> class] allocWithZone:zone]init];</div><div class="line">    ZTApple<span class="variable">.color</span> = <span class="keyword">self</span><span class="variable">.color</span>;</div><div class="line">    ZTApple<span class="variable">.weight</span> = <span class="keyword">self</span><span class="variable">.weight</span>;</div><div class="line">    <span class="keyword">return</span> apple;</div><div class="line">}</div><div class="line"><span class="comment">// 如果父类已经实现了NSCopying协议，那么代码就可简化</span></div><div class="line">-(<span class="keyword">id</span>)copyWithZone:(NSZone*)zone</div><div class="line">{</div><div class="line">    <span class="keyword">id</span> obj = [<span class="keyword">super</span> <span class="keyword">copy</span>];</div><div class="line">    <span class="comment">//...</span></div><div class="line">    <span class="keyword">return</span> obj;</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<h3 id="浅复制(shallow_copy)与深复制(deep_copy)">浅复制(shallow copy)与深复制(deep copy)</h3>
+<ul>
+<li>当对象的实例变量是指针变量时，程序只是复制该指针的地址，而不是真正复制指针指向的对象，这种方式被称为“浅复制”，对浅复制而言，在内存中复制了两个对象，这两个对象的指针变量将会指向同一个对象，也就是两个对象存在公用的部分。</li>
+<li>深复制不仅会复制对象本身，而且会“递归”复制每个指针类型的实例变量，直到两个对象没有任何公用的部分。</li>
+</ul>
+<figure class="highlight Objective-C"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">-(id)<span class="symbol">copyWithZone:</span>(<span class="constant">NSZone</span>*)zone</div><div class="line">{</div><div class="line">    <span class="constant">ZTApple</span> apple= [[[<span class="keyword">self</span> <span class="class"><span class="keyword">class</span>] <span class="title">allocWithZone</span>:<span class="title">zone</span>]<span class="title">init</span>];</span></div><div class="line">    <span class="constant">ZTApple</span>.color = [<span class="keyword">self</span>.color mutableCopy];</div><div class="line">    <span class="constant">ZTApple</span>.weight = <span class="keyword">self</span>.weight;</div><div class="line">    <span class="keyword">return</span> apple;</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<ul>
+<li>一般来说，Foundation框架中的类大部分只实现了浅复制。<h4 id="setter方法的copy选项">setter方法的copy选项</h4>
+</li>
+<li>setter的copy只实现copy方法，得到的回事一个不可变的副本。</li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/iOS/">iOS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://seniorzhai.github.io/2014/02/28/Foundation框架(一)/" data-title="Foundation框架(一) | Zoe&#39;s blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/02/28/Objective-C小知识/" title="Objective-C小知识">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Objective-C小知识</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/02/27/NSBundle/"  title="NSBundle">
+ <strong>下一篇：</strong><br/> 
+ <span>NSBundle
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#字符串（NSString与NSMutableString）"><span class="toc-number">1.</span> <span class="toc-text">字符串（NSString与NSMutableString）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#日期与时间（NSDate）"><span class="toc-number">2.</span> <span class="toc-text">日期与时间（NSDate）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#日期格式器（NSDateFormatter）"><span class="toc-number">3.</span> <span class="toc-text">日期格式器（NSDateFormatter）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#日历（NSCalendar）与日期组件（NSDateComponents）"><span class="toc-number">4.</span> <span class="toc-text">日历（NSCalendar）与日期组件（NSDateComponents）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#定时器（NSTimer）"><span class="toc-number">5.</span> <span class="toc-text">定时器（NSTimer）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对象复制"><span class="toc-number">6.</span> <span class="toc-text">对象复制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NSCopying与NSMutableCopy协议"><span class="toc-number">6.1.</span> <span class="toc-text">NSCopying与NSMutableCopy协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#浅复制(shallow_copy)与深复制(deep_copy)"><span class="toc-number">6.2.</span> <span class="toc-text">浅复制(shallow copy)与深复制(deep copy)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#setter方法的copy选项"><span class="toc-number">6.2.1.</span> <span class="toc-text">setter方法的copy选项</span></a></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/Android/" title="Android">Android<sup>184</sup></a></li>
+		
+			<li><a href="/categories/Camera/" title="Camera">Camera<sup>1</sup></a></li>
+		
+			<li><a href="/categories/Cocos2d-X/" title="Cocos2d-X">Cocos2d-X<sup>11</sup></a></li>
+		
+			<li><a href="/categories/Prose/" title="Prose">Prose<sup>27</sup></a></li>
+		
+			<li><a href="/categories/Python/" title="Python">Python<sup>22</sup></a></li>
+		
+			<li><a href="/categories/ReactNative/" title="ReactNative">ReactNative<sup>7</sup></a></li>
+		
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>79</sup></a></li>
+		
+			<li><a href="/categories/node-js/" title="node.js">node.js<sup>29</sup></a></li>
+		
+			<li><a href="/categories/杂文/" title="杂文">杂文<sup>3</sup></a></li>
+		
+		</ul>
+		<ul>
+		<script charset="Shift_JIS" src="http://chabudai.sakura.ne.jp/blogparts/honehoneclock/honehone_clock_wh.js"></script>
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/AFNetworking/" style="font-size: 10.00px;">AFNetworking</a><a href="/tags/APK/" style="font-size: 10.00px;">APK</a><a href="/tags/AS/" style="font-size: 10.00px;">AS</a><a href="/tags/Adapter/" style="font-size: 10.00px;">Adapter</a><a href="/tags/Android/" style="font-size: 20.00px;">Android</a><a href="/tags/Android-5-0/" style="font-size: 10.00px;">Android 5.0</a><a href="/tags/Android-Studio/" style="font-size: 13.33px;">Android Studio</a><a href="/tags/AndroidAninotations/" style="font-size: 10.00px;">AndroidAninotations</a><a href="/tags/AndroidStudio/" style="font-size: 18.33px;">AndroidStudio</a><a href="/tags/Animation/" style="font-size: 15.00px;">Animation</a><a href="/tags/Api/" style="font-size: 13.33px;">Api</a><a href="/tags/App/" style="font-size: 10.00px;">App</a><a href="/tags/Apple/" style="font-size: 10.00px;">Apple</a><a href="/tags/Async/" style="font-size: 10.00px;">Async</a><a href="/tags/Atom/" style="font-size: 11.67px;">Atom</a><a href="/tags/BaseAdapter/" style="font-size: 10.00px;">BaseAdapter</a><a href="/tags/Blur/" style="font-size: 10.00px;">Blur</a><a href="/tags/Box2D/" style="font-size: 10.00px;">Box2D</a><a href="/tags/Broadcast/" style="font-size: 10.00px;">Broadcast</a><a href="/tags/CardView/" style="font-size: 10.00px;">CardView</a><a href="/tags/CocoaPods/" style="font-size: 10.00px;">CocoaPods</a><a href="/tags/Cocos2d-X/" style="font-size: 16.67px;">Cocos2d-X</a><a href="/tags/CocosPods/" style="font-size: 10.00px;">CocosPods</a><a href="/tags/ContentProvider/" style="font-size: 10.00px;">ContentProvider</a><a href="/tags/Context/" style="font-size: 10.00px;">Context</a><a href="/tags/Crouton/" style="font-size: 10.00px;">Crouton</a><a href="/tags/CursorLoader/" style="font-size: 10.00px;">CursorLoader</a><a href="/tags/Demo/" style="font-size: 11.67px;">Demo</a><a href="/tags/Dialog/" style="font-size: 10.00px;">Dialog</a><a href="/tags/EditView/" style="font-size: 10.00px;">EditView</a><a href="/tags/EventBus/" style="font-size: 10.00px;">EventBus</a><a href="/tags/Express/" style="font-size: 10.00px;">Express</a><a href="/tags/Express学习笔记/" style="font-size: 10.00px;">Express学习笔记</a><a href="/tags/Flex/" style="font-size: 10.00px;">Flex</a><a href="/tags/Fragment/" style="font-size: 11.67px;">Fragment</a><a href="/tags/GET/" style="font-size: 10.00px;">GET</a><a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/Gradle/" style="font-size: 11.67px;">Gradle</a><a href="/tags/GridLayout/" style="font-size: 10.00px;">GridLayout</a><a href="/tags/GridView/" style="font-size: 11.67px;">GridView</a>
+    </div>
+  </div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">25</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a><span class="archive-list-count">42</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">June 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">20</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a><span class="archive-list-count">24</span></li></ul>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://imid.me/" target="_blank" title="iMID">iMID's Blog</a></li>
+      <li><a href="http://www.trinea.cn/" target="_blank" title="trinea">Trinea's Blog</a></li>
+      <li><a href="http://stormzhang.github.io/" target="_blank" title="stormzhang">StormZhang's Blog</a></li>
+      <li><a href="http://daimajia.com/" target="_blank" title="daimajia">DaiMaJia.Blog</a></li>
+      <li><a href="http://macrotea.com/welcome/" target="_blank" title="daimajia">Macrotea.Blog</a></li>
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello,I&#39;m Zoe,a Android and iOS developers. <br/>
+			This is my blog,I hope you will enjoy them.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2292032577" target="_blank" class="icon-weibo" title="weibo"></a>
+		
+		
+		<a href="https://github.com/seniorzhai" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:developer.zhaitao@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2016 
+		
+		<a href="http://seniorzhai.github.io/about" target="_blank" title="Zoe">Zoe</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zt1991616"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-54646832-1', 'null');  
+ga('send', 'pageview');
+</script>
+
+
+
+
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<script src="/js/totop.js"></script>
+
+
+
+
+  </body>
+</html>
+
+<a href="https://github.com/seniorzhai"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
