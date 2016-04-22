@@ -1,0 +1,505 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>加密解密 | bins&#39;s learning notes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="bins">
+    
+
+    
+    <meta name="description" content="scap密码加密解密前端javascript加密
+&amp;ensp;&amp;ensp;&amp;ensp;对涉及用户ID和密码的传输全部采用AES对称算法进行加密,在前端将用户ID使用AES加密,密码字段改为传输AES加密过的特定字符串(密码MD5+密码明文+明文长度+随机验证码).后端根据约定的key进行解密,加密的密码字段每次会话都不相同,这样可以有效的防止信息传输过程中被非法截 取,进行会话重放攻击.
+&amp;ens">
+<meta property="og:type" content="article">
+<meta property="og:title" content="加密解密">
+<meta property="og:url" content="http://binswfm.github.io/2016/04/21/加密解密/index.html">
+<meta property="og:site_name" content="bins's learning notes">
+<meta property="og:description" content="scap密码加密解密前端javascript加密
+&amp;ensp;&amp;ensp;&amp;ensp;对涉及用户ID和密码的传输全部采用AES对称算法进行加密,在前端将用户ID使用AES加密,密码字段改为传输AES加密过的特定字符串(密码MD5+密码明文+明文长度+随机验证码).后端根据约定的key进行解密,加密的密码字段每次会话都不相同,这样可以有效的防止信息传输过程中被非法截 取,进行会话重放攻击.
+&amp;ens">
+<meta property="og:updated_time" content="2016-04-21T01:00:25.104Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="加密解密">
+<meta name="twitter:description" content="scap密码加密解密前端javascript加密
+&amp;ensp;&amp;ensp;&amp;ensp;对涉及用户ID和密码的传输全部采用AES对称算法进行加密,在前端将用户ID使用AES加密,密码字段改为传输AES加密过的特定字符串(密码MD5+密码明文+明文长度+随机验证码).后端根据约定的key进行解密,加密的密码字段每次会话都不相同,这样可以有效的防止信息传输过程中被非法截 取,进行会话重放攻击.
+&amp;ens">
+
+    
+    <link rel="alternative" href="/atom.xml" title="bins&#39;s learning notes" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="bins&#39;s learning notes" title="bins&#39;s learning notes"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="bins&#39;s learning notes">bins&#39;s learning notes</a></h1>
+				<h2 class="blog-motto">斌哥哥的学习笔记</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:binswfm.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/04/21/加密解密/" title="加密解密" itemprop="url">加密解密</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="bins" target="_blank" itemprop="author">bins</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-21T00:46:20.000Z" itemprop="datePublished"> 发表于 2016-04-21</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#scap密码加密解密"><span class="toc-number">1.</span> <span class="toc-text">scap密码加密解密</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#前端javascript加密"><span class="toc-number">1.1.</span> <span class="toc-text">前端javascript加密</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#前端使用crypto-js库中的AES加密实现来对传输的密码，用户ID等信息进行加密"><span class="toc-number">1.1.0.0.0.1.</span> <span class="toc-text">前端使用crypto-js库中的AES加密实现来对传输的密码，用户ID等信息进行加密</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后端使用JDK自带的AES工具进行解密"><span class="toc-number">1.2.</span> <span class="toc-text">后端使用JDK自带的AES工具进行解密</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#AesUtils-java"><span class="toc-number">1.2.0.0.0.1.</span> <span class="toc-text">AesUtils.java</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#后端校验"><span class="toc-number">1.2.0.0.0.2.</span> <span class="toc-text">后端校验</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据库存储"><span class="toc-number">1.3.</span> <span class="toc-text">数据库存储</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#mysql数据库中使用gw-uer-info-gw-aes-pass两张表进行存储"><span class="toc-number">1.3.0.0.0.1.</span> <span class="toc-text">mysql数据库中使用gw_uer_info,gw_aes_pass两张表进行存储</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="scap密码加密解密"><a href="#scap密码加密解密" class="headerlink" title="scap密码加密解密"></a>scap密码加密解密</h1><h2 id="前端javascript加密"><a href="#前端javascript加密" class="headerlink" title="前端javascript加密"></a>前端javascript加密</h2><blockquote>
+<p>&ensp;&ensp;&ensp;对涉及用户ID和密码的传输全部采用AES对称算法进行加密,在前端将用户ID使用AES加密,密码字段改为传输AES加密过的特定字符串(密码MD5+密码明文+明文长度+随机验证码).后端根据约定的key进行解密,加密的密码字段每次会话都不相同,这样可以有效的防止信息传输过程中被非法截 取,进行会话重放攻击.</p>
+<p>&ensp;&ensp;&ensp;登陆时首先校验数据传输的完整性， 这一步是解密密码串解出明文和md5，将明文md5然后比较解 出的md5是否一致，不一致即传输过程遭到破坏， 一致的话进行第二步存储验证，取出两张表分别存储的md5 和Aes加密后的md5，将Aes的md5解密与存储的md5比对， 不一致的话就是存储的密码遭到破坏，  一致的话进行第三步， 用户名密码校验，拿第一步的密码md5与存储的md5比较，一致登陆成功,不一致登录失败． </p>
+<h6 id="前端使用crypto-js库中的AES加密实现来对传输的密码，用户ID等信息进行加密"><a href="#前端使用crypto-js库中的AES加密实现来对传输的密码，用户ID等信息进行加密" class="headerlink" title="前端使用crypto-js库中的AES加密实现来对传输的密码，用户ID等信息进行加密"></a>前端使用<a href="http://code.google.com/p/crypto-js" target="_blank" rel="external">crypto-js</a>库中的AES加密实现来对传输的密码，用户ID等信息进行加密</h6><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--导入依赖的javascrip库文件(jquery,jquery.cookie,jquery.md5,aes,pbkdf2,AesUtils) --&gt;</span><br><span class="line">&lt;script src="&lt;c:url value='/scripts/jquery-1.7.2.min.js'/&gt;"&gt;&lt;/script&gt;</span><br><span class="line">&lt;script src="&lt;c:url value='/scripts/jquery.cookie.js'/&gt;"&gt;&lt;/script&gt;</span><br><span class="line">&lt;script src="&lt;c:url value='/res/scripts/jQuery.md5.js'/&gt;"&gt;&lt;/script&gt;</span><br><span class="line">&lt;script src="&lt;c:url value='/res/scripts/aes.js'/&gt;"&gt;&lt;/script&gt;</span><br><span class="line">&lt;script src="&lt;c:url value='/res/scripts/pbkdf2.js'/&gt;"&gt;&lt;/script&gt;</span><br><span class="line">&lt;script src="&lt;c:url value='/res/scripts/AesUtil.js'/&gt;"&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"> $(<span class="string">"#loginUser"</span>).submit(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">/** 将用户名使用128AES进行加密,将用户名md5+密码明文+明文长度+动态验证码进行加密</span><br><span class="line">       ，加密是用的iv,salt都是动态随机生成的,加密用的passphrase是密码的md5码   **/</span></span><br><span class="line">        $(<span class="string">"#login_ok"</span>).attr(<span class="string">"disabled"</span>, <span class="literal">true</span>).val(<span class="string">'登录中..'</span>);</span><br><span class="line">        <span class="keyword">var</span> src = $(<span class="string">"#j_password"</span>).val(),md5 = $.md5(src),randomKey = $(<span class="string">"#j_randomKey"</span>).val();</span><br><span class="line">        <span class="keyword">var</span> iterationCount = <span class="number">1000</span>;</span><br><span class="line">        <span class="keyword">var</span> keySize = <span class="number">128</span>;</span><br><span class="line">        <span class="keyword">var</span> psize = src.length;</span><br><span class="line">      　<span class="keyword">var</span> plaintext = md5+src+psize+randomKey;</span><br><span class="line">        <span class="keyword">var</span> passphrase = md5;</span><br><span class="line">        <span class="keyword">var</span> iv = CryptoJS.lib.WordArray.random(<span class="number">128</span>/<span class="number">8</span>).toString(CryptoJS.enc.Hex);</span><br><span class="line">        <span class="keyword">var</span> salt = CryptoJS.lib.WordArray.random(<span class="number">128</span>/<span class="number">8</span>).toString(CryptoJS.enc.Hex);</span><br><span class="line">        <span class="keyword">var</span> ciphertext = aesEncrypt(iv,salt,passphrase+randomKey, plaintext);</span><br><span class="line">        $(<span class="string">"[name=psize]"</span>).val(psize);</span><br><span class="line">        $(<span class="string">"[name=passphrase]"</span>).val(passphrase);</span><br><span class="line">        $(<span class="string">"[name=iv]"</span>).val(iv);</span><br><span class="line">        $(<span class="string">"[name=salt]"</span>).val(salt);</span><br><span class="line">        $(<span class="string">"[name=id]"</span>).val(aesEncrypt(iv,salt,passphrase+randomKey, $(<span class="string">"#j_username"</span>).val()));</span><br><span class="line">        $(<span class="string">"[name=password]"</span>).val(ciphertext);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;);</span><br><span class="line">    showNoSupportBrowser(isBrowserSupport);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">aesEncrypt</span>(<span class="params">iv,salt,passphrase,plaintext</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> iterationCount = <span class="number">1000</span>;</span><br><span class="line">    <span class="keyword">var</span> keySize = <span class="number">128</span>;</span><br><span class="line">    <span class="keyword">var</span> aesUtil = <span class="keyword">new</span> AesUtil(keySize, iterationCount);</span><br><span class="line">    <span class="keyword">return</span> aesUtil.encrypt(salt, iv, passphrase, plaintext);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="后端使用JDK自带的AES工具进行解密"><a href="#后端使用JDK自带的AES工具进行解密" class="headerlink" title="后端使用JDK自带的AES工具进行解密"></a>后端使用JDK自带的AES工具进行解密</h2><blockquote>
+<blockquote>
+<h6 id="AesUtils-java"><a href="#AesUtils-java" class="headerlink" title="AesUtils.java"></a>AesUtils.java</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.gridnt.frame.utils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.UnsupportedEncodingException;</span><br><span class="line"><span class="keyword">import</span> java.security.InvalidAlgorithmParameterException;</span><br><span class="line"><span class="keyword">import</span> java.security.InvalidKeyException;</span><br><span class="line"><span class="keyword">import</span> java.security.NoSuchAlgorithmException;</span><br><span class="line"><span class="keyword">import</span> java.security.SecureRandom;</span><br><span class="line"><span class="keyword">import</span> java.security.spec.InvalidKeySpecException;</span><br><span class="line"><span class="keyword">import</span> java.security.spec.KeySpec;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.crypto.BadPaddingException;</span><br><span class="line"><span class="keyword">import</span> javax.crypto.Cipher;</span><br><span class="line"><span class="keyword">import</span> javax.crypto.IllegalBlockSizeException;</span><br><span class="line"><span class="keyword">import</span> javax.crypto.NoSuchPaddingException;</span><br><span class="line"><span class="keyword">import</span> javax.crypto.SecretKey;</span><br><span class="line"><span class="keyword">import</span> javax.crypto.SecretKeyFactory;</span><br><span class="line"><span class="keyword">import</span> javax.crypto.spec.IvParameterSpec;</span><br><span class="line"><span class="keyword">import</span> javax.crypto.spec.PBEKeySpec;</span><br><span class="line"><span class="keyword">import</span> javax.crypto.spec.SecretKeySpec;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.commons.codec.DecoderException;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.codec.binary.Base64;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.codec.binary.Hex;</span><br><span class="line"></span><br><span class="line"><span class="comment">// <span class="doctag">TODO:</span> Implement 256-bit version like: http://securejava.wordpress.com/2012/10/25/aes-256/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AesUtil</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> keySize = <span class="number">128</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> iterationCount = <span class="number">1000</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Cipher cipher;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AesUtil</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            cipher = Cipher.getInstance(<span class="string">"AES/CBC/PKCS5Padding"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (NoSuchAlgorithmException | NoSuchPaddingException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> fail(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">encrypt</span><span class="params">(String salt, String iv, String passphrase, String plaintext)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            SecretKey key = generateKey(salt, passphrase);</span><br><span class="line">            <span class="keyword">byte</span>[] encrypted = doFinal(Cipher.ENCRYPT_MODE, key, iv, plaintext.getBytes(<span class="string">"UTF-8"</span>));</span><br><span class="line">            <span class="keyword">return</span> base64(encrypted);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (UnsupportedEncodingException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> fail(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">decrypt</span><span class="params">(String salt, String iv, String passphrase, String ciphertext)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            SecretKey key = generateKey(salt, passphrase);</span><br><span class="line">            <span class="keyword">byte</span>[] decrypted = doFinal(Cipher.DECRYPT_MODE, key, iv, base64(ciphertext));</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> String(decrypted, <span class="string">"UTF-8"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (UnsupportedEncodingException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> fail(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">byte</span>[] doFinal(<span class="keyword">int</span> encryptMode, SecretKey key, String iv, <span class="keyword">byte</span>[] bytes) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            cipher.init(encryptMode, key, <span class="keyword">new</span> IvParameterSpec(hex(iv)));</span><br><span class="line">            <span class="keyword">return</span> cipher.doFinal(bytes);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (InvalidKeyException</span><br><span class="line">                | InvalidAlgorithmParameterException</span><br><span class="line">                | IllegalBlockSizeException</span><br><span class="line">                | BadPaddingException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> fail(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> SecretKey <span class="title">generateKey</span><span class="params">(String salt, String passphrase)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            SecretKeyFactory factory = SecretKeyFactory.getInstance(<span class="string">"PBKDF2WithHmacSHA1"</span>);</span><br><span class="line">            KeySpec spec = <span class="keyword">new</span> PBEKeySpec(passphrase.toCharArray(), hex(salt), iterationCount, keySize);</span><br><span class="line">            SecretKey key = <span class="keyword">new</span> SecretKeySpec(factory.generateSecret(spec).getEncoded(), <span class="string">"AES"</span>);</span><br><span class="line">            <span class="keyword">return</span> key;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (NoSuchAlgorithmException | InvalidKeySpecException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> fail(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">random</span><span class="params">(<span class="keyword">int</span> length)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">byte</span>[] salt = <span class="keyword">new</span> <span class="keyword">byte</span>[length];</span><br><span class="line">        <span class="keyword">new</span> SecureRandom().nextBytes(salt);</span><br><span class="line">        <span class="keyword">return</span> hex(salt);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">base64</span><span class="params">(<span class="keyword">byte</span>[] bytes)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Base64.encodeBase64String(bytes);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] base64(String str) &#123;</span><br><span class="line">        <span class="keyword">return</span> Base64.decodeBase64(str);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">hex</span><span class="params">(<span class="keyword">byte</span>[] bytes)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Hex.encodeHexString(bytes);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] hex(String str) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> Hex.decodeHex(str.toCharArray());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (DecoderException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> IllegalStateException <span class="title">fail</span><span class="params">(Exception e)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> IllegalStateException(e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="后端校验"><a href="#后端校验" class="headerlink" title="后端校验"></a>后端校验</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">　　　　　　<span class="comment">/** 获取前端传输过来的数据，加密后的用户ID,密码串,加密用到的参数**/</span></span><br><span class="line">HttpServletRequest req = (HttpServletRequest) request;</span><br><span class="line">String passphrase = req.getParameter(<span class="string">"passphrase"</span>);</span><br><span class="line">String iv = req.getParameter(<span class="string">"iv"</span>);</span><br><span class="line">String salt = req.getParameter(<span class="string">"salt"</span>);</span><br><span class="line">String randomKey = req.getParameter(<span class="string">"randomKey"</span>);</span><br><span class="line">String _userId = req.getParameter(<span class="string">"id"</span>);</span><br><span class="line">String _password = req.getParameter(<span class="string">"password"</span>);</span><br><span class="line"><span class="keyword">int</span> psize = NumberUtils.toInt(req.getParameter(<span class="string">"psize"</span>), <span class="number">0</span>);</span><br><span class="line">String ip = GWUtils.getIpAddr(req);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 校验通过生成 请求令牌：IP</span></span><br><span class="line">req.getSession().setAttribute(GWConstants.SESSION_HOST, ip);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 校验通过生成 请求令牌：requestToken</span></span><br><span class="line">req.getSession().setAttribute(GWConstants.CSRF_TOKEN, RandomStringUtils.randomAlphanumeric(<span class="number">8</span>));</span><br><span class="line"></span><br><span class="line">String errorMessage = <span class="keyword">null</span>;</span><br><span class="line">String userId = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">/**使用AesUtils进行解密**/</span></span><br><span class="line">    userId = aesUtil.decrypt(salt, iv, passphrase + randomKey, _userId);</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    errorMessage = <span class="string">"当前登录用户的ID在传输过程中被破坏，请重试"</span>;</span><br><span class="line">    logger.error(errorMessage, e);</span><br><span class="line">    request.setAttribute(LoginBaseFilter.KEY_LOGIN_MESSAGE, errorMessage);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">String md5P = <span class="string">""</span>, mpass = <span class="string">""</span>;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    String enPass = aesUtil.decrypt(salt, iv, passphrase + randomKey, _password);</span><br><span class="line">    String radkey = enPass.substring(enPass.length() - <span class="number">4</span>);</span><br><span class="line">    String str1 = enPass.substring(<span class="number">0</span>, enPass.lastIndexOf(String.valueOf(psize) + radkey));</span><br><span class="line">    mpass = str1.substring(str1.length() - psize);</span><br><span class="line">    md5P = str1.substring(<span class="number">0</span>, str1.length() - psize);</span><br><span class="line"></span><br><span class="line">    request.setAttribute(<span class="string">"mpass"</span>, mpass);</span><br><span class="line">    request.setAttribute(<span class="string">"md5P"</span>, md5P);</span><br><span class="line">    request.setAttribute(<span class="string">"radkey"</span>, radkey);</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    logger.error(errorMessage, e);</span><br><span class="line">    logAndTip(req, userId, ip, <span class="string">"当前登录用户的密码在传输过程中被破坏，请重试"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** 1、密码校验 **/</span></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">false</span> == md5P.equals(EncryptUtils.encryptMD5(mpass))) &#123;</span><br><span class="line">    logAndTip(req, userId, ip, <span class="string">"当前登录用户的密码在传输过程中被破坏，请重试"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+</blockquote>
+<h2 id="数据库存储"><a href="#数据库存储" class="headerlink" title="数据库存储"></a>数据库存储</h2><blockquote>
+<blockquote>
+<h6 id="mysql数据库中使用gw-uer-info-gw-aes-pass两张表进行存储"><a href="#mysql数据库中使用gw-uer-info-gw-aes-pass两张表进行存储" class="headerlink" title="mysql数据库中使用gw_uer_info,gw_aes_pass两张表进行存储"></a>mysql数据库中使用gw_uer_info,gw_aes_pass两张表进行存储</h6><blockquote>
+<blockquote>
+<p>gw_user_info表记录用户信息和密码md5码<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- Table structure for table `gw_user_info`</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> <span class="string">`gw_user_info`</span>;</span><br><span class="line"><span class="comment">/*!40101 SET @saved_cs_client     = @@character_set_client */</span>;</span><br><span class="line"><span class="comment">/*!40101 SET character_set_client = utf8 */</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`gw_user_info`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">COLLATE</span> utf8_bin <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'用户编码'</span>,</span><br><span class="line">  <span class="string">`name`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">COLLATE</span> utf8_bin <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'用户名称'</span>,</span><br><span class="line">  <span class="string">`password`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">COLLATE</span> utf8_bin <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'登录密码'</span>,</span><br><span class="line">  <span class="string">`user_desc`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">COLLATE</span> utf8_bin <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'用户备注'</span>,</span><br><span class="line">  <span class="string">`region`</span> <span class="built_in">int</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'用户归属区域'</span>,</span><br><span class="line">  <span class="string">`phone`</span> <span class="built_in">varchar</span>(<span class="number">64</span>) <span class="keyword">COLLATE</span> utf8_bin <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'联系电话'</span>,</span><br><span class="line">  <span class="string">`email`</span> <span class="built_in">varchar</span>(<span class="number">128</span>) <span class="keyword">COLLATE</span> utf8_bin <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'Email'</span>,</span><br><span class="line">  <span class="string">`status`</span> <span class="built_in">int</span>(<span class="number">1</span>) <span class="keyword">DEFAULT</span> <span class="string">'0'</span> <span class="keyword">COMMENT</span> <span class="string">'用户状态'</span>,</span><br><span class="line">  <span class="string">`create_date`</span> datetime <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'创建日期'</span>,</span><br><span class="line">  <span class="string">`update_time`</span> datetime <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'更新日期'</span>,</span><br><span class="line">  <span class="string">`manage_regions`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">COLLATE</span> utf8_bin <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`visible`</span> <span class="built_in">int</span>(<span class="number">1</span>) <span class="keyword">DEFAULT</span> <span class="string">'1'</span> <span class="keyword">COMMENT</span> <span class="string">'是否可见'</span>,</span><br><span class="line">  <span class="string">`not_new_user`</span> <span class="built_in">int</span>(<span class="number">1</span>) <span class="keyword">DEFAULT</span> <span class="string">'0'</span> <span class="keyword">COMMENT</span> <span class="string">'是否为新用户'</span>,</span><br><span class="line">  <span class="string">`certificate_id`</span> <span class="built_in">varchar</span>(<span class="number">100</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'证书标识'</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8 <span class="keyword">COLLATE</span>=utf8_bin <span class="keyword">COMMENT</span>=<span class="string">'用户信息表'</span>;</span><br><span class="line"><span class="comment">/*!40101 SET character_set_client = @saved_cs_client */</span>;</span><br></pre></td></tr></table></figure></p>
+<p>gw_aes_pass存储用户ID和aes加密后的密码的md5码<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> <span class="string">`gw_aes_pass`</span>;</span><br><span class="line"><span class="comment">/*!40101 SET @saved_cs_client     = @@character_set_client */</span>;</span><br><span class="line"><span class="comment">/*!40101 SET character_set_client = utf8 */</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`gw_aes_pass`</span> (</span><br><span class="line"><span class="keyword">id</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">not</span> <span class="literal">null</span> ,</span><br><span class="line"><span class="keyword">password</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">primary <span class="keyword">key</span>(<span class="keyword">id</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8 <span class="keyword">COLLATE</span>=utf8_bin <span class="keyword">COMMENT</span>=<span class="string">'AES加密表'</span>;</span><br></pre></td></tr></table></figure></p>
+<p>存储时使用的加密工具类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.gridnt.frame.utils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.crypto.hash.Md5Hash;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 加密工具类</span><br><span class="line"> *</span><br><span class="line"> * <span class="doctag">@author</span> chenggangs</span><br><span class="line"> * <span class="doctag">@since</span> 2015年4月10日 下午6:09:04</span><br><span class="line"> *</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">EncryptUtils</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> AesUtil aesUtil = <span class="keyword">new</span> AesUtil();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> String IV = <span class="string">"53e11e8f61ff79e447626465dd7f5014"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> String SALT = <span class="string">"5c6df26a311012d51a48f93f90251c14"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 生成MD5密文</span><br><span class="line">     *</span><br><span class="line">     * <span class="doctag">@param</span> source</span><br><span class="line">     * <span class="doctag">@return</span></span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">encryptMD5</span><span class="params">(Object source)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (source == <span class="keyword">null</span>) &#123;</span><br><span class="line">            source = <span class="string">""</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        Md5Hash md5 = <span class="keyword">new</span> Md5Hash(source);</span><br><span class="line">        <span class="keyword">return</span> md5.toString();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String md5 = encryptMD5(<span class="string">"xtgly"</span>);</span><br><span class="line">        String en = encryptAES(md5);</span><br><span class="line">        <span class="comment">/*System.out.println(md5);</span><br><span class="line">        System.out.println(en);</span><br><span class="line">        System.out.println(decryptAES(md5, en));*/</span></span><br><span class="line">        AesUtil aesUtil = <span class="keyword">new</span> AesUtil();</span><br><span class="line">        System.out.println(aesUtil.encrypt(<span class="string">"2ea18096ce286ca6d8eaffedf58d84ee"</span>, <span class="string">"9c3172b5043dbd24130df93ca1b8b77d"</span>, <span class="string">"d41d8cd98f00b204e9800998ecf8427e"</span>, <span class="string">"admin123456"</span>));</span><br><span class="line">        System.out.println(aesUtil.decrypt(<span class="string">"9fd1a440356c0088aba95a62c2c10296"</span>, <span class="string">"b7b4b3d8ceabd188095c8d675ebcf392"</span>, <span class="string">"3a4ebf16a4795ad258e5408bae7be341"</span>, <span class="string">"36qtwfroO6R32o02S7xZ6Q=="</span>));</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">encryptAES</span><span class="params">(String password)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> aesUtil.encrypt(SALT, IV, password, password);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">decryptAES</span><span class="params">(String passphrase, String password)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> aesUtil.decrypt(SALT, IV, passphrase, password);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://binswfm.github.io/2016/04/21/加密解密/" data-title="加密解密 | bins&#39;s learning notes" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/04/20/wget下载整站/"  title="Wget下载整站">
+ <strong>下一篇：</strong><br/> 
+ <span>Wget下载整站
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/04/21/加密解密/" data-title="加密解密" data-url="http://binswfm.github.io/2016/04/21/加密解密/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#scap密码加密解密"><span class="toc-number">1.</span> <span class="toc-text">scap密码加密解密</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#前端javascript加密"><span class="toc-number">1.1.</span> <span class="toc-text">前端javascript加密</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#前端使用crypto-js库中的AES加密实现来对传输的密码，用户ID等信息进行加密"><span class="toc-number">1.1.0.0.0.1.</span> <span class="toc-text">前端使用crypto-js库中的AES加密实现来对传输的密码，用户ID等信息进行加密</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后端使用JDK自带的AES工具进行解密"><span class="toc-number">1.2.</span> <span class="toc-text">后端使用JDK自带的AES工具进行解密</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#AesUtils-java"><span class="toc-number">1.2.0.0.0.1.</span> <span class="toc-text">AesUtils.java</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#后端校验"><span class="toc-number">1.2.0.0.0.2.</span> <span class="toc-text">后端校验</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据库存储"><span class="toc-number">1.3.</span> <span class="toc-text">数据库存储</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#mysql数据库中使用gw-uer-info-gw-aes-pass两张表进行存储"><span class="toc-number">1.3.0.0.0.1.</span> <span class="toc-text">mysql数据库中使用gw_uer_info,gw_aes_pass两张表进行存储</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/linux/" title="linux">linux<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/tools/" title="tools">tools<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cmd/" title="cmd">cmd<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=b3593ceb&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Larry Page in Google. <br/>
+			This is my blog,believe it or not.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2176287895" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/binswfm" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:bins@gridnt.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="bins">bins</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#bc66dd', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"binswfm"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

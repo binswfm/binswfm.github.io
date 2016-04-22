@@ -4,23 +4,26 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Wget下载整站 | bins&#39;s learning notes</title>
+    <title>解包rk3288的ROM | bins&#39;s learning notes</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="bins">
     
 
     
-    <meta name="description" content="wget下载整站wget -r -p -np -k  站点1234567-r, --recursive（递归） specify recursive download.（指定递归下载）-k, --convert-links（转换链接） make links in downloaded HTML point to local files.（将下载的HTML页面中的链接转换为相对链接即本地链接） -p,">
+    <meta name="description" content="使用resource_tool解包resource.img1resource_tool  --unpack --verbose --image=resource.img路径 解包目录
+使用mkkrnlimg 解包boot.img1mkkrnlimg -r boot.img ramdisk.img &amp;amp;&amp;amp; unpack_ramdisk ramdisk.img ramdisk">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Wget下载整站">
-<meta property="og:url" content="http://binswfm.github.io/2016/04/20/wget下载整站/index.html">
+<meta property="og:title" content="解包rk3288的ROM">
+<meta property="og:url" content="http://binswfm.github.io/2016/04/21/解包rk3288的ROM/index.html">
 <meta property="og:site_name" content="bins's learning notes">
-<meta property="og:description" content="wget下载整站wget -r -p -np -k  站点1234567-r, --recursive（递归） specify recursive download.（指定递归下载）-k, --convert-links（转换链接） make links in downloaded HTML point to local files.（将下载的HTML页面中的链接转换为相对链接即本地链接） -p,">
-<meta property="og:updated_time" content="2016-04-20T11:24:12.569Z">
+<meta property="og:description" content="使用resource_tool解包resource.img1resource_tool  --unpack --verbose --image=resource.img路径 解包目录
+使用mkkrnlimg 解包boot.img1mkkrnlimg -r boot.img ramdisk.img &amp;amp;&amp;amp; unpack_ramdisk ramdisk.img ramdisk">
+<meta property="og:updated_time" content="2016-04-21T11:22:44.622Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Wget下载整站">
-<meta name="twitter:description" content="wget下载整站wget -r -p -np -k  站点1234567-r, --recursive（递归） specify recursive download.（指定递归下载）-k, --convert-links（转换链接） make links in downloaded HTML point to local files.（将下载的HTML页面中的链接转换为相对链接即本地链接） -p,">
+<meta name="twitter:title" content="解包rk3288的ROM">
+<meta name="twitter:description" content="使用resource_tool解包resource.img1resource_tool  --unpack --verbose --image=resource.img路径 解包目录
+使用mkkrnlimg 解包boot.img1mkkrnlimg -r boot.img ramdisk.img &amp;amp;&amp;amp; unpack_ramdisk ramdisk.img ramdisk">
 
     
     <link rel="alternative" href="/atom.xml" title="bins&#39;s learning notes" type="application/atom+xml">
@@ -80,14 +83,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/04/20/wget下载整站/" title="Wget下载整站" itemprop="url">Wget下载整站</a>
+      <a href="/2016/04/21/解包rk3288的ROM/" title="解包rk3288的ROM" itemprop="url">解包rk3288的ROM</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="bins" target="_blank" itemprop="author">bins</a>
 		
   <p class="article-time">
-    <time datetime="2016-04-20T11:20:34.000Z" itemprop="datePublished"> 发表于 2016-04-20</time>
+    <time datetime="2016-04-21T10:51:46.000Z" itemprop="datePublished"> 发表于 2016-04-21</time>
     
   </p>
 </header>
@@ -96,26 +99,17 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#wget下载整站"><span class="toc-number">1.</span> <span class="toc-text">wget下载整站</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用resource-tool解包resource-img"><span class="toc-number">1.</span> <span class="toc-text">使用resource_tool解包resource.img</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用mkkrnlimg-解包boot-img"><span class="toc-number">2.</span> <span class="toc-text">使用mkkrnlimg 解包boot.img</span></a></li></ol>
 		
 		</div>
 		
-		<h1 id="wget下载整站"><a href="#wget下载整站" class="headerlink" title="wget下载整站"></a>wget下载整站</h1><p><code>wget -r -p -np -k  站点</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-r, --recursive（递归） specify recursive download.（指定递归下载）</span><br><span class="line"></span><br><span class="line">-k, --convert-links（转换链接） make links in downloaded HTML point to local files.（将下载的HTML页面中的链接转换为相对链接即本地链接） </span><br><span class="line"></span><br><span class="line">-p, --page-requisites（页面必需元素） get all images, etc. needed to display HTML page.（下载所有的图片等页面显示所需的内容）</span><br><span class="line"></span><br><span class="line">-np, --no-parent（不追溯至父级） don&apos;t ascend to the parent directory.</span><br></pre></td></tr></table></figure></p>
+		<h2 id="使用resource-tool解包resource-img"><a href="#使用resource-tool解包resource-img" class="headerlink" title="使用resource_tool解包resource.img"></a>使用resource_tool解包resource.img</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">resource_tool  --unpack --verbose --image=resource.img路径 解包目录</span><br></pre></td></tr></table></figure>
+<h2 id="使用mkkrnlimg-解包boot-img"><a href="#使用mkkrnlimg-解包boot-img" class="headerlink" title="使用mkkrnlimg 解包boot.img"></a>使用mkkrnlimg 解包boot.img</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkkrnlimg -r boot.img ramdisk.img &amp;&amp; unpack_ramdisk ramdisk.img ramdisk</span><br></pre></td></tr></table></figure>
   
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/linux/">linux</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/tools/">tools</a><a href="/tags/cmd/">cmd</a>
-  </div>
 
 </div>
 
@@ -123,7 +117,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://binswfm.github.io/2016/04/20/wget下载整站/" data-title="Wget下载整站 | bins&#39;s learning notes" data-tsina="null" class="share clearfix">
+	  <div data-url="http://binswfm.github.io/2016/04/21/解包rk3288的ROM/" data-title="解包rk3288的ROM | bins&#39;s learning notes" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -136,19 +130,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/04/21/gradle学习笔记/" title="Gradle学习笔记">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Gradle学习笔记</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/04/20/hello-world/"  title="Hello World">
+<a href="/2016/04/21/gradle学习笔记/"  title="Gradle学习笔记">
  <strong>下一篇：</strong><br/> 
- <span>Hello World
+ <span>Gradle学习笔记
 </span>
 </a>
 </div>
@@ -157,7 +143,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2016/04/20/wget下载整站/" data-title="Wget下载整站" data-url="http://binswfm.github.io/2016/04/20/wget下载整站/"></div>
+	<div class="ds-thread" data-thread-key="2016/04/21/解包rk3288的ROM/" data-title="解包rk3288的ROM" data-url="http://binswfm.github.io/2016/04/21/解包rk3288的ROM/"></div>
 </section>
 
 
@@ -167,7 +153,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#wget下载整站"><span class="toc-number">1.</span> <span class="toc-text">wget下载整站</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用resource-tool解包resource-img"><span class="toc-number">1.</span> <span class="toc-text">使用resource_tool解包resource.img</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用mkkrnlimg-解包boot-img"><span class="toc-number">2.</span> <span class="toc-text">使用mkkrnlimg 解包boot.img</span></a></li></ol>
  
   </div>
 
